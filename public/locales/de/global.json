@@ -1,0 +1,27 @@
+{
+    "global": {
+        "about": "Über",
+        "calendar": "Kalender",
+        "songs": "Lieder",
+        "press": "Presse",
+        "contact": "Kontakt",
+        "loading": "Laden",
+        "rights": "Alle Rechte vorbehalten",
+        
+        "tagline": "Quartett des neuen argentinischen Tangos",
+        "about-text": "Das Quartett wurde 2022 gegründet und besteht aus Martina Greiner, Federico Gómez, Ignacio Santos und Emilio Cossani, die alle eine reiche Laufbahn teilen, die von ihrer Leidenschaft für den Tango geprägt ist.\n\nIhr Zusammenschluss entstand aus dem Wunsch, Teil der kulturellen Bewegung des 21. Jahrhunderts im Tango zu sein, bekannt als das neue goldene Zeitalter, in dem die Schaffung neuer Werke im Mittelpunkt steht. So vermeiden sie die Wiederholung von Klassikern und öffnen die Tür für innovative Musik und Texte.\n\nBuenos Aires, eine lebendige und chaotische Stadt, spiegelt den kritischen Moment wider, den Argentinien (und die Welt?) erlebt. In dieser Umgebung inspirieren verschiedene Formen der Interaktion die musikalische Kreation dieses Quartetts.\n\nIhre unkonventionelle Instrumentierung im Genre fügt der Tradition frische Texturen hinzu und entspricht dem Zweck der populären Musik: den Moment authentisch einzufangen.\n\nNach einer erfolgreichen Europatournee im Jahr 2024 widmet sich das Quartett nun der Schaffung neuen Materials, das es in Buenos Aires und im nächsten Jahr in verschiedenen Konzertsälen und Milongas in Europa präsentieren wird.",
+
+        "january": "Januar",
+        "february": "Februar",
+        "march": "März",
+        "april": "April",
+        "may": "Mai",
+        "june": "Juni",
+        "july": "Juli",
+        "august": "August",
+        "september": "September",
+        "october": "Oktober",
+        "november": "November",
+        "december": "Dezember"
+    }
+}
