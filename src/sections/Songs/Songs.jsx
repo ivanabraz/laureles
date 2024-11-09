@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { useMediaQuery } from 'react-responsive';
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
@@ -11,12 +12,16 @@ const Songs = ({ t }) => {
     const [audio, setAudio] = useState(null);
     const [isPaused, setIsPaused] = useState(false);
 
+    // Define el tamaño de pantalla para cambiar centeredSlides
+    const isSmallScreen = useMediaQuery({ maxWidth: 1024 }); // Ejemplo: maxWidth 1024px
+
     const music = [
         { name: 'Toro', id: 'toro' },
         { name: 'Chino', id: 'chino' },
         { name: 'La Oriental', id: 'la-oriental' },
         { name: 'Paladar Negro', id: 'paladar-negro' },
     ];
+
     useEffect(() => {
         return () => {
             if (audio) {
@@ -61,23 +66,30 @@ const Songs = ({ t }) => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 3, ease: "easeInOut" }}
             viewport={{ once: true }}
+            className="w-full"
             >
                 <Swiper
+                    loop={true} 
+                    centeredSlides={isSmallScreen} // Cambia según el tamaño de pantalla
                     spaceBetween={20}
+                    grabCursor={true}
                     breakpoints={{
                         320: { slidesPerView: 1.5 },
-                        640: { slidesPerView: 1.5 },
-                        768: { slidesPerView: 3.5 },
+                        768: { slidesPerView: 2.5 },
                         1024: { slidesPerView: 3.5 },
                     }}
-                    grabCursor={true}
+                    className="overflow-visible w-full"
                 >
                     {music.map((song) => (
-                        <SwiperSlide key={song.id} className="flex flex-col items-center" onClick={() => handlePlayPause(song)}>
+                        <SwiperSlide 
+                            key={song.id} 
+                            className="flex flex-col items-center" 
+                            onClick={() => handlePlayPause(song)}
+                        >
                             <img
                                 src={`${process.env.PUBLIC_URL}/images/songs/${song.id}.png`}
                                 alt={song.name}
-                                className={` w-full h-auto lg:px-10 cursor-pointer transition-transform ${
+                                className={`w-full h-auto lg:px-10 cursor-pointer transition-transform ${
                                     currentSong?.id === song.id
                                         ? isPlaying
                                             ? 'animate-spin-slow'
@@ -102,7 +114,6 @@ const Songs = ({ t }) => {
                     ))}
                 </Swiper>
             </motion.div>
-
         </div>
     );
 };
