@@ -47,16 +47,16 @@ const Calendar = ({ t }) => {
     const datesWithoutTour = dates.filter(date => !date.Tour);
 
     return (
-        <div className="w-full bg-white text-center condensed uppercase text-black flex justify-center">
+        <div className="w-full bg-white my-16 text-center condensed uppercase text-black flex justify-center">
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 2, ease: "easeInOut" }}
                 viewport={{ once: true }}
-                className="w-[100%] lg:w-[70%] xl:w-[60%] m-auto px-10 xs:px-3 sm:px-3"
+                className="w-[100%] lg:w-[70%] xl:w-[60%] m-auto px-2 md:10"
             >
                 {/* Título */}
-                <p className="text-4xl mb-14 mt-16">
+                <p className="text-4xl mb-14">
                     {t('global.calendar')}
                 </p>
 
@@ -75,7 +75,7 @@ const Calendar = ({ t }) => {
                             return (
                                 <div
                                     key={index}
-                                    className={`grid grid-cols-[1fr,1fr,1fr,7fr,7fr,2fr] gap-2 pb-1 border-b border-neutral-500 text-left text-base xs:text-xs sm:text-sm md:text-base ${isPastEvent ? 'text-neutral-400' : ''}`}
+                                    className={`grid grid-cols-[1fr,1fr,1fr,7fr,7fr,2fr] md:grid-cols-[1fr,1fr,1fr,10fr,10fr,2fr] gap-2 pb-1 border-b border-neutral-500 text-left text-xs md:text-base ${isPastEvent ? 'text-neutral-400' : ''}`}
                                 >
                                     {/* Día (con 0 delante si es menor que 10) */}
                                     <div>{formattedDay}</div>
@@ -132,7 +132,7 @@ const Calendar = ({ t }) => {
                                 return (
                                     <div
                                         key={index}
-                                        className={`grid grid-cols-[1fr,1fr,1fr,7fr,7fr,2fr] gap-2 pb-1 border-b border-neutral-500 text-left text-base xs:text-xs sm:text-sm md:text-base ${isPastEvent ? 'text-neutral-400' : ''}`}
+                                        className={`grid grid-cols-[1fr,1fr,1fr,7fr,7fr,2fr] md:grid-cols-[1fr,1fr,1fr,10fr,10fr,2fr] gap-2 pb-1 border-b border-neutral-500 text-left text-xs md:text-base ${isPastEvent ? 'text-neutral-400' : ''}`}
                                     >
                                         {/* Día (con 0 delante si es menor que 10) */}
                                         <div>{formattedDay}</div>
@@ -156,7 +156,7 @@ const Calendar = ({ t }) => {
                                                     TICKETS 🡥
                                                 </a>
                                             ) : (
-                                                <span className="text-neutral-400"></span>
+                                                <span className="text-neutral-400 whitespace-nowrap hidden">TICKETS 🡥</span>
                                             )}
                                         </div>
                                     </div>

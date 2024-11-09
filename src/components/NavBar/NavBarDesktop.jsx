@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NavBarLanguage from './NavBarLanguage';
 import NavBarLogo from "./NavBarLogo";
@@ -26,7 +25,7 @@ const NavBarDesktop = ({ navigation }) => {
             </div>
             <div className="col-span-5 flex justify-center gap-8">
                 {navigation.sections.map((page) => (
-                    <div key={uuidv4()} className="self-center">
+                    <div key={page.index} className="self-center">
                         <Link 
                             to={page.href}
                             className={`transition-all duration-700 ease-in-out border-b border-transparent 
@@ -41,7 +40,7 @@ const NavBarDesktop = ({ navigation }) => {
                 <div className="flex gap-6">
                     {navigation.social.map((page) => (
                         <a 
-                            key={uuidv4()}
+                            key={page.index}
                             href={"https://" + page.href}
                             className={`hover:text-gray-400 transition-colors ${scrolled ? 'text-black' : 'text-white'}`}
                             target="_blank"
