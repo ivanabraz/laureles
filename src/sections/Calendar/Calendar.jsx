@@ -47,21 +47,21 @@ const Calendar = ({ t }) => {
     const datesWithoutTour = dates.filter(date => !date.Tour);
 
     return (
-        <div className="w-full bg-white text-center py-16 condensed uppercase text-black flex justify-center">
+        <div className="w-full bg-white text-center condensed uppercase text-black flex justify-center">
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 2, ease: "easeInOut" }}
                 viewport={{ once: true }}
-                className="w-[100%] lg:w-[70%] xl:w-[60%] mx-auto"
+                className="w-[100%] lg:w-[70%] xl:w-[60%] m-auto px-10 xs:px-3 sm:px-3"
             >
                 {/* Título */}
-                <p className="text-4xl pb-14">
+                <p className="text-4xl mb-14 mt-16">
                     {t('global.calendar')}
                 </p>
 
                 {/* Fechas sin Tour */}
-                <div className="space-y-2 p-10 xs:p-3 sm:p-5 md:p-10">
+                <div className="space-y-2 mb-10">
                     {datesWithoutTour.length > 0 ? (
                         datesWithoutTour.map((date, index) => {
                             // Crear una nueva fecha a partir de la fecha del calendario
@@ -75,7 +75,7 @@ const Calendar = ({ t }) => {
                             return (
                                 <div
                                     key={index}
-                                    className={`grid grid-cols-[1fr,1fr,1fr,6fr,6fr,2fr] pb-1 border-b border-neutral-500 text-left px-2 text-base xs:text-xs sm:text-sm md:text-base ${isPastEvent ? 'text-neutral-400' : ''}`}
+                                    className={`grid grid-cols-[1fr,1fr,1fr,7fr,7fr,2fr] gap-2 pb-1 border-b border-neutral-500 text-left text-base xs:text-xs sm:text-sm md:text-base ${isPastEvent ? 'text-neutral-400' : ''}`}
                                 >
                                     {/* Día (con 0 delante si es menor que 10) */}
                                     <div>{formattedDay}</div>
@@ -106,7 +106,7 @@ const Calendar = ({ t }) => {
                             );
                         })
                     ) : (
-                        <p className="text-neutral-400">No hay fechas disponibles sin Tour</p>
+                        <p className="text-neutral-400">No hay fechas disponibles</p>
                     )}
                 </div>
 
@@ -114,12 +114,12 @@ const Calendar = ({ t }) => {
                 {Object.keys(groupedDates).map((tour, index) => (
                     <div key={index}>
                         {/* Título del Tour */}
-                        <div className="px-10 mb-3">
+                        <div className="mb-3">
                             <p className="w-fit h-auto border border-black rounded-[50%] uppercase px-8 text-base xs:text-xs sm:text-sm md:text-base">{tour}</p>
                         </div>
 
                         {/* Listado de fechas para este Tour */}
-                        <div className="space-y-2 px-10 xs:px-3 sm:px-5 md:px-10">
+                        <div className="space-y-2">
                             {groupedDates[tour].map((date, index) => {
                                 // Crear una nueva fecha a partir de la fecha del calendario
                                 const eventDate = new Date(`${date.Month} ${date.Day}, ${date.Year}`);
@@ -132,7 +132,7 @@ const Calendar = ({ t }) => {
                                 return (
                                     <div
                                         key={index}
-                                        className={`grid grid-cols-[1fr,1fr,1fr,6fr,6fr,2fr] pb-1 border-b border-neutral-500 text-left px-2 text-base xs:text-xs sm:text-sm md:text-base ${isPastEvent ? 'text-neutral-400' : ''}`}
+                                        className={`grid grid-cols-[1fr,1fr,1fr,7fr,7fr,2fr] gap-2 pb-1 border-b border-neutral-500 text-left text-base xs:text-xs sm:text-sm md:text-base ${isPastEvent ? 'text-neutral-400' : ''}`}
                                     >
                                         {/* Día (con 0 delante si es menor que 10) */}
                                         <div>{formattedDay}</div>
