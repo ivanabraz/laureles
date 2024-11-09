@@ -49,7 +49,14 @@ const Songs = ({ t }) => {
 
     return (
         <div className="w-full bg-black text-center py-16 condensed uppercase text-white">
-            <p className="text-4xl pb-14">{t('global.songs')}</p>
+            <motion.p
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            viewport={{ once: true }}
+            className="text-4xl pb-14">
+                {t('global.songs')}
+            </motion.p>
             <motion.div initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 3, ease: "easeInOut" }}
