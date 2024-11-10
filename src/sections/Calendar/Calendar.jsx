@@ -48,7 +48,7 @@ const Calendar = ({ t }) => {
     const datesWithoutTour = dates.filter(date => !date.Tour);
 
     return (
-        <div className="w-full bg-white my-16 text-center condensed uppercase text-black flex justify-center">
+        <div id="calendar" className="w-full bg-white my-16 text-center condensed uppercase text-black flex flex-col justify-center">
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -166,6 +166,14 @@ const Calendar = ({ t }) => {
                         </div>
                     </div>
                 ))}
+            </motion.div>
+            <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            viewport={{ once: true }}
+            className="w-fit mt-10 py-2 px-5 m-auto uppercase border border-black">
+                {t('global.previous')}
             </motion.div>
         </div>
     );

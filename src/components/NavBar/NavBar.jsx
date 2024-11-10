@@ -10,11 +10,11 @@ const NavBar = ({ onLanguageChange, currentLanguage }) => {
     
     const navigation = {
         sections: [
-            { name: t('global.about'), href: '#about' },
-            { name: t('global.calendar'), href: '#calendar' },
-            { name: t('global.songs'), href: '#songs' },
-            { name: t('global.press'), href: '#press' },
-            { name: t('global.contact'), href: '#contact' },
+            { name: t('global.about'), href: 'about' },
+            { name: t('global.songs'), href: 'songs' },
+            { name: t('global.calendar'), href: 'calendar' },
+            { name: t('global.press'), href: 'press' },
+            { name: t('global.contact'), href: 'contact' },
         ],
         social: [
             { name: 'Instagram', icon: faInstagram, href: 'instagram.com/cuero.tango' },

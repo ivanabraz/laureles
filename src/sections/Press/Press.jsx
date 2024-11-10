@@ -34,7 +34,7 @@ const Press = ({ t }) => {
     }, []);
 
     return (
-        <div className="w-full bg-neutral-100 text-center py-16 condensed uppercase text-black">
+        <div id="press" className="w-full bg-neutral-100 text-center py-16 condensed uppercase text-black">
             <motion.p
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -53,10 +53,10 @@ const Press = ({ t }) => {
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-10">
                     {pressData.length > 0 ? (
-                        pressData.map((media, index) => (
+                        pressData.filter(media => media.ShowOnWebsite !== false).map((media, index) => (
                             <div key={index} className="w-full">
                                 <img
-                                    src={media.Image || 'https://placehold.co/400'}
+                                    src={`${process.env.PUBLIC_URL}/images/press/${media.ID}.png` || 'https://placehold.co/400'}
                                     alt={media.Name || 'Media'}
                                     className="aspect-square"
                                 />
@@ -69,7 +69,7 @@ const Press = ({ t }) => {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            Ver nota 🡥
+                                            {t('global.readnote')} 🡥
                                         </a>
                                     ) : (
                                         <span className="text-neutral-400"></span>
@@ -78,9 +78,17 @@ const Press = ({ t }) => {
                             </div>
                         ))
                     ) : (
-                        <p className="text-neutral-400">No hay notas disponibles</p>
+                        <p className="text-neutral-400 m-auto text-center">No hay notas disponibles</p>
                     )}
                 </div>
+            </motion.div>
+            <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            viewport={{ once: true }}
+            className="w-fit mt-10 py-2 px-5 m-auto uppercase border border-black">
+                {t('global.seemore')} (15)
             </motion.div>
         </div>
     );

@@ -57,7 +57,7 @@ const Songs = ({ t }) => {
     };
 
     return (
-        <div className="w-full bg-black text-center py-16 condensed uppercase text-white">
+        <div id="songs" className="w-full bg-black text-center py-16 condensed uppercase text-white">
             <motion.p
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}

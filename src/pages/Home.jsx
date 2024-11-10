@@ -5,6 +5,7 @@ import About from "../sections/About/About";
 import Songs from "../sections/Songs/Songs";
 import Calendar from "../sections/Calendar/Calendar";
 import Press from "../sections/Press/Press";
+import Contact from "../sections/Contact/Contact";
 
 const Home = () => {
     const { t } = useTranslation();
@@ -16,6 +17,7 @@ const Home = () => {
             <Songs t={t} />
             <Calendar t={t}/>
             <Press t={t}/>
+            <Contact t={t}/>
         </>
     );
 }

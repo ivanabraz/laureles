@@ -17,6 +17,7 @@ const NavBarDesktop = ({ navigation }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+
     return (
         <nav className={`fixed flex w-full h-16 hidden lg:grid grid-cols-9 px-28 z-40 justify-center items-center text-center uppercase font-condensed transition-all duration-300 ${scrolled ? 'bg-white fixed' : ''}`}>
             <div className="col-span-2 flex justify-start">
@@ -25,13 +26,13 @@ const NavBarDesktop = ({ navigation }) => {
             <div className="col-span-5 flex justify-center gap-8">
                 {navigation.sections.map((page) => (
                     <div key={uuidv4()} className="self-center">
-                        <Link 
-                            to={page.href}
+                        <a 
+                            href={`#${page.href}`}
                             className={`transition-all duration-700 ease-in-out border-b border-transparent 
                                 ${scrolled ? 'hover:border-black text-black' : 'hover:border-white text-white'}`}
                         >
                             {page.name}
-                        </Link>
+                        </a>
                     </div>
                 ))}
             </div>
