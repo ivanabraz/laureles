@@ -60,7 +60,7 @@ const NavBarLanguage = ({ scrolled, closeMenu }) => {
                 <span className={`mr-1 ${scrolled ? 'text-black' : 'text-white'}`}>{currentLanguage.toUpperCase()}</span>
                 <FontAwesomeIcon
                     icon={faChevronDown}
-                    size="md"
+                    size="lg"
                     className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : 'rotate-0'} ${scrolled ? 'text-black' : 'text-white'}`}
                 />
                 {isOpen && (

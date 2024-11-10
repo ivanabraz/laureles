@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
+import { v4 as uuidv4 } from 'uuid';
 
 const Songs = ({ t }) => {
     const [currentSong, setCurrentSong] = useState(null);
@@ -12,10 +13,13 @@ const Songs = ({ t }) => {
     const [audio, setAudio] = useState(null);
     const [isPaused, setIsPaused] = useState(false);
 
-    // Define el tamaño de pantalla para cambiar centeredSlides
-    const isSmallScreen = useMediaQuery({ maxWidth: 1024 }); // Ejemplo: maxWidth 1024px
+    const isSmallScreen = useMediaQuery({ maxWidth: 1024 });
 
     const music = [
+        { name: 'Toro', id: 'toro' },
+        { name: 'Chino', id: 'chino' },
+        { name: 'La Oriental', id: 'la-oriental' },
+        { name: 'Paladar Negro', id: 'paladar-negro' },
         { name: 'Toro', id: 'toro' },
         { name: 'Chino', id: 'chino' },
         { name: 'La Oriental', id: 'la-oriental' },
@@ -70,7 +74,7 @@ const Songs = ({ t }) => {
             >
                 <Swiper
                     loop={true} 
-                    centeredSlides={isSmallScreen} // Cambia según el tamaño de pantalla
+                    centeredSlides={isSmallScreen}
                     spaceBetween={20}
                     grabCursor={true}
                     breakpoints={{
@@ -82,7 +86,7 @@ const Songs = ({ t }) => {
                 >
                     {music.map((song) => (
                         <SwiperSlide 
-                            key={song.id} 
+                            key={uuidv4()}
                             className="flex flex-col items-center" 
                             onClick={() => handlePlayPause(song)}
                         >
@@ -103,7 +107,7 @@ const Songs = ({ t }) => {
                             />
                             <FontAwesomeIcon
                                 icon={currentSong?.id === song.id && isPlaying ? faPause : faPlay}
-                                size="md"
+                                size="lg"
                                 className={`mt-5 text-white transition-opacity cursor-pointer ${
                                     currentSong?.id === song.id ? 'opacity-100' : 'opacity-0'
                                 }`}

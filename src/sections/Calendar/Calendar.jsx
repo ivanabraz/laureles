@@ -5,7 +5,7 @@ const Calendar = ({ t }) => {
     const [dates, setDates] = useState([]);
 
     // URL de tu Google Apps Script
-    const DATA_URL = 'https://script.google.com/macros/s/AKfycbxDm9vDT8RC77opDZ4VFD5akxNuU_0cWOgcyzR90DLaFhIk7mF-49loYJ4dR8LGzbDiuA/exec'; // Reemplaza con tu URL
+    const DATA_URL = 'https://script.google.com/macros/s/AKfycbyLKhfogIKzfD5rgdPeqtQZHMY6A3NRNL_dBI0aHolKp0ulRSmIaIdFwkCbHfA2pXkT-w/exec';
 
     // Fetch de datos del Google Sheets
     useEffect(() => {
@@ -16,11 +16,12 @@ const Calendar = ({ t }) => {
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }
                 const data = await res.json();
-                setDates(data); // Guardar datos en el estado
+                setDates(data);
             } catch (error) {
                 console.error("Error al obtener los datos:", error);
             }
         };
+        
         fetchData();
     }, []);
 
@@ -114,7 +115,7 @@ const Calendar = ({ t }) => {
                 {Object.keys(groupedDates).map((tour, index) => (
                     <div key={index}>
                         {/* Título del Tour */}
-                        <div className="mb-3">
+                        <div className="mb-3 mt-10">
                             <p className="w-fit h-auto border border-black rounded-[50%] uppercase px-8 text-base xs:text-xs sm:text-sm md:text-base">{tour}</p>
                         </div>
 
