@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 const Press = ({ t }) => {
     const [pressData, setPressData] = useState([]);
+    const [showAll, setShowAll] = useState(false);
 
     // URL de tu Google Apps Script
     const DATA_URL = 'https://script.google.com/macros/s/AKfycbyKz7fnNcwpBJVXXwDjtbNpI4ntfzweat9VlET__yC4WvQFiBdJoxPV5QcjmQniE3tYXA/exec';
@@ -33,6 +34,15 @@ const Press = ({ t }) => {
         fetchData();
     }, []);
 
+    const toggleShowAll = () => {
+        setShowAll(!showAll);
+    };
+
+    // Filtrar notas con ShowOnWebsite en true
+    const visiblePressData = pressData.filter(media => media.ShowOnWebsite);
+    const displayedItems = showAll ? visiblePressData : visiblePressData.slice(0, 4);
+    const hiddenItemsCount = visiblePressData.length - 4;
+
     return (
         <div id="press" className="w-full bg-neutral-100 text-center py-16 condensed uppercase text-black">
             <motion.p
@@ -51,14 +61,14 @@ const Press = ({ t }) => {
                 viewport={{ once: true }}
                 className="w-full"
             >
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-10">
-                    {pressData.length > 0 ? (
-                        pressData.filter(media => media.ShowOnWebsite !== false).map((media, index) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 px-5">
+                    {displayedItems.length > 0 ? (
+                        displayedItems.map((media, index) => (
                             <div key={index} className="w-full">
                                 <img
                                     src={`${process.env.PUBLIC_URL}/images/press/${media.ID}.png` || 'https://placehold.co/400'}
                                     alt={media.Name || 'Media'}
-                                    className="aspect-square"
+                                    className="aspect-square xs:mt-5 md:mt-0"
                                 />
                                 <div className="flex flex-row justify-between mt-2">
                                     <p>{media.Name}</p>
@@ -82,14 +92,20 @@ const Press = ({ t }) => {
                     )}
                 </div>
             </motion.div>
-            <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 2, ease: "easeInOut" }}
-            viewport={{ once: true }}
-            className="w-fit mt-10 py-2 px-5 m-auto uppercase border border-black">
-                {t('global.seemore')} (15)
-            </motion.div>
+            {hiddenItemsCount > 0 && (
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 2, ease: "easeInOut" }}
+                    viewport={{ once: true }}
+                    className="w-fit mt-10 py-2 px-5 m-auto uppercase border border-black cursor-pointer"
+                    onClick={toggleShowAll}
+                >
+                    {showAll
+                        ? t('global.seeless')
+                        : `${t('global.seemore')} (${hiddenItemsCount})`}
+                </motion.div>
+            )}
         </div>
     );
 };
