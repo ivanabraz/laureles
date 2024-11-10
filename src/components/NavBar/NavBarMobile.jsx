@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import NavBarLanguage from "./NavBarLanguage";
+import NavBarLogo from "./NavBarLogo";
 
 const NavBarMobile = ({ logo, navigation, scrolled }) => {
     const [open, setOpen] = useState(false);
@@ -20,11 +21,10 @@ const NavBarMobile = ({ logo, navigation, scrolled }) => {
                 </button>
 
                 {/* Logo */}
-                <img 
-                    src={logo} 
-                    alt="Cuero Tango Logo" 
-                    className={`invert mt-1 h-6 ${scrolled ? 'show' : 'hidden'}`} 
-                />
+                <div className={`mt-1 w-28`}>
+                    <NavBarLogo/>
+                </div>
+
                 <div></div>
             </nav>
 
