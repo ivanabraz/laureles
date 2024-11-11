@@ -19,7 +19,7 @@ const Contact = ({ t }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 2, ease: "easeInOut" }}
-                className="w-[60%] grid grid-cols-1 md:grid-cols-3 m-auto"
+                className="w-[60%] grid grid-cols-1 lg:grid-cols-3 m-auto"
             >
                 <a href="mailto:cuerotango@gmail.com" rel="noopener noreferrer" target="_blank">cuerotango@gmail.com</a>
                 <a href="mailto:emiliocossani@gmail.com" rel="noopener noreferrer" target="_blank">emiliocossani@gmail.com</a>
