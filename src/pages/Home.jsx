@@ -7,6 +7,7 @@ import Calendar from "../sections/Calendar/Calendar";
 import Press from "../sections/Press/Press";
 import Contact from "../sections/Contact/Contact";
 import Rider from "../sections/Rider/Rider";
+import Members from "../sections/Members/Members";
 
 const Home = () => {
     const { t } = useTranslation();
@@ -16,8 +17,9 @@ const Home = () => {
         <>
             <Header t={t} />
             <About t={t} setIsOpen={setIsOpen} />
-            <Songs t={t} />
+            <Members t={t} />
             <Calendar t={t}/>
+            <Songs t={t} />
             <Press t={t}/>
             <Contact t={t}/>
             <Rider t={t} isOpen={isOpen} setIsOpen={setIsOpen} />

@@ -11,8 +11,8 @@ const NavBar = ({ onLanguageChange, currentLanguage }) => {
     const navigation = {
         sections: [
             { name: t('global.about'), href: 'about' },
-            { name: t('global.songs'), href: 'songs' },
             { name: t('global.calendar'), href: 'calendar' },
+            { name: t('global.songs'), href: 'songs' },
             { name: t('global.press'), href: 'press' },
             { name: t('global.contact'), href: 'contact' },
         ],

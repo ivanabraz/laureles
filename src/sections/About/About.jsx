@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const About = ({ t, setIsOpen }) => {
-    const image = `${process.env.PUBLIC_URL}/images/photos/image-01.jpg`;
+    const image = `${process.env.PUBLIC_URL}/images/photos/image-02.jpg`;
     
     return (
         <div id='about' className="w-full grid grid-cols-1 md:grid-cols-2">
