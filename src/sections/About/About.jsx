@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
 
 const About = ({ t, setIsOpen }) => {
     const image = `${process.env.PUBLIC_URL}/images/photos/image-02.jpg`;
@@ -15,8 +16,8 @@ const About = ({ t, setIsOpen }) => {
                 <p>{t('global.about-text')}</p>
                 <button 
                     onClick={() => setIsOpen(true)}
-                    className="text-base underline uppercase text-emerald-400 mt-10">
-                    {t('global.rider')}  🡥
+                    className="text-base uppercase text-emerald-400 mt-10 flex items-center border-b border-emerald-400">
+                    {t('global.rider')}  <ArrowUpRightIcon className="h-4 w-4 ml-1 relative top-[0.05em]" />
                 </button>
             </motion.div>
             <motion.img

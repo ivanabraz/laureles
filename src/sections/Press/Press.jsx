@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import 'swiper/css';
 import { motion } from "framer-motion";
+import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
 
 const Press = ({ t }) => {
     const [pressData, setPressData] = useState([]);
@@ -75,11 +76,11 @@ const Press = ({ t }) => {
                                     {media.Link ? (
                                         <a
                                             href={media.Link}
-                                            className="text-emerald-400"
+                                            className="text-emerald-400 whitespace-nowrap flex items-center"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            {t('global.readnote')} 🡥
+                                            {t('global.readnote')} <ArrowUpRightIcon className="h-4 w-4 ml-1 relative top-[0.05em]" />
                                         </a>
                                     ) : (
                                         <span className="text-neutral-400"></span>

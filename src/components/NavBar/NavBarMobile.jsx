@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from 'react-router-dom';
 import NavBarLanguage from "./NavBarLanguage";
 import NavBarLogo from "./NavBarLogo";
@@ -17,7 +17,7 @@ const NavBarMobile = ({ logo, navigation, scrolled }) => {
                     className={`${scrolled ? 'text-black' : 'text-white'}`} 
                     onClick={() => setOpen(true)}
                 >
-                    <MenuIcon className="h-8 w-8" aria-hidden="true" />
+                    <Bars3Icon className="h-8 w-8" aria-hidden="true" />
                 </button>
 
                 {/* Logo */}
@@ -39,7 +39,7 @@ const NavBarMobile = ({ logo, navigation, scrolled }) => {
                                 className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500"
                                 onClick={() => setOpen(false)}
                             >
-                                <XIcon className="h-8 w-8" aria-hidden="true" />
+                                <XMarkIcon className="h-8 w-8" aria-hidden="true" />
                             </button>
                         </div>
 

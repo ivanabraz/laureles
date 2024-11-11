@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
+import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
 
 const Calendar = ({ t }) => {
 const [dates, setDates] = useState([]);
@@ -66,7 +67,7 @@ const handleShowLess = () => {
 };
 
 if (loading) {
-    return <p className='text-center m-auto'>Cargando...</p>;
+    return <p className='text-center m-auto p-24'>Cargando...</p>;
 }
 
 return (
@@ -108,7 +109,12 @@ return (
                     <div>{date.Place}</div>
                     <div className='text-right'>
                     {date.Tickets ? (
-                        <a href={date.Tickets} target="_blank" rel="noopener noreferrer" className="text-emerald-400 whitespace-nowrap">TICKETS 🡥</a>
+                        <a href={date.Tickets} target="_blank" rel="noopener noreferrer"
+                        className="text-emerald-400 whitespace-nowrap flex items-center"
+                        >
+                            TICKETS
+                            <ArrowUpRightIcon className="h-4 w-4 ml-1 relative top-[0.05em]" />
+                        </a>
                     ) : <span className="hidden">TICKETS 🡥</span>}
                     </div>
                 </div>
@@ -143,3 +149,4 @@ return (
 };
 
 export default Calendar;
+

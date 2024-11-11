@@ -39,6 +39,7 @@ const Members = ({ t }) => {
                                     href={"https://www.instagram.com/" + member.social}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    className="transition border-b border-transparent hover:border-b hover:border-white"
                                 >
                                     @{member.social}
                                 </a>
