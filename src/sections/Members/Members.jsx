@@ -21,7 +21,12 @@ const Members = ({ t }) => {
                 className="grid grid-cols-2 md:grid-cols-4"
             >
                 {cueroMembers.map((member) => (
-                    <div key={uuidv4()} className="relative">
+                    <a 
+                        href={"https://www.instagram.com/" + member.social}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        key={uuidv4()} className="relative"
+                        >
                         <img
                             className="aspect-[3/4] object-cover w-full h-full"
                             alt={member.name}
@@ -35,17 +40,10 @@ const Members = ({ t }) => {
                                     <p className="uppercase">{member.name}</p>
                                     <p>{member.instrument}</p>
                                 </div>
-                                <a
-                                    href={"https://www.instagram.com/" + member.social}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="transition border-b border-transparent hover:border-b hover:border-white"
-                                >
-                                    @{member.social}
-                                </a>
+                                @{member.social}
                             </div>
                         </div>
-                    </div>
+                    </a>
                 ))}
             </motion.div>
         </div>
