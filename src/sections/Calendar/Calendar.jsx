@@ -136,9 +136,7 @@ const Calendar = () => {
                                                 <a 
                                                     href={date['Google maps']} 
                                                     target="_blank" 
-                                                    rel="noopener noreferrer"
-                                                    className="text-neutral-400"
-                                                >
+                                                    rel="noopener noreferrer"                                                >
                                                     {date.Venue}
                                                 </a>
                                             ) : (
