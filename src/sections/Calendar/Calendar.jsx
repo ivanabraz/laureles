@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
+import { useTranslation } from 'react-i18next';
 
-const Calendar = ({ t }) => {
+const Calendar = () => {
+    const { t, i18n } = useTranslation();
     const [dates, setDates] = useState([]);
     const [groupedDatesLimited, setGroupedDatesLimited] = useState({});
     const [showAllDates, setShowAllDates] = useState(false);
     const [loading, setLoading] = useState(true);
-    const currentDate = new Date();  // Fecha actual
-    const currentYear = currentDate.getFullYear();  // Año actual
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
 
     const monthMap = {
         'Enero': 'january',
@@ -23,6 +25,17 @@ const Calendar = ({ t }) => {
         'Octubre': 'october',
         'Noviembre': 'november',
         'Diciembre': 'december',
+    };
+
+    const getPlaceColumn = (date) => {
+        switch (i18n.language) {
+            case 'en':
+                return date['Place (EN)'] || date['Place (ES)'];
+            case 'de':
+                return date['Place (DE)'] || date['Place (ES)'];
+            default:
+                return date['Place (ES)'];
+        }
     };
 
     useEffect(() => {
@@ -51,7 +64,7 @@ const Calendar = ({ t }) => {
             }
         };
         fetchData();
-    }, []);
+    }, [i18n.language]);  // Recarga los datos al cambiar de idioma
 
     const handleShowMore = () => {
         const groupedDatesAll = dates.reduce((acc, date) => {
@@ -74,7 +87,9 @@ const Calendar = ({ t }) => {
     };
 
     if (loading) {
-        return <p className='text-center m-auto p-24'>Cargando...</p>;
+        return <p className='text-center m-auto p-24'>
+                    {t('global.loading')}
+                </p>;
     }
 
     return (
@@ -130,7 +145,7 @@ const Calendar = ({ t }) => {
                                                 date.Venue
                                             )}
                                         </div>
-                                        <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>{date.Place}</div>
+                                        <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>{getPlaceColumn(date)}</div>
                                         <div className="text-right">
                                             {eventYear === currentYear && !isPastEvent && date.Tickets && date.Tickets !== "#" ? (
                                                 <a 
@@ -144,10 +159,8 @@ const Calendar = ({ t }) => {
                                                 </a>
                                             ) : eventYear !== currentYear && date.Tour ? (
                                                 <span className="text-neutral-400">{date.Tour}</span>
-                                            ) : eventYear !== currentYear && !date.Tour ? (
-                                                <span className="text-neutral-400"></span>
                                             ) : (
-                                                <span className="text-neutral-400">{isPastEvent ? '' : date.Tour}</span>
+                                                <span className="text-neutral-400"></span>
                                             )}
                                         </div>
                                     </div>
