@@ -116,7 +116,20 @@ const Calendar = ({ t }) => {
                                             {translatedMonth.slice(0, 3).toUpperCase()}
                                         </div>
                                         <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>{date.Year}</div>
-                                        <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>{date.Venue}</div>
+                                        <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>
+                                            {date['Google maps'] && date['Google maps'].trim() ? (
+                                                <a 
+                                                    href={date['Google maps']} 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer"
+                                                    className="text-neutral-400"
+                                                >
+                                                    {date.Venue}
+                                                </a>
+                                            ) : (
+                                                date.Venue
+                                            )}
+                                        </div>
                                         <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>{date.Place}</div>
                                         <div className="text-right">
                                             {eventYear === currentYear && !isPastEvent && date.Tickets && date.Tickets !== "#" ? (
@@ -132,7 +145,7 @@ const Calendar = ({ t }) => {
                                             ) : eventYear !== currentYear && date.Tour ? (
                                                 <span className="text-neutral-400">{date.Tour}</span>
                                             ) : eventYear !== currentYear && !date.Tour ? (
-                                                <span className="text-neutral-400"></span> // Esto asegura que quede vacío si no hay Tour.
+                                                <span className="text-neutral-400"></span>
                                             ) : (
                                                 <span className="text-neutral-400">{isPastEvent ? '' : date.Tour}</span>
                                             )}
