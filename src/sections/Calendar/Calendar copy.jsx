@@ -14,6 +14,7 @@ const Calendar = ({ t }) => {
     const currentMonth = currentDate.getMonth();  // Mes actual (0-11)
     const currentDay = currentDate.getDate();  // Día actual
 
+    // Mapa de meses en español a inglés (esto solo se usa para crear fechas al principio)
     const monthMap = {
         'Enero': 'january',
         'Febrero': 'february',
@@ -29,6 +30,7 @@ const Calendar = ({ t }) => {
         'Diciembre': 'december',
     };
 
+    // Cargar datos desde Google Sheets
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -36,17 +38,24 @@ const Calendar = ({ t }) => {
                     'https://script.google.com/macros/s/AKfycbyLKhfogIKzfD5rgdPeqtQZHMY6A3NRNL_dBI0aHolKp0ulRSmIaIdFwkCbHfA2pXkT-w/exec'
                 );
                 const data = await response.json();
+
+                // Filtrar las fechas a mostrar en el sitio web
                 const filteredDates = data.filter((date) => String(date['Show on website']).toUpperCase() === 'TRUE');
+
+                // Agrupar fechas por Tour
                 const groupedDates = filteredDates.reduce((acc, date) => {
                     const tour = date.Tour || 'Sin Tour';
                     if (!acc[tour]) acc[tour] = [];
                     acc[tour].push(date);
                     return acc;
                 }, {});
+
+                // Limitar a los primeros 10 eventos
                 const limitedGroupedDates = Object.keys(groupedDates).reduce((acc, tour) => {
                     acc[tour] = groupedDates[tour].slice(0, 10);
                     return acc;
                 }, {});
+
                 setDates(filteredDates);
                 setGroupedDatesLimited(limitedGroupedDates);
                 setLoading(false);
@@ -57,6 +66,7 @@ const Calendar = ({ t }) => {
         fetchData();
     }, []);
 
+    // Función para mostrar todas las fechas al hacer clic en el botón
     const handleShowMore = () => {
         const groupedDatesAll = dates.reduce((acc, date) => {
             const tour = date.Tour || 'Sin Tour';
@@ -90,12 +100,14 @@ const Calendar = ({ t }) => {
                 viewport={{ once: true }}
                 className="w-[100%] lg:w-[70%] xl:w-[60%] m-auto px-2 md:10"
             >
+                {/* Título */}
                 <p className="text-4xl mb-14 text-center">
                     {t('global.calendar')}
                 </p>
 
                 {Object.keys(groupedDatesLimited).map((tour, index) => (
                     <div key={index} className='mb-10'>
+                        {/* Mostrar título solo si la propiedad tour no está vacía y el año es el actual */}
                         {tour !== 'Sin Tour' && groupedDatesLimited[tour].some(date => parseInt(date.Year) === currentYear) && (
                             <div className="mb-3 mt-10">
                                 <p className="w-fit border border-black rounded-[50%] uppercase px-8">{tour}</p>
@@ -103,12 +115,26 @@ const Calendar = ({ t }) => {
                         )}
                         <div className="space-y-2">
                             {groupedDatesLimited[tour].map((date, idx) => {
-                                const eventMonth = monthMap[date.Month];
+                                // Convertir el mes en español a inglés (para el manejo de la fecha)
+                                const eventMonth = monthMap[date.Month]; // Aquí usamos el mes en español
                                 const eventDate = new Date(`${eventMonth} ${date.Day}, ${date.Year}`);
+
                                 const eventYear = eventDate.getFullYear();
+                                const eventDay = eventDate.getDate();  // Día del evento
+
+                                // Comparar el evento con la fecha actual (año, mes y día)
                                 const isPastEvent = (eventYear < currentYear) || 
                                                     (eventYear === currentYear && eventDate < currentDate);
-                                const translatedMonth = t(`global.${eventMonth}`);
+
+                                // Traducir el mes con i18next para mostrar las primeras tres letras del mes
+                                const translatedMonth = t(`global.${eventMonth}`);  // Traducción del mes
+
+                                // Verificamos si el botón de "Tickets" debe aparecer
+                                const showTicketButton = 
+                                    !isPastEvent && 
+                                    eventYear === currentYear && 
+                                    date.Tickets && 
+                                    date.Tickets !== "#";
 
                                 return (
                                     <div
@@ -117,28 +143,17 @@ const Calendar = ({ t }) => {
                                     >
                                         <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>{date.Day}</div>
                                         <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>
-                                            {translatedMonth.slice(0, 3).toUpperCase()}
+                                            {translatedMonth.slice(0, 3).toUpperCase()}  {/* Muestra las 3 primeras letras traducidas */}
                                         </div>
                                         <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>{date.Year}</div>
                                         <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>{date.Venue}</div>
                                         <div className={`${isPastEvent ? 'text-neutral-400' : ''}`}>{date.Place}</div>
                                         <div className="text-right">
-                                            {eventYear === currentYear && !isPastEvent && date.Tickets && date.Tickets !== "#" ? (
-                                                <a 
-                                                    href={date.Tickets} 
-                                                    target="_blank" 
-                                                    rel="noopener noreferrer"
-                                                    className="text-emerald-400 whitespace-nowrap flex items-center"
-                                                >
-                                                    TICKETS
-                                                    <ArrowUpRightIcon className="h-4 w-4 ml-1 relative top-[0.05em]" />
-                                                </a>
-                                            ) : eventYear !== currentYear && date.Tour ? (
-                                                <span className="text-neutral-400">{date.Tour}</span>
-                                            ) : eventYear !== currentYear && !date.Tour ? (
-                                                <span className="text-neutral-400"></span> // Esto asegura que quede vacío si no hay Tour.
+                                            {/* Si el evento es del año actual pero ya pasó, dejamos vacío */}
+                                            {isPastEvent && eventYear === currentYear ? (
+                                                <span className="text-neutral-400"></span>
                                             ) : (
-                                                <span className="text-neutral-400">{isPastEvent ? '' : date.Tour}</span>
+                                                <span className="text-neutral-400">{date.Tour}</span>
                                             )}
                                         </div>
                                     </div>
@@ -148,6 +163,7 @@ const Calendar = ({ t }) => {
                     </div>
                 ))}
 
+                {/* Botón para mostrar más fechas */}
                 {!showAllDates && (
                     <div
                         onClick={handleShowMore}
@@ -157,6 +173,7 @@ const Calendar = ({ t }) => {
                     </div>
                 )}
 
+                {/* Botón para mostrar menos fechas */}
                 {showAllDates && (
                     <div
                         onClick={handleShowLess}

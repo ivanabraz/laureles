@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const Header = ({ t }) => {
-    const heroImg = `${process.env.PUBLIC_URL}/images/photos/image-01.jpg`;
+    const [heroImg, setHeroImg] = useState("");
+
+    useEffect(() => {
+        const updateHeroImg = () => {
+            const isLandscape = window.innerWidth > window.innerHeight;
+            setHeroImg(
+                `${process.env.PUBLIC_URL}/images/photos/image-01${isLandscape ? "h" : "v"}.jpg`
+            );
+        };
+
+        // Establece la imagen inicial
+        updateHeroImg();
+
+        // Escucha cambios en el tamaño de la ventana
+        window.addEventListener("resize", updateHeroImg);
+
+        // Limpia el evento al desmontar
+        return () => window.removeEventListener("resize", updateHeroImg);
+    }, []);
+
     const logo = `${process.env.PUBLIC_URL}/images/logo/logo.svg`;
 
     return (
@@ -19,7 +38,7 @@ const Header = ({ t }) => {
                     transition={{ duration: 2, ease: "easeInOut" }}
                     src={logo} 
                     alt="Cuerto Tango logo" 
-                    className={`w-full mb-20 relative z-0`}
+                    className={`w-full sm:w-4/5 m-auto mb-20 relative z-0`}
                     style={{ zIndex: 0 }}
                 />
                 <motion.p
