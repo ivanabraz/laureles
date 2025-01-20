@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
-import { useTranslation } from 'react-i18next';
 
 const Calendar = ({ t }) => {
-    const { i18n } = useTranslation();  // Accedemos a la configuración de idioma
     const [dates, setDates] = useState([]);
     const [groupedDatesLimited, setGroupedDatesLimited] = useState({});
     const [showAllDates, setShowAllDates] = useState(false);
     const [loading, setLoading] = useState(true);
     const currentDate = new Date();  // Fecha actual
     const currentYear = currentDate.getFullYear();  // Año actual
-    const currentMonth = currentDate.getMonth();  // Mes actual (0-11)
-    const currentDay = currentDate.getDate();  // Día actual
 
     const monthMap = {
         'Enero': 'january',
