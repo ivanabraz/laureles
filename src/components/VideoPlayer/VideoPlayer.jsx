@@ -1,7 +1,14 @@
 import React from 'react';
+import { motion } from "framer-motion";
 
 const VideoPlayer = () => (
-    <div className="relative w-full lg:w-[70%] xl:w-[60%] aspect-video m-auto mt-10">
+    <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            viewport={{ once: true }}
+            className="relative w-full lg:w-[70%] xl:w-[60%] aspect-video m-auto mt-10"
+        >
         <iframe
             className="absolute top-0 left-0 w-full h-full p-5 xs:p-5 lg:p-0"
             src="https://www.youtube.com/embed/W_C2p0gqdfs?si=QuWOHlBYhGleKx0B"
@@ -10,7 +17,7 @@ const VideoPlayer = () => (
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
         ></iframe>
-    </div>
+    </motion.div>
 );
 
 export default VideoPlayer;

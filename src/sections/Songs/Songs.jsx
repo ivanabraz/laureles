@@ -16,6 +16,8 @@ const Songs = ({ t }) => {
     const isSmallScreen = useMediaQuery({ maxWidth: 1024 });
 
     const music = [
+        { name: 'Prima Facie', id: 'prima-facie' },
+        { name: 'ATR 13 1', id: 'atr131' },
         { name: 'Toro', id: 'toro' },
         { name: 'Chino', id: 'chino' },
         { name: 'La Oriental', id: 'la-oriental' },
