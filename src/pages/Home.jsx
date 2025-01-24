@@ -8,6 +8,7 @@ import Press from "../sections/Press/Press";
 import Contact from "../sections/Contact/Contact";
 import Rider from "../sections/Rider/Rider";
 import Members from "../sections/Members/Members";
+import VideoPlayer from "../components/VideoPlayer/VideoPlayer";
 
 const Home = () => {
     const { t } = useTranslation();
@@ -18,6 +19,7 @@ const Home = () => {
             <Header t={t} />
             <About t={t} setIsOpen={setIsOpen} />
             <Members t={t} />
+            <VideoPlayer />
             <Calendar t={t}/>
             <Songs t={t} />
             <Press t={t}/>
