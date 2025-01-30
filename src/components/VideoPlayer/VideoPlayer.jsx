@@ -7,7 +7,7 @@ const VideoPlayer = () => (
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 2, ease: "easeInOut" }}
             viewport={{ once: true }}
-            className="relative w-full lg:w-[70%] xl:w-[60%] aspect-video m-auto mt-10"
+            className="relative w-full lg:w-[70%] xl:w-[60%] aspect-video m-auto mt-5 mb-14"
         >
         <iframe
             className="absolute top-0 left-0 w-full h-full p-5 xs:p-5 lg:p-0"

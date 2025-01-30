@@ -18,8 +18,8 @@ const Home = () => {
         <>
             <Header t={t} />
             <About t={t} setIsOpen={setIsOpen} />
-            <Members t={t} />
             <VideoPlayer />
+            <Members t={t} />
             <Calendar t={t}/>
             <Songs t={t} />
             <Press t={t}/>
