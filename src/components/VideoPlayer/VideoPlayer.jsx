@@ -11,7 +11,7 @@ const VideoPlayer = () => (
         >
         <iframe
             className="absolute top-0 left-0 w-full h-full p-5 xs:p-5 lg:p-0"
-            src="https://www.youtube.com/embed/W_C2p0gqdfs?si=QuWOHlBYhGleKx0B"
+            src="https://www.youtube.com/embed/L5TbO85cRNs?si=o0ssExx0Evkd5GzY"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

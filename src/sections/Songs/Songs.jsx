@@ -17,7 +17,7 @@ const Songs = ({ t }) => {
 
     const music = [
         { name: 'Prima Facie', id: 'prima-facie' },
-        { name: 'ATR 13 1', id: 'atr131' },
+        { name: 'ATR 13 1', id: 'atr' },
         { name: 'Toro', id: 'toro' },
         { name: 'Chino', id: 'chino' },
         { name: 'La Oriental', id: 'la-oriental' },
