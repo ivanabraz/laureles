@@ -17,8 +17,8 @@ const Home = () => {
     return (
         <>
             <Header t={t} />
-            <About t={t} setIsOpen={setIsOpen} />
             <VideoPlayer />
+            <About t={t} setIsOpen={setIsOpen} />
             <Members t={t} />
             <Calendar t={t}/>
             <Songs t={t} />
