@@ -17,14 +17,12 @@ const Songs = ({ t }) => {
 
     const music = [
         { name: 'Prima Facie', id: 'prima-facie' },
-        { name: 'ATR 13 1', id: 'atr' },
-        { name: 'Toro', id: 'toro' },
+        { name: 'ATR', id: 'atr' },
         { name: 'Chino', id: 'chino' },
-        { name: 'La Oriental', id: 'la-oriental' },
         { name: 'Paladar Negro', id: 'paladar-negro' },
-        { name: 'Toro', id: 'toro' },
+        { name: 'Prima Facie', id: 'prima-facie' },
+        { name: 'ATR', id: 'atr' },
         { name: 'Chino', id: 'chino' },
-        { name: 'La Oriental', id: 'la-oriental' },
         { name: 'Paladar Negro', id: 'paladar-negro' },
     ];
 
