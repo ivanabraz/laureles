@@ -15,15 +15,20 @@ const Songs = ({ t }) => {
 
     const isSmallScreen = useMediaQuery({ maxWidth: 1024 });
 
+    const tapIcon = `${process.env.PUBLIC_URL}/images/icons/tap.svg`;
+    const swipeIcon = `${process.env.PUBLIC_URL}/images/icons/swipe.svg`;
+
     const music = [
         { name: 'Prima Facie', id: 'prima-facie' },
-        { name: 'ATR', id: 'atr' },
         { name: 'Chino', id: 'chino' },
         { name: 'Paladar Negro', id: 'paladar-negro' },
+        { name: 'ATR', id: 'atr' },
+        { name: 'Toro', id: 'toro' },
         { name: 'Prima Facie', id: 'prima-facie' },
-        { name: 'ATR', id: 'atr' },
         { name: 'Chino', id: 'chino' },
         { name: 'Paladar Negro', id: 'paladar-negro' },
+        { name: 'ATR', id: 'atr' },
+        { name: 'Toro', id: 'toro' },
     ];
 
     useEffect(() => {
@@ -63,9 +68,20 @@ const Songs = ({ t }) => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 2, ease: "easeInOut" }}
             viewport={{ once: true }}
-            className="text-4xl pb-14">
+            className="text-4xl pb-3">
                 {t('global.songs')}
             </motion.p>
+            <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            viewport={{ once: true }}
+            className="flex items-center justify-center text-xs pb-14 text-neutral-400">
+            <img src={tapIcon} alt="Tap to listen" className="mr-1 w-4 h-4 inline-block"></img>
+                Tap to listen
+                <img src={swipeIcon} alt="Swipe for more" className="ml-5 mr-1 w-4 h-4 inline-block"></img>
+                Swipe for more
+            </motion.div>
             <motion.div initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 3, ease: "easeInOut" }}
