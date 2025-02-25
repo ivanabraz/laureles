@@ -78,9 +78,9 @@ const Songs = ({ t }) => {
             viewport={{ once: true }}
             className="flex items-center justify-center text-xs pb-14 text-neutral-400">
             <img src={tapIcon} alt="Tap to listen" className="mr-1 w-4 h-4 inline-block"></img>
-                Tap to listen
+                {t('global.tapSong')}
                 <img src={swipeIcon} alt="Swipe for more" className="ml-5 mr-1 w-4 h-4 inline-block"></img>
-                Swipe for more
+                {t('global.swipeSong')}
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
