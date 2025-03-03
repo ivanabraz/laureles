@@ -19,16 +19,14 @@ const Songs = ({ t }) => {
     const swipeIcon = `${process.env.PUBLIC_URL}/images/icons/swipe.svg`;
 
     const music = [
-        { name: 'Prima Facie', id: 'prima-facie' },
-        { name: 'Chino', id: 'chino' },
-        { name: 'Paladar Negro', id: 'paladar-negro' },
         { name: 'ATR', id: 'atr' },
         { name: 'Toro', id: 'toro' },
+        { name: 'La baratija', id: 'la-baratija' },
         { name: 'Prima Facie', id: 'prima-facie' },
-        { name: 'Chino', id: 'chino' },
         { name: 'Paladar Negro', id: 'paladar-negro' },
-        { name: 'ATR', id: 'atr' },
-        { name: 'Toro', id: 'toro' },
+        { name: 'Chino', id: 'chino' },
+        { name: 'La oriental', id: 'la-oriental' },
+        { name: 'Gordito', id: 'gordito' },
     ];
 
     useEffect(() => {
