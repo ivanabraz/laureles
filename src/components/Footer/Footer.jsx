@@ -11,7 +11,7 @@ const Footer = ({ onLanguageChange, currentLanguage }) => {
 
     return (
         <footer 
-            className="w-full p-10 flex justify-between items-center text-xl text-black bg-white"
+            className="w-full p-10 flex flex-col md:flex-row justify-between items-center text-xl text-black bg-white"
         >
             <p>© {currentYear} Laureles Audiovisual</p>
 

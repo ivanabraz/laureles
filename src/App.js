@@ -1,20 +1,25 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import { Route, Routes, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NavBarProvider } from './context/NavBarContext';
 import { AnimatePresence } from "framer-motion";
+
 import Home from './pages/Home';
+import Portfolio from './pages/Portfolio';
 import NavBar from './components/NavBar/NavBar';
 import Footer from './components/Footer/Footer';
 import Loading from './components/Loading/Loading';
-import Portfolio from './pages/Portfolio';
 
 const App = () => {
     const { i18n } = useTranslation();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+    const location = useLocation();
     const { lang } = useParams();
+
+    // Mostrar NavBar solo en la home y rutas con idioma (/, /es, /en, etc.)
+    const showNavBar = location.pathname === '/' || /^\/(es|en|pt)?$/.test(location.pathname);
 
     useEffect(() => {
         const selectedLanguage = lang || localStorage.getItem("i18nextLng") || 'es';
@@ -43,26 +48,30 @@ const App = () => {
                         <Loading i18n={i18n} />
                     ) : (
                         <>
-                        <div className="content">
-                            <NavBar 
-                                onLanguageChange={changeLanguage} 
-                                currentLanguage={i18n.language} 
-                            />
-                            <Routes>
-                                <Route path={`/:lang?`} exact element={<Home />} />
-                                <Route path={`/portfolio`} exact element={<Portfolio />} />
-                            </Routes>
-                            <Footer
-                                onLanguageChange={changeLanguage} 
-                                currentLanguage={i18n.language} 
-                            />
-                        </div>
+                            <div className="content">
+                                {showNavBar && (
+                                    <NavBar 
+                                        onLanguageChange={changeLanguage} 
+                                        currentLanguage={i18n.language} 
+                                    />
+                                )}
+
+                                <Routes>
+                                    <Route path={`/:lang?`} exact element={<Home />} />
+                                    <Route path={`/portfolio`} exact element={<Portfolio />} />
+                                </Routes>
+
+                                <Footer
+                                    onLanguageChange={changeLanguage} 
+                                    currentLanguage={i18n.language} 
+                                />
+                            </div>
                         </>
                     )}
                 </AnimatePresence>
             </div>
         </NavBarProvider>
     );
-}
+};
 
 export default App;
