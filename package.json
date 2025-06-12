@@ -1,5 +1,5 @@
 {
-  "name": "cuero",
+  "name": "laureles",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -20,6 +20,7 @@
     "link-preview-js": "^3.0.12",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-fast-marquee": "^1.6.5",
     "react-i18next": "^15.1.0",
     "react-responsive": "^10.0.0",
     "react-router-dom": "^6.27.0",

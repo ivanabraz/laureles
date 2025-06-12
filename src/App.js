@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import NavBar from './components/NavBar/NavBar';
 import Footer from './components/Footer/Footer';
 import Loading from './components/Loading/Loading';
+import Portfolio from './pages/Portfolio';
 
 const App = () => {
     const { i18n } = useTranslation();
@@ -49,6 +50,7 @@ const App = () => {
                             />
                             <Routes>
                                 <Route path={`/:lang?`} exact element={<Home />} />
+                                <Route path={`/portfolio`} exact element={<Portfolio />} />
                             </Routes>
                             <Footer
                                 onLanguageChange={changeLanguage} 

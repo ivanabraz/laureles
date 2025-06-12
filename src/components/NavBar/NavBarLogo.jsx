@@ -36,9 +36,8 @@ const NavBarLogo = (props) => {
                 <Link to="#" onClick={handleScrollToTop}>
                     <img 
                         src={logo} 
-                        alt="Cuerto Tango logo" 
-                        className={`h-8 transition-all duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'} ${scrolled ? 'invert' : ''}`}
-                    />
+                        alt="Logo" 
+                        className={`h-8 transition-all duration-300 ${scrolled ? 'invert' : ''}`}                    />
                 </Link>
         </div>
     )

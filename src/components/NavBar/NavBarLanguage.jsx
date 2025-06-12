@@ -15,7 +15,6 @@ const NavBarLanguage = ({ scrolled, closeMenu }) => {
     const languages = [
         { code: 'es', name: 'ES' },
         { code: 'en', name: 'EN' },
-        { code: 'de', name: 'DE' },
     ];
 
     // Idiomas disponibles excluyendo el actual

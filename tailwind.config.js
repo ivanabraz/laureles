@@ -8,11 +8,6 @@ module.exports = {
             'xs': '475px',
             ...defaultTheme.screens,
             },
-            fontFamily: {
-                'sans': ['TeXGyreHeros'],
-                'body': ['TeXGyreHeros'],
-                'condensed': ['TeXGyreHerosCondensed'],
-            },
         extend: {
             animation: {
                 'spin-slow': 'spin 5s linear infinite',

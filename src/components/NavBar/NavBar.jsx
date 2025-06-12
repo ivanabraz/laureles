@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import NavBarMobile from "./NavBarMobile";
 import NavBarDesktop from "./NavBarDesktop";
-import { faSpotify, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { faWhatsapp, faInstagram } from "@fortawesome/free-brands-svg-icons";
 
 const NavBar = ({ onLanguageChange, currentLanguage }) => {
     const [scrolled, setScrolled] = useState(false);
@@ -11,14 +11,14 @@ const NavBar = ({ onLanguageChange, currentLanguage }) => {
     const navigation = {
         sections: [
             { name: t('global.about'), href: 'about' },
-            { name: t('global.calendar'), href: 'calendar' },
-            { name: t('global.songs'), href: 'songs' },
+            { name: t('global.packages'), href: 'packages' },
+            { name: t('global.portfolio'), href: 'portfolio' },
             { name: t('global.press'), href: 'press' },
             { name: t('global.contact'), href: 'contact' },
         ],
         social: [
-            { name: 'Instagram', icon: faInstagram, href: 'instagram.com/cuero.tango' },
-            { name: 'Spotify', icon: faSpotify, href: 'open.spotify.com/intl-es/artist/1v6RSn3Vu77AbHn73BQIIM?si=6HvGxICoQJ2OFGejclw5qw' },
+            { name: 'Instagram', icon: faInstagram, href: 'instagram.com/laurelesaudiovisual' },
+            { name: 'Whatsapp', icon: faWhatsapp, href: 'api.whatsapp.com/send?phone=5491133752356&text=%20Hola,%20%c2%bfpuedes%20brindarme%20informaci%c3%b3n%20sobre%20las%20sesiones%20de%20fotograf%c3%ada%20en%20Laureles%20Audiovisual%3F%20%f0%9f%93%b8%f0%9f%90%be%20Estoy%20interesado/a%20en%20capturar%20momentos%20especiales.%20%c2%a1Gracias!&fbclid=PAZXh0bgNhZW0CMTEAAad6ZrVzURR5nBa3pjyZXMVmdZ0ZWhXG0Fq_s9bjzZKkjnb8cofqbX4WjCUNxg_aem_tM7HFUsxjO-Jt-EWBDDbVA' },
         ]
     };
 

@@ -21,7 +21,7 @@ const NavBarMobile = ({ logo, navigation, scrolled }) => {
                 </button>
 
                 {/* Logo */}
-                <div className={`mt-1 w-28`}>
+                <div className={`mt-1 w-34`}>
                     <NavBarLogo/>
                 </div>
 
@@ -45,14 +45,14 @@ const NavBarMobile = ({ logo, navigation, scrolled }) => {
 
                         <div className="w-full h-full m-auto content-center">
                             {/* Logo */}
-                            <img src={logo} alt="Cuero Tango Logo" className="invert h-12 m-auto mb-20" />
+                            <img src={logo} alt="Logo" className="invert h-12 m-auto mb-20" />
                             {/* Links de navegación */}
                             <div className="space-y-12 text-center relative">
                                 {navigation.sections.map((item) => (
                                     <Link
                                         key={item.name}
                                         to={item.href}
-                                        className="block text-xl uppercase condensed text-black"
+                                        className="block text-xl text-black"
                                         onClick={() => setOpen(false)}
                                     >
                                         {item.name}

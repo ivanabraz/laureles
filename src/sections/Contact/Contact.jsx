@@ -3,28 +3,22 @@ import { motion } from "framer-motion";
 
 const Contact = ({ t }) => {
     return (
-    <div id='contact' className="w-full bg-black py-16 text-center condensed uppercase text-white flex flex-col justify-center">
-            {/* Título */}
-            <motion.p
+        <div id="contact" className="w-full text-center text-black flex flex-col justify-center py-10">
+            <a href="https://api.whatsapp.com/send?phone=5491133752356&text=%20Hola,%20%c2%bfpuedes%20brindarme%20informaci%c3%b3n%20sobre%20las%20sesiones%20de%20fotograf%c3%ada%20en%20Laureles%20Audiovisual%3F%20%f0%9f%93%b8%f0%9f%90%be%20Estoy%20interesado/a%20en%20capturar%20momentos%20especiales.%20%c2%a1Gracias!" rel="noopener noreferrer" target="_blank">
+                <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, ease: "easeInOut" }}
-                    className="text-4xl mb-14"
+                    className="relative overflow-hidden group rounded-[40px] mx-6 md:mx-10 py-24 bg-neutral-100
+                    text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl"
                 >
-                    {t('global.contact')}
-                </motion.p>
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 2, ease: "easeInOut" }}
-                className="w-[60%] grid grid-cols-1 lg:grid-cols-3 m-auto"
-            >
-                <a href="mailto:cuerotango@gmail.com" rel="noopener noreferrer" target="_blank">cuerotango@gmail.com</a>
-                <a href="mailto:emiliocossani@gmail.com" rel="noopener noreferrer" target="_blank">emiliocossani@gmail.com</a>
-                <a href="https://www.instagram.com/cuero.tango" rel="noopener noreferrer" target="_blank">@cuero.tango</a>
-            </motion.div>
+                    <div className="absolute top-0 left-0 h-full w-0 bg-[#25D366] transition-all duration-500 ease-in-out group-hover:w-full z-0" />
+                    <span className="relative z-10 underline tracking-normal group-hover:tracking-widest transition-all duration-300 ease-in-out group-hover:text-white">
+                        {t("global.talk")}
+                    </span>
+                </motion.div>
+            </a>
         </div>
     );
 };
