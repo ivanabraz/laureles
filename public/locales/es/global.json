@@ -18,8 +18,37 @@
         "requestinfo":"Consultar",
 
         "tagline": "Donde las <u>patas</u>, las <u>manos</u> y los corazones cuentan su <u>historia</u> en una sola imagen.",
-        "about-text": "Soy Laura de los laureles, fotógrafa y amante de los animales. ¡Me hace mucha ilusión la posibilidad de conocer tu familia multiespecie! Cuando decides hacerte una sesión de fotos con quien más amas, estas invirtiendo en una experiencia de vida inolvidable. Quiero ser parte de esa experiencia con ustedes, capturando el vinculo más autentico, dulce y divertido en imágenes que atesorarán para siempre. No solo obtendrás sesiones de fotografía, sino una experiencia completa de disfrute y confort en un espacio completamente pensado para animales amados. Mi objetivo es que tú y tu amigo peludo se sientan cómodos y relajados durante la sesión, para que podamos capturar momentos conmovedores y divertidos que perduren e iluminen tu vida cada vez que mires las imágenes en tu celular, en la decoración de tu casa, en la compu o en donde quieras sentirte cerca de tu amado peludo."
-    
+        "about-text": "Soy Laura de los laureles, fotógrafa y amante de los animales. ¡Me hace mucha ilusión la posibilidad de conocer tu familia multiespecie! Cuando decides hacerte una sesión de fotos con quien más amas, estas invirtiendo en una experiencia de vida inolvidable. Quiero ser parte de esa experiencia con ustedes, capturando el vinculo más autentico, dulce y divertido en imágenes que atesorarán para siempre. No solo obtendrás sesiones de fotografía, sino una experiencia completa de disfrute y confort en un espacio completamente pensado para animales amados. Mi objetivo es que tú y tu amigo peludo se sientan cómodos y relajados durante la sesión, para que podamos capturar momentos conmovedores y divertidos que perduren e iluminen tu vida cada vez que mires las imágenes en tu celular, en la decoración de tu casa, en la compu o en donde quieras sentirte cerca de tu amado peludo.",
 
+        "packages_description": {
+            "session_studio_model": "Sesión estudio modelo",
+            "session_express": "Sesión express",
+            "session_studio_express": "Sesión estudio express",
+            "session_model": "Sesión modelo",
+            "session_chanda": "Sesión Chanda",
+            "gift_card": "Gift card",
+
+            "session_1h30": "1 hora y media de sesión",
+            "session_45min": "45 min de sesión",
+            "session_35min": "35 min de sesión",
+            "session_2h30": "2 horas y media de sesión",
+
+            "session_16_photos": "16 fotos editadas digitales",
+            "session_14_photos": "14 fotos editadas digitales",
+            "session_5_photos": "5 fotos editadas digitales",
+            "session_30_photos": "30 fotos editadas digitales",
+
+            "frame_40x50": "Cuadro 40x50cm",
+            "frame_30x40": "Cuadro 30x40cm",
+
+            "treats": "Premios comestibles",
+            "snack_humans": "Merienda para humanos",
+            "gift_bandana": "Un modelo Chanda bandana",
+
+            "location_studio": "Estudio (Recoleta)",
+            "location_outdoor": "Exterior, 1 locación",
+            "location_outdoor_multiple": "Exterior, más de 1 locación",
+            "location_outdoor_and_studio": "Exterior + estudio (Recoleta)"
+        }
     }
 }

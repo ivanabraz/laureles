@@ -1,93 +1,50 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
-const NavBarLanguage = ({ scrolled, closeMenu }) => {
+const NavBarLanguage = ({ closeMenu }) => {
     const { i18n } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
-    const currentLanguage = i18n.language;
-    const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef(null);
 
-    const languages = [
-        { code: 'es', name: 'ES' },
-        { code: 'en', name: 'EN' },
-    ];
+    const currentLanguageRaw = i18n.language;
+    const currentLanguage = currentLanguageRaw.startsWith('es') ? 'es' : 'en';
 
-    // Idiomas disponibles excluyendo el actual
-    const availableLanguages = languages.filter(lang => lang.code !== currentLanguage);
+    const languages = ['es', 'en'];
+    const languageToShow = languages.find(lang => lang !== currentLanguage);
 
-    // Función para cambiar el idioma y cerrar el menú
     const changeLanguage = (newLanguage) => {
         const newPath = location.pathname.replace(/^\/[a-z]{2}/, `/${newLanguage}`);
         i18n.changeLanguage(newLanguage);
         navigate(newPath);
-
-        // Cerrar el menú móvil
-        if (closeMenu) {
-            closeMenu();
-        }
-        setIsOpen(false);
+        if (closeMenu) closeMenu();
     };
-
-    const toggleDropdown = () => setIsOpen(!isOpen);
-
-    // Manejo de clics fuera del dropdown
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        };
-
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
-        }
-
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen]);
 
     return (
         <div className="flex items-center">
-            {/* Versión para desktop */}
-            <div ref={dropdownRef} className="relative hidden sm:flex items-center cursor-pointer" onClick={toggleDropdown}>
-                <span className={`mr-1 ${scrolled ? 'text-black' : 'text-white'}`}>{currentLanguage.toUpperCase()}</span>
-                <FontAwesomeIcon
-                    icon={faChevronDown}
-                    size="lg"
-                    className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : 'rotate-0'} ${scrolled ? 'text-black' : 'text-white'}`}
-                />
-                {isOpen && (
-                    <div className="absolute top-full mt-2 bg-white shadow-lg rounded w-16">
-                        {availableLanguages.map((lang) => (
-                            <div
-                                key={lang.code}
-                                onClick={() => changeLanguage(lang.code)}
-                                className="px-2 py-1 hover:bg-gray-200 cursor-pointer"
-                            >
-                                {lang.name}
-                            </div>
-                        ))}
-                    </div>
-                )}
+            {/* Botón idioma desktop */}
+            <div
+                className="hidden sm:flex cursor-pointer px-4 py-1 rounded-full border border-white text-white
+                hover:bg-white hover:text-neutral-400 transition-colors duration-300"
+                onClick={() => changeLanguage(languageToShow)}
+                title={`Cambiar a ${languageToShow.toUpperCase()}`}
+            >
+                {languageToShow.toUpperCase()}
             </div>
 
-            {/* Versión para mobile */}
+            {/* Idiomas mobile */}
             <div className="space-x-8 flex lg:hidden text-black">
-                {availableLanguages.map((lang) => (
-                    <span
-                        key={lang.code}
-                        onClick={() => changeLanguage(lang.code)}
-                        className="hover:underline cursor-pointer"
-                    >
-                        {lang.name}
-                    </span>
-                ))}
+                {languages
+                    .filter(lang => lang !== currentLanguage)
+                    .map(lang => (
+                        <span
+                            key={lang}
+                            onClick={() => changeLanguage(lang)}
+                            className="hover:underline cursor-pointer"
+                        >
+                            {lang.toUpperCase()}
+                        </span>
+                    ))}
             </div>
         </div>
     );

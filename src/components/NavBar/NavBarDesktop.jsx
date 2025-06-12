@@ -1,8 +1,9 @@
 import React from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { motion } from "framer-motion";
+import NavBarLanguage from "./NavBarLanguage";
 
-const NavBarDesktop = ({ navigation }) => {
+const NavBarDesktop = ({ navigation, scrolled }) => {
     return (
         <nav className={`absolute flex w-full hidden lg:flex lg:flex-col z-40 justify-center items-center text-center transition-all duration-300`}>
             <motion.div
@@ -32,6 +33,7 @@ const NavBarDesktop = ({ navigation }) => {
                         </a>
                     </div>
                 ))}
+                <NavBarLanguage scrolled={scrolled} />
             </motion.div>
         </nav>
     );
