@@ -86,7 +86,7 @@ const packagesData = useMemo(() => [
     buttonColor: "text-white",
     textColor: "text-white",
     },
-], [i18n.language, t]);
+], [t]);
 
 return (
     <div id="packages" className="w-full text-black flex flex-col items-center">
