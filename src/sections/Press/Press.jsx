@@ -63,7 +63,7 @@
                         />
                         <h3 className="text-xl mt-4 text-black">{item.title}</h3>
                         <button className="mt-1 text-sm underline text-neutral-400">
-                            Ver nota
+                            {t('global.readnote')}
                         </button>
                     </div>
                 </SwiperSlide>

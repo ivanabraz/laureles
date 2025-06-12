@@ -1,8 +1,9 @@
 import React from "react";
 import 'swiper/css';
 import { motion } from "framer-motion";
+import { Trans } from "react-i18next";
 
-const Quote = ({ t }) => {
+const Quote = () => {
     return (
         <div id="quote" className="w-full text-center py-24 text-black justify-center font-normal">
             <motion.div
@@ -14,10 +15,11 @@ const Quote = ({ t }) => {
                 text-4xl lg:text-5xl
                 w-[95%] md:w-[70%] lg:w-[60%] xl:w-[45%] m-auto"
             >
-                {/* {t('global.press')} */}
-                Donde las <u>patas</u>, las <u>manos</u> y los corazones cuentan su <u>historia</u> en una sola imagen.
+                <Trans
+                    i18nKey="global.tagline"
+                    components={{ u: <u /> }}
+                />
             </motion.div>
-            
         </div>
     );
 };

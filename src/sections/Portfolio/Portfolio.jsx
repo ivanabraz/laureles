@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 const Portfolio = ({ t }) => {
 const items = [
     {
-    label: "Marcas",
-    image: `${process.env.PUBLIC_URL}/images/portfolio/image-01.jpg`,
+        label: t("global.brands"),
+        image: `${process.env.PUBLIC_URL}/images/portfolio/image-01.jpg`,
     },
     {
-    label: "Familias",
-    image: `${process.env.PUBLIC_URL}/images/portfolio/image-02.jpg`,
+        label: t("global.family"),
+        image: `${process.env.PUBLIC_URL}/images/portfolio/image-02.jpg`,
     },
 ];
 
@@ -32,9 +32,9 @@ return (
             className="relative aspect-square bg-cover bg-center overflow-hidden"
             style={{ backgroundImage: `url(${item.image})` }}
             >
-            <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-all ease-in-out duration-300 flex items-center justify-center">
-                <span className="text-white text-2xl font-semibold">{item.label}</span>
-            </div>
+                <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-all ease-in-out duration-300 flex items-center justify-center">
+                    <span className="text-white text-2xl font-semibold">{item.label}</span>
+                </div>
             </div>
         ))}
         </div>

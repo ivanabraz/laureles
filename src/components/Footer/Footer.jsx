@@ -19,7 +19,7 @@ const Footer = ({ onLanguageChange, currentLanguage }) => {
                 onClick={handleScrollToTop}
                 className="cursor-pointer underline hover:text-gray-600 transition-colors"
             >
-                Volver arriba
+                {t('global.backtotop')}
             </p>
 
             <a 

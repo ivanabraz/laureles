@@ -137,7 +137,7 @@ return (
                         <div className="z-10">
                         <h3 className={`text-3xl ${pkg.titleColor}`}>{pkg.title}</h3>
                         <button className={`mt-3 text-sm underline ${pkg.buttonColor}`}>
-                            Consultar
+                            {t('global.requestinfo')}
                         </button>
                         </div>
 
