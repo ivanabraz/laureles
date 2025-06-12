@@ -5,7 +5,7 @@ import 'swiper/css';
 import { useTranslation } from "react-i18next";
 
 const Packages = () => {
-const { t, i18n } = useTranslation();
+const { t } = useTranslation();
 
 const packagesData = useMemo(() => [
     {
