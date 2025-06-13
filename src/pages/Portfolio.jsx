@@ -26,7 +26,7 @@ const Portfolio = () => {
         if (urlFilters) {
             setActiveFilters(urlFilters.split(","));
         }
-    }, [searchParams]);
+    }, [searchParams, setSearchParams]);
 
     // Actualizar filtros en la URL
     useEffect(() => {
@@ -35,7 +35,7 @@ const Portfolio = () => {
         } else {
             setSearchParams({});
         }
-    }, [activeFilters]);
+    }, [activeFilters, setSearchParams]);
 
     const toggleFilter = (filter) => {
         setActiveFilters((prev) =>
@@ -50,8 +50,8 @@ const Portfolio = () => {
         activeFilters.length === 0
             ? imageData
             : imageData.filter((img) =>
-                activeFilters.every((f) => img.filters.includes(f))
-            );
+                  activeFilters.every((f) => img.filters.includes(f))
+              );
 
     const allFilters = [
         { key: "brands", label: t("global.brands") },
@@ -68,7 +68,7 @@ const Portfolio = () => {
                 className="mt-12 text-2xl flex items-center gap-2 mb-6 hover:opacity-70 transition"
             >
                 <FontAwesomeIcon icon={faChevronLeft} />
-                {t('global.back')}
+                {t("global.back")}
             </button>
 
             {/* Filtros */}
