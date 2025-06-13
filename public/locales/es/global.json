@@ -7,6 +7,7 @@
         "press": "Prensa",
         "contact": "Contacto",
         "loading": "Cargando",
+        "back": "Volver",
 
         "rights": "Todos los derechos reservados",
         "readnote":"Ver nota",
@@ -15,6 +16,9 @@
         "backtotop":"Volver arriba",
         "family":"Familia",
         "brands":"Marcas",
+        "shelters":"Refugios",
+        "outdoor":"Exteriores",
+        "studio":"Estudio",
         "requestinfo":"Consultar",
 
         "tagline": "Donde las <u>patas</u>, las <u>manos</u> y los corazones cuentan su <u>historia</u> en una sola imagen.",

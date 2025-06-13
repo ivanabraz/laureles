@@ -7,6 +7,7 @@
         "press": "Press",
         "contact": "Contact",
         "loading": "Loading",
+        "back": "Back",
 
         "rights": "All rights reserved",
         "readnote":"Read note",
@@ -15,6 +16,9 @@
         "multispecies":"Multispecies photography",
         "family":"Family",
         "brands":"Brands",
+        "shelters":"Shelters",
+        "outdoor":"Outdoor",
+        "studio":"Studio",
         "requestinfo":"Request info",
 
         "tagline": "Where <u>paws</u>, <u>hands</u> and hearts tell their <u>story</u> in a single image.",

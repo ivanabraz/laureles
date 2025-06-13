@@ -10,11 +10,11 @@ const NavBar = ({ onLanguageChange, currentLanguage }) => {
     
     const navigation = {
         sections: [
-            { name: t('global.about'), href: 'about' },
-            { name: t('global.packages'), href: 'packages' },
-            { name: t('global.portfolio'), href: '/portfolio' },
-            { name: t('global.press'), href: 'press' },
-            { name: t('global.contact'), href: 'contact' },
+            { name: t('global.about'), href: `#about` },
+            { name: t('global.packages'), href: `#packages` },
+            { name: t('global.portfolio'), href: '#portfolio' },
+            { name: t('global.press'), href: `#press` },
+            { name: t('global.contact'), href: `#contact` },
         ],
         social: [
             { name: 'Instagram', icon: faInstagram, href: 'instagram.com/laurelesaudiovisual' },

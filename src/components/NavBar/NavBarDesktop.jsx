@@ -26,7 +26,7 @@ const NavBarDesktop = ({ navigation, scrolled }) => {
                 {navigation.sections.map((page) => (
                     <div key={uuidv4()} className="self-center">
                         <a 
-                            href={`#${page.href}`}
+                            href={`${page.href}`}
                             className={`transition-all duration-700 ease-in-out border-b border-transparent hover:border-white text-white`}
                         >
                             {page.name}

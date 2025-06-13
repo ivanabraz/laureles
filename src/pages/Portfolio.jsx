@@ -1,38 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faTrash, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const imageData = [
-    { id: "1", src: `${process.env.PUBLIC_URL}/images/portfolio/image-02.jpg`, categories: ["marcas", "exteriores"] },
-    { id: "2", src: `${process.env.PUBLIC_URL}/images/portfolio/image-02.jpg`, categories: ["familia"] },
-    { id: "3", src: `${process.env.PUBLIC_URL}/images/portfolio/image-02.jpg`, categories: ["estudio", "marcas"] },
-    { id: "4", src: `${process.env.PUBLIC_URL}/images/portfolio/image-02.jpg`, categories: ["exteriores"] },
-    { id: "5", src: `${process.env.PUBLIC_URL}/images/portfolio/image-02.jpg`, categories: ["familia", "estudio"] },
-];
-
-const filters = ["marcas", "familia", "exteriores", "estudio"];
+// Data
+import shelters from "../data/shelter.json";
+import brands from "../data/brands.json";
+import family from "../data/family.json";
 
 const Portfolio = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [activeFilters, setActiveFilters] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
 
+    const imageData = [...shelters, ...brands, ...family];
+
+    // Leer filtros de la URL
+    useEffect(() => {
+        const urlFilters = searchParams.get("filters");
+        if (urlFilters) {
+            setActiveFilters(urlFilters.split(","));
+        }
+    }, [searchParams]);
+
+    // Actualizar filtros en la URL
+    useEffect(() => {
+        if (activeFilters.length > 0) {
+            setSearchParams({ filters: activeFilters.join(",") });
+        } else {
+            setSearchParams({});
+        }
+    }, [activeFilters]);
+
     const toggleFilter = (filter) => {
         setActiveFilters((prev) =>
-            prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
+            prev.includes(filter)
+                ? prev.filter((f) => f !== filter)
+                : [...prev, filter]
         );
     };
 
+    // FILTRADO CON AND LÓGICO
     const filteredImages =
         activeFilters.length === 0
             ? imageData
             : imageData.filter((img) =>
-                activeFilters.some((f) => img.categories.includes(f))
+                activeFilters.every((f) => img.filters.includes(f))
             );
+
+    const allFilters = [
+        { key: "brands", label: t("global.brands") },
+        { key: "family", label: t("global.family") },
+        { key: "shelters", label: t("global.shelters") },
+        { key: "outdoor", label: t("global.outdoor") },
+        { key: "studio", label: t("global.studio") },
+    ];
 
     return (
         <div className="px-6 md:px-10">
@@ -41,20 +68,22 @@ const Portfolio = () => {
                 className="mt-12 text-2xl flex items-center gap-2 mb-6 hover:opacity-70 transition"
             >
                 <FontAwesomeIcon icon={faChevronLeft} />
-                Volver
+                {t('global.back')}
             </button>
 
             {/* Filtros */}
             <div className="w-full flex justify-center gap-8 mb-8 flex-wrap">
-                {filters.map((filter) => (
+                {allFilters.map((filter) => (
                     <button
-                        key={filter}
-                        onClick={() => toggleFilter(filter)}
+                        key={filter.key}
+                        onClick={() => toggleFilter(filter.key)}
                         className={`transition capitalize underline ${
-                            activeFilters.includes(filter) ? "font-semibold" : "font-normal"
+                            activeFilters.includes(filter.key)
+                                ? "font-semibold"
+                                : "font-normal"
                         }`}
                     >
-                        {t(filter)}
+                        {filter.label}
                     </button>
                 ))}
                 {activeFilters.length > 0 && (
@@ -69,23 +98,48 @@ const Portfolio = () => {
 
             {/* Galería */}
             <motion.div
+                key={activeFilters.join(",")}
                 layout
-                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
+                className="relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4"
             >
                 <AnimatePresence>
                     {filteredImages.map((image) => (
-                        <motion.img
+                        <motion.div
                             layout
-                            key={image.id}
-                            src={image.src}
-                            alt=""
-                            onClick={() => setSelectedImage(image.src)}
-                            className="w-full h-auto object-cover aspect-[2/3] rounded cursor-pointer"
+                            layoutId={image.id || image.src}
+                            key={image.id || image.src}
+                            className="relative w-full aspect-[2/3] rounded-[8px] overflow-hidden cursor-pointer"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.3 }}
-                        />
+                            onClick={() => setSelectedImage(image.src)}
+                        >
+                            <img
+                                src={image.src}
+                                alt=""
+                                className="w-full h-full object-cover"
+                            />
+
+                            {/* Etiqueta superior si hay texto */}
+                            {image.text && (
+                                <div className="absolute top-2 left-2 text-neutral-400 text-xs px-2 py-1 rounded z-10">
+                                    {image.href ? (
+                                        <a
+                                            href={image.href}
+                                            onClick={(e) => e.stopPropagation()}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:opacity-80 transition"
+                                        >
+                                            {image.text}
+                                        </a>
+                                    ) : (
+                                        image.text
+                                    )}
+                                </div>
+                            )}
+                        </motion.div>
                     ))}
                 </AnimatePresence>
             </motion.div>
@@ -97,23 +151,23 @@ const Portfolio = () => {
                     onClick={() => setSelectedImage(null)}
                 >
                     <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedImage(null);
-                    }}
-                    className="absolute top-6 right-6 text-white text-3xl p-2 hover:bg-opacity-80 transition"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedImage(null);
+                        }}
+                        className="absolute top-6 right-6 text-white text-3xl p-2 hover:bg-opacity-80 transition"
                     >
                         <FontAwesomeIcon icon={faTimes} />
                     </button>
                     <div className="w-full h-full flex items-center justify-center">
-                    <img
-                        src={selectedImage}
-                        alt="Ampliada"
-                        className="max-w-[80%] max-h-[80vh] rounded-lg"
-                    />
+                        <img
+                            src={selectedImage}
+                            alt="Ampliada"
+                            className="max-w-[80%] max-h-[80vh] rounded-lg"
+                        />
                     </div>
                 </div>
-                )}
+            )}
         </div>
     );
 };

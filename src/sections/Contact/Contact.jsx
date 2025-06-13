@@ -14,7 +14,7 @@ const Contact = ({ t }) => {
                     text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl"
                 >
                     <div className="absolute top-0 left-0 h-full w-0 bg-[#25D366] transition-all duration-500 ease-in-out group-hover:w-full z-0" />
-                    <span className="relative z-10 underline tracking-normal group-hover:tracking-widest transition-all duration-300 ease-in-out group-hover:text-white">
+                    <span className="relative z-2 underline tracking-normal group-hover:tracking-widest transition-all duration-300 ease-in-out group-hover:text-white">
                         {t("global.talk")}
                     </span>
                 </motion.div>

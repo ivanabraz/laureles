@@ -7,7 +7,7 @@ import Contact from "../sections/Contact/Contact";
 import Quote from "../sections/Quote/Quote";
 import MarqueeComponent from "../sections/Marquee/MarqueeComponent";
 import Packages from "../sections/Packages/Packages";
-import Portfolio from "../sections/Portfolio/Portfolio";
+import PortfolioSection from "../sections/PortfolioSection/PortfolioSection";
 
 const Home = () => {
     const { t } = useTranslation();
@@ -18,7 +18,7 @@ const Home = () => {
             <Quote t={t} />
             <Packages t={t} />
             <MarqueeComponent t={t} />
-            <Portfolio t={t} />
+            <PortfolioSection t={t} />
             <About t={t} />
             <Press t={t} />
             <Contact t={t}/>
