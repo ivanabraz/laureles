@@ -3,12 +3,15 @@ import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import 'swiper/css';
 import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 
 const Packages = () => {
 const { t } = useTranslation();
+const tEs = i18next.getFixedT('es');
 
 const packagesData = useMemo(() => [
     {
+    titleKey: "global.packages_description.session_chihuahua",
     title: t("global.packages_description.session_chihuahua"),
     details: [
         t("global.packages_description.session_60min"),
@@ -22,6 +25,7 @@ const packagesData = useMemo(() => [
     textColor: "text-black",
     },
     {
+    titleKey: "global.packages_description.session_galgo",
     title: t("global.packages_description.session_galgo"),
     details: [
         t("global.packages_description.session_60min"),
@@ -35,6 +39,7 @@ const packagesData = useMemo(() => [
     textColor: "text-white",
     },
     {
+    titleKey: "global.packages_description.session_akita",
     title: t("global.packages_description.session_akita"),
     details: [
         t("global.packages_description.session_60_90min"),
@@ -48,6 +53,7 @@ const packagesData = useMemo(() => [
     textColor: "text-white",
     },
     {
+    titleKey: "global.packages_description.session_pug",
     title: t("global.packages_description.session_pug"),
     details: [
         t("global.packages_description.session_60_90min"),
@@ -61,6 +67,7 @@ const packagesData = useMemo(() => [
     textColor: "text-white",
     },
     {
+    titleKey: "global.packages_description.session_mestizo",
     title: t("global.packages_description.session_mestizo"),
     details: [
         t("global.packages_description.session_60_90min"),
@@ -74,6 +81,7 @@ const packagesData = useMemo(() => [
     textColor: "text-white",
     },
     {
+    titleKey: "global.packages_description.session_dogo",
     title: t("global.packages_description.session_dogo"),
     details: [
         t("global.packages_description.session_60_90min"),
@@ -87,6 +95,7 @@ const packagesData = useMemo(() => [
     textColor: "text-white",
     },
     {
+    titleKey: "global.packages_description.gift_card",
     title: t("global.packages_description.gift_card"),
     details: [],
     image: `${process.env.PUBLIC_URL}/images/packages/image-07.jpg`,
@@ -124,40 +133,45 @@ return (
             1280: { slidesPerView: 4.5 },
         }}
         >
-        {packagesData.map((pkg, index) => (
+        {packagesData.map((pkg, index) => {
+            const whatsappMessage = `Hola! Me gustaría recibir información sobre el paquete ${tEs(pkg.titleKey)}`;
+            const whatsappURL = `https://api.whatsapp.com/send?phone=5491133752356&text=${encodeURIComponent(whatsappMessage)}`;
+
+            return (
             <SwiperSlide key={index}>
-            <a
-                href="https://api.whatsapp.com/send?phone=5491133752356&text=Hola,%20¿puedes%20brindarme%20información%20sobre%20las%20sesiones%20de%20fotografía%20en%20Laureles%20Audiovisual?"
+                <a
+                href={whatsappURL}
                 rel="noopener noreferrer"
                 target="_blank"
-            >
-                <div
-                className="aspect-[10/16] tracking-tight rounded-[40px] overflow-hidden relative bg-cover bg-center flex flex-col justify-between p-6"
-                style={{ backgroundImage: `url(${pkg.image})` }}
                 >
-                <div className="z-10">
+                <div
+                    className="aspect-[10/16] tracking-tight rounded-[40px] overflow-hidden relative bg-cover bg-center flex flex-col justify-between p-6"
+                    style={{ backgroundImage: `url(${pkg.image})` }}
+                >
+                    <div className="z-10">
                     <h3 className={`text-2xl md:text-3xl ${pkg.titleColor}`}>
-                    {pkg.title.split('\n').map((line, i) => (
+                        {pkg.title.split('\n').map((line, i) => (
                         <React.Fragment key={i}>
-                        {line}
-                        <br />
+                            {line}
+                            <br />
                         </React.Fragment>
-                    ))}
+                        ))}
                     </h3>
                     <button className={`mt-3 text-sm underline ${pkg.buttonColor}`}>
-                    {t("global.requestinfo")}
+                        {t("global.requestinfo")}
                     </button>
-                </div>
-                <div className={`z-10 text-sm ${pkg.textColor}`}>
+                    </div>
+                    <div className={`z-10 text-sm ${pkg.textColor}`}>
                     {pkg.details.map((item, i) => (
-                    <p key={i}>{item}</p>
+                        <p key={i}>{item}</p>
                     ))}
+                    </div>
+                    <div className="absolute inset-0 z-0" />
                 </div>
-                <div className="absolute inset-0 z-0" />
-                </div>
-            </a>
+                </a>
             </SwiperSlide>
-        ))}
+            );
+        })}
         </Swiper>
     </motion.div>
     </div>
