@@ -10,6 +10,7 @@ import Portfolio from './pages/Portfolio';
 import NavBar from './components/NavBar/NavBar';
 import Footer from './components/Footer/Footer';
 import Loading from './components/Loading/Loading';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 
 const App = () => {
     const { i18n } = useTranslation();
@@ -18,7 +19,6 @@ const App = () => {
     const location = useLocation();
     const { lang } = useParams();
 
-    // Mostrar NavBar solo en la home y rutas con idioma (/, /es, /en, etc.)
     const showNavBar = location.pathname === '/' || /^\/(es|en|pt)?$/.test(location.pathname);
 
     useEffect(() => {
@@ -56,6 +56,7 @@ const App = () => {
                                     />
                                 )}
 
+                                <ScrollToTop />
                                 <Routes>
                                     <Route path={`/:lang?`} exact element={<Home />} />
                                     <Route path={`/portfolio`} exact element={<Portfolio />} />

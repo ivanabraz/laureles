@@ -20,39 +20,33 @@
         "outdoor":"Outdoor",
         "studio":"Studio",
         "requestinfo":"Request info",
+        "no_results":"Oops! No results for the selected filters ☺",
+        "pawlidays": "Pawlidays",
 
         "tagline": "Where <u>paws</u>, <u>hands</u> and hearts tell their <u>story</u> in a single image.",
         "about-text": "I'm Laura de los Laureles, a photographer and animal lover. I'm thrilled at the possibility of meeting your multispecies family! When you decide to have a photo session with those you love the most, you're investing in an unforgettable life experience. I want to be part of that experience with you—capturing the most authentic, sweet, and joyful bond in images that you'll treasure forever. You're not just getting photography sessions, but a complete experience of joy and comfort in a space entirely designed for beloved animals. My goal is for you and your furry friend to feel comfortable and relaxed during the session, so we can capture heartwarming and fun moments that will last—and light up your life every time you see the images on your phone, decorating your home, on your computer, or anywhere you want to feel close to your beloved companion.",
 
         "packages_description": {
-            "session_studio_model": "Studio session model",
-            "session_express": "Express session",
-            "session_studio_express": "Studio express session",
-            "session_model": "Model session",
-            "session_chanda": "Chanda session",
-            "gift_card": "Gift card",
+            "session_pug": "Pug outdoor\nsession",
+            "session_mestizo": "Mestizo outdoor\nsession",
+            "session_dogo": "Dogo outdoor\nsession",
+            "session_chihuahua": "Chihuahua studio\nsession",
+            "session_galgo": "Galgo studio\nsession",
+            "session_akita": "Akita studio\nsession",
+            "gift_card": "Send a\ngift card",
 
-            "session_1h30": "1 hour and a half session",
-            "session_45min": "45-minute session",
-            "session_35min": "35-minute session",
-            "session_2h30": "2 and a half hour session",
+            "session_60_90min": "60 to 90 min",
+            "session_60min": "60 min",
 
-            "session_16_photos": "16 edited digital photos",
-            "session_14_photos": "14 edited digital photos",
             "session_5_photos": "5 edited digital photos",
-            "session_30_photos": "30 edited digital photos",
-
-            "frame_40x50": "40x50cm framed print",
-            "frame_30x40": "30x40cm framed print",
+            "session_10_photos": "10 edited digital photos",
+            "session_16_photos": "16 edited digital photos",
 
             "treats": "Edible treats",
-            "snack_humans": "Snack for humans",
-            "gift_bandana": "A Chanda model bandana",
 
-            "location_studio": "Studio (Recoleta)",
-            "location_outdoor": "Outdoor, 1 location",
-            "location_outdoor_multiple": "Outdoor, more than 1 location",
-            "location_outdoor_and_studio": "Outdoor + studio (Recoleta)"
+            "location_outdoor_1": "Outdoor, 1 location",
+            "location_outdoor_2": "Outdoor, 2 locations",
+            "location_studio": "Studio (Recoleta)"
         }
     }
 }

@@ -9,16 +9,30 @@ import { faChevronLeft, faTrash, faTimes } from "@fortawesome/free-solid-svg-ico
 import shelters from "../data/shelter.json";
 import brands from "../data/brands.json";
 import family from "../data/family.json";
+import pawlidays from "../data/pawlidays.json"; // 👈 Asegurate de tener este archivo
+
+const CATEGORY_FILTERS = ["shelters", "brands", "family", "pawlidays"];
+const STYLE_FILTERS = ["studio", "outdoor"];
 
 const Portfolio = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-
     const [activeFilters, setActiveFilters] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
 
-    const imageData = [...shelters, ...brands, ...family];
+    const imageData = [...shelters, ...brands, ...family, ...pawlidays];
+
+    const shuffleArray = (array) => {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    };
+
+    const [shuffledData] = useState(() => shuffleArray(imageData));
 
     // Leer filtros de la URL
     useEffect(() => {
@@ -26,7 +40,7 @@ const Portfolio = () => {
         if (urlFilters) {
             setActiveFilters(urlFilters.split(","));
         }
-    }, [searchParams, setSearchParams]);
+    }, [searchParams]);
 
     // Actualizar filtros en la URL
     useEffect(() => {
@@ -45,21 +59,45 @@ const Portfolio = () => {
         );
     };
 
-    // FILTRADO CON AND LÓGICO
-    const filteredImages =
-        activeFilters.length === 0
-            ? imageData
-            : imageData.filter((img) =>
-                  activeFilters.every((f) => img.filters.includes(f))
-              );
+    // Nuevo sistema de filtrado
+    const filteredImages = shuffledData.filter((img) => {
+        const hasAnyCategoryFilter = CATEGORY_FILTERS.some((f) =>
+            activeFilters.includes(f)
+        );
+        const hasAnyStyleFilter = STYLE_FILTERS.some((f) =>
+            activeFilters.includes(f)
+        );
 
-    const allFilters = [
-        { key: "brands", label: t("global.brands") },
-        { key: "family", label: t("global.family") },
-        { key: "shelters", label: t("global.shelters") },
-        { key: "outdoor", label: t("global.outdoor") },
-        { key: "studio", label: t("global.studio") },
-    ];
+        const hasCategory = activeFilters.some(
+            (f) => CATEGORY_FILTERS.includes(f) && img.filters.includes(f)
+        );
+
+        const styleFilters = activeFilters.filter((f) =>
+            STYLE_FILTERS.includes(f)
+        );
+
+        const hasAllStyles = styleFilters.every((style) =>
+            img.filters.includes(style)
+        );
+
+        // Caso 1: categoría + estilo
+        if (hasAnyCategoryFilter && hasAnyStyleFilter) {
+            return hasCategory && hasAllStyles;
+        }
+
+        // Caso 2: solo estilos
+        if (!hasAnyCategoryFilter && hasAnyStyleFilter) {
+            return hasAllStyles;
+        }
+
+        // Caso 3: solo categorías
+        if (hasAnyCategoryFilter && !hasAnyStyleFilter) {
+            return hasCategory;
+        }
+
+        // Caso 4: sin filtros
+        return true;
+    });
 
     return (
         <div className="px-6 md:px-10">
@@ -72,18 +110,31 @@ const Portfolio = () => {
             </button>
 
             {/* Filtros */}
-            <div className="w-full flex justify-center gap-8 mb-8 flex-wrap">
-                {allFilters.map((filter) => (
+            <div className="w-full flex flex-wrap justify-center gap-8 mb-8">
+                {CATEGORY_FILTERS.map((filter) => (
                     <button
-                        key={filter.key}
-                        onClick={() => toggleFilter(filter.key)}
+                        key={filter}
+                        onClick={() => toggleFilter(filter)}
                         className={`transition capitalize underline ${
-                            activeFilters.includes(filter.key)
+                            activeFilters.includes(filter)
                                 ? "font-semibold"
                                 : "font-normal"
                         }`}
                     >
-                        {filter.label}
+                        {t(`global.${filter}`)}
+                    </button>
+                ))}
+                {STYLE_FILTERS.map((filter) => (
+                    <button
+                        key={filter}
+                        onClick={() => toggleFilter(filter)}
+                        className={`transition capitalize underline ${
+                            activeFilters.includes(filter)
+                                ? "font-semibold"
+                                : "font-normal"
+                        }`}
+                    >
+                        {t(`global.${filter}`)}
                     </button>
                 ))}
                 {activeFilters.length > 0 && (
@@ -120,10 +171,8 @@ const Portfolio = () => {
                                 alt=""
                                 className="w-full h-full object-cover"
                             />
-
-                            {/* Etiqueta superior si hay texto */}
                             {image.text && (
-                                <div className="absolute top-2 left-2 text-neutral-400 text-xs px-2 py-1 rounded z-10">
+                                <div className="absolute top-2 left-2 bg-white/80 rounded-full text-neutral-900 text-xs px-2 py-1 z-10">
                                     {image.href ? (
                                         <a
                                             href={image.href}
@@ -142,6 +191,13 @@ const Portfolio = () => {
                         </motion.div>
                     ))}
                 </AnimatePresence>
+
+                {filteredImages.length === 0 && (
+                    <div className="col-span-full h-[75vh] content-center text-center text-neutral-500 py-20 text-xl">
+                        {t("global.no_results") ||
+                            "Oops! No hay resultados para los filtros seleccionados."}
+                    </div>
+                )}
             </motion.div>
 
             {/* Modal */}
