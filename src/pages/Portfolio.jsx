@@ -9,7 +9,7 @@ import { faChevronLeft, faTrash, faTimes } from "@fortawesome/free-solid-svg-ico
 import shelters from "../data/shelter.json";
 import brands from "../data/brands.json";
 import family from "../data/family.json";
-import pawlidays from "../data/pawlidays.json"; // 👈 Asegurate de tener este archivo
+import pawlidays from "../data/pawlidays.json";
 
 const CATEGORY_FILTERS = ["shelters", "brands", "family", "pawlidays"];
 const STYLE_FILTERS = ["studio", "outdoor"];
@@ -34,7 +34,6 @@ const Portfolio = () => {
 
     const [shuffledData] = useState(() => shuffleArray(imageData));
 
-    // Leer filtros de la URL
     useEffect(() => {
         const urlFilters = searchParams.get("filters");
         if (urlFilters) {
@@ -42,7 +41,6 @@ const Portfolio = () => {
         }
     }, [searchParams]);
 
-    // Actualizar filtros en la URL
     useEffect(() => {
         if (activeFilters.length > 0) {
             setSearchParams({ filters: activeFilters.join(",") });
@@ -80,22 +78,18 @@ const Portfolio = () => {
             img.filters.includes(style)
         );
 
-        // Caso 1: categoría + estilo
         if (hasAnyCategoryFilter && hasAnyStyleFilter) {
             return hasCategory && hasAllStyles;
         }
 
-        // Caso 2: solo estilos
         if (!hasAnyCategoryFilter && hasAnyStyleFilter) {
             return hasAllStyles;
         }
 
-        // Caso 3: solo categorías
         if (hasAnyCategoryFilter && !hasAnyStyleFilter) {
             return hasCategory;
         }
 
-        // Caso 4: sin filtros
         return true;
     });
 
@@ -110,7 +104,7 @@ const Portfolio = () => {
             </button>
 
             {/* Filtros */}
-            <div className="w-full flex flex-wrap justify-center gap-8 mb-8">
+            <div className="w-full flex flex-wrap justify-center gap-5 mb-8">
                 {CATEGORY_FILTERS.map((filter) => (
                     <button
                         key={filter}

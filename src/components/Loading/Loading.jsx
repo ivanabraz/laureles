@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 
 const Loading = () => {
-    // Memorizar animaciones para que no se redefinan en cada render
     const animations = useMemo(() => ({
         perrito: [
         `${process.env.PUBLIC_URL}/images/loading/perrito-01.svg`,
@@ -21,7 +20,6 @@ const Loading = () => {
     const [frameIndex, setFrameIndex] = useState(0);
 
     useEffect(() => {
-        // Elegir aleatoriamente solo una vez al montar
         const keys = Object.keys(animations);
         const randomKey = keys[Math.floor(Math.random() * keys.length)];
         setAnimationKey(randomKey);
@@ -46,7 +44,7 @@ const Loading = () => {
         <img
             src={animations[animationKey][frameIndex]}
             alt={`Animación ${animationKey}`}
-            className="h-16"
+            className="h-10"
         />
         </div>
     );
