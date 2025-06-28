@@ -58,5 +58,23 @@
     "text": "CATdopciones",
     "href": "https://www.instagram.com/catdopciones/",
     "filters": ["shelters", "studio"]
+    },
+    {
+    "src": "/images/portfolio/shelters/fortalezapitbull-01.jpg",
+    "text": "Fortaleza Pitbull",
+    "href": "https://www.instagram.com/fortalezapitbull/",
+    "filters": ["shelters", "studio"]
+    },
+    {
+    "src": "/images/portfolio/shelters/fortalezapitbull-02.jpg",
+    "text": "Fortaleza Pitbull",
+    "href": "https://www.instagram.com/fortalezapitbull/",
+    "filters": ["shelters", "studio"]
+    },
+    {
+    "src": "/images/portfolio/shelters/fortalezapitbull-03.jpg",
+    "text": "Fortaleza Pitbull",
+    "href": "https://www.instagram.com/fortalezapitbull/",
+    "filters": ["shelters", "studio"]
     }
 ]

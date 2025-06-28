@@ -3,15 +3,15 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faTrash, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 // Data
 import shelters from "../data/shelter.json";
 import brands from "../data/brands.json";
 import family from "../data/family.json";
-import pawlidays from "../data/pawlidays.json";
+import pawlidays from "../data/specials.json";
 
-const CATEGORY_FILTERS = ["shelters", "brands", "family", "pawlidays"];
+const CATEGORY_FILTERS = ["family", "brands", "shelters", "specials"];
 const STYLE_FILTERS = ["studio", "outdoor"];
 
 const Portfolio = () => {
@@ -57,40 +57,18 @@ const Portfolio = () => {
         );
     };
 
-    // Nuevo sistema de filtrado
+    // ✅ Nueva lógica de filtrado más flexible
     const filteredImages = shuffledData.filter((img) => {
-        const hasAnyCategoryFilter = CATEGORY_FILTERS.some((f) =>
-            activeFilters.includes(f)
-        );
-        const hasAnyStyleFilter = STYLE_FILTERS.some((f) =>
-            activeFilters.includes(f)
-        );
+        const categoryFilters = activeFilters.filter(f => CATEGORY_FILTERS.includes(f));
+        const styleFilters = activeFilters.filter(f => STYLE_FILTERS.includes(f));
 
-        const hasCategory = activeFilters.some(
-            (f) => CATEGORY_FILTERS.includes(f) && img.filters.includes(f)
-        );
+        const matchesCategory = categoryFilters.length === 0
+            || categoryFilters.some(f => img.filters.includes(f));
 
-        const styleFilters = activeFilters.filter((f) =>
-            STYLE_FILTERS.includes(f)
-        );
+        const matchesStyle = styleFilters.length === 0
+            || styleFilters.some(f => img.filters.includes(f));
 
-        const hasAllStyles = styleFilters.every((style) =>
-            img.filters.includes(style)
-        );
-
-        if (hasAnyCategoryFilter && hasAnyStyleFilter) {
-            return hasCategory && hasAllStyles;
-        }
-
-        if (!hasAnyCategoryFilter && hasAnyStyleFilter) {
-            return hasAllStyles;
-        }
-
-        if (hasAnyCategoryFilter && !hasAnyStyleFilter) {
-            return hasCategory;
-        }
-
-        return true;
+        return matchesCategory && matchesStyle;
     });
 
     return (
@@ -103,42 +81,60 @@ const Portfolio = () => {
                 {t("global.back")}
             </button>
 
-            {/* Filtros */}
-            <div className="w-full flex flex-wrap justify-center gap-5 mb-8">
-                {CATEGORY_FILTERS.map((filter) => (
-                    <button
-                        key={filter}
-                        onClick={() => toggleFilter(filter)}
-                        className={`transition capitalize underline ${
-                            activeFilters.includes(filter)
-                                ? "font-semibold"
-                                : "font-normal"
-                        }`}
-                    >
-                        {t(`global.${filter}`)}
-                    </button>
-                ))}
-                {STYLE_FILTERS.map((filter) => (
-                    <button
-                        key={filter}
-                        onClick={() => toggleFilter(filter)}
-                        className={`transition capitalize underline ${
-                            activeFilters.includes(filter)
-                                ? "font-semibold"
-                                : "font-normal"
-                        }`}
-                    >
-                        {t(`global.${filter}`)}
-                    </button>
-                ))}
-                {activeFilters.length > 0 && (
-                    <button
-                        onClick={() => setActiveFilters([])}
-                        className="transition capitalize underline text-neutral-400 font-normal flex items-center gap-2"
-                    >
-                        <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                )}
+            {/* Filtros de categoría */}
+            <div className="w-full flex flex-wrap justify-center gap-3 mb-3">
+                {CATEGORY_FILTERS.map((filter) => {
+                    const isActive = activeFilters.includes(filter);
+                    return (
+                        <button
+                            key={filter}
+                            onClick={() => toggleFilter(filter)}
+                            className={`px-3 py-1 rounded-full border transition flex items-center gap-2 text-sm capitalize
+                                ${isActive ? "border-black font-medium" : "border-transparent text-neutral-500 hover:border-neutral-400"}`}
+                        >
+                            {t(`global.${filter}`)}
+                            {isActive && (
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleFilter(filter);
+                                    }}
+                                    className="text-neutral-500 hover:text-black transition"
+                                >
+                                    <FontAwesomeIcon icon={faTimes} size="xs" />
+                                </span>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+
+            {/* Filtros de estilo */}
+            <div className="w-full flex flex-wrap justify-center gap-3 mb-8">
+                {STYLE_FILTERS.map((filter) => {
+                    const isActive = activeFilters.includes(filter);
+                    return (
+                        <button
+                            key={filter}
+                            onClick={() => toggleFilter(filter)}
+                            className={`px-3 py-1 rounded-full border transition flex items-center gap-2 text-sm uppercase
+                                ${isActive ? "border-black font-medium" : "border-transparent text-neutral-500 hover:border-neutral-400"}`}
+                        >
+                            {t(`global.${filter}`)}
+                            {isActive && (
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleFilter(filter);
+                                    }}
+                                    className="text-neutral-500 hover:text-black transition"
+                                >
+                                    <FontAwesomeIcon icon={faTimes} size="xs" />
+                                </span>
+                            )}
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Galería */}

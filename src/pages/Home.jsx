@@ -16,10 +16,10 @@ const Home = () => {
         <>
             <Header t={t} />
             <Quote t={t} />
-            <Packages t={t} />
-            <MarqueeComponent t={t} />
             <PortfolioSection t={t} />
             <About t={t} />
+            <Packages t={t} />
+            <MarqueeComponent t={t} />
             <Press t={t} />
             <Contact t={t}/>
         </>

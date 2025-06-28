@@ -51,17 +51,14 @@
     { "src": "/images/portfolio/family/image-50.jpg", "filters": ["family", "studio"] },
     { "src": "/images/portfolio/family/image-51.jpg", "filters": ["family", "studio"] },
     { "src": "/images/portfolio/family/image-52.jpg", "filters": ["family", "studio"] },
-    { "src": "/images/portfolio/family/image-53.jpg", "filters": ["family", "studio"] },
-    { "src": "/images/portfolio/family/image-54.jpg", "filters": ["family", "studio"] },
-    { "src": "/images/portfolio/family/image-55.jpg", "filters": ["family", "studio"] },
+    { "src": "/images/portfolio/family/image-53.jpg", "filters": ["family", "outdoor"] },
+    { "src": "/images/portfolio/family/image-54.jpg", "filters": ["family", "outdoor"] },
+    { "src": "/images/portfolio/family/image-55.jpg", "filters": ["family", "outdoor"] },
     { "src": "/images/portfolio/family/image-56.jpg", "filters": ["family", "outdoor"] },
     { "src": "/images/portfolio/family/image-57.jpg", "filters": ["family", "outdoor"] },
     { "src": "/images/portfolio/family/image-58.jpg", "filters": ["family", "outdoor"] },
     { "src": "/images/portfolio/family/image-59.jpg", "filters": ["family", "outdoor"] },
     { "src": "/images/portfolio/family/image-60.jpg", "filters": ["family", "outdoor"] },
     { "src": "/images/portfolio/family/image-61.jpg", "filters": ["family", "outdoor"] },
-    { "src": "/images/portfolio/family/image-62.jpg", "filters": ["family", "outdoor"] },
-    { "src": "/images/portfolio/family/image-63.jpg", "filters": ["family", "outdoor"] },
-    { "src": "/images/portfolio/family/image-64.jpg", "filters": ["family", "outdoor"] },
-    { "src": "/images/portfolio/family/image-65.jpg", "filters": ["family", "outdoor"] }
+    { "src": "/images/portfolio/family/image-62.jpg", "filters": ["family", "outdoor"] }
 ]
