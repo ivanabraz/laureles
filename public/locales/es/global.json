@@ -47,6 +47,13 @@
             "location_outdoor_1": "Exterior, 1 locación",
             "location_outdoor_2": "Exterior, 2 locaciones",
             "location_studio": "Estudio (Recoleta)"
-        }
+        },
+        
+        "brand_message": "¿Tienes una marca que ama a los animales tanto como yo? Creamos juntos contenido visual auténtico y profesional que conecte con tu audiencia.",
+        "contact_invite": "Contáctame para producir tus próximas fotos y campañas.",
+
+        "sections": "Secciones",
+        "language": "Idioma",
+        "followus": "Sígueme en redes!"
     }
 }

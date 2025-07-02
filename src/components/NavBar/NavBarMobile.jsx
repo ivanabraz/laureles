@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import NavBarLanguage from "./NavBarLanguage";
-import NavBarLogo from "./NavBarLogo";
+import { motion } from "framer-motion";
 
 const NavBarMobile = ({ logo, navigation, scrolled }) => {
     const [open, setOpen] = useState(false);
@@ -12,18 +12,26 @@ const NavBarMobile = ({ logo, navigation, scrolled }) => {
             {/* Barra superior */}
             <nav className={`w-full flex flex-row justify-between fixed top-0 left-0 z-100 py-5 px-10 ${scrolled ? 'bg-white' : 'bg-transparent'}`}>
                 {/* Botón burger */}
-                <button 
+                <motion.button
+                    initial={{ opacity: 0, }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 2, ease: "easeInOut" }}
+                    viewport={{ once: true }}
                     type="button" 
                     className={`${scrolled ? 'text-black' : 'text-white'}`} 
                     onClick={() => setOpen(true)}
                 >
                     <Bars3Icon className="h-8 w-8" aria-hidden="true" />
-                </button>
+                </motion.button>
 
                 {/* Logo */}
-                <div className={`mt-1 w-34`}>
-                    <NavBarLogo />
-                </div>
+                <motion.img
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 2, ease: "easeInOut" }}
+                viewport={{ once: true }}
+                src={logo} alt="Logo" 
+                className={`${scrolled ? 'invert' : ''} h-12 m-auto`}  />
 
                 <div></div>
             </nav>

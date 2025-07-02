@@ -149,22 +149,22 @@ return (
                     style={{ backgroundImage: `url(${pkg.image})` }}
                 >
                     <div className="z-10">
-                    <h3 className={`text-2xl md:text-3xl ${pkg.titleColor}`}>
-                        {pkg.title.split('\n').map((line, i) => (
-                        <React.Fragment key={i}>
-                            {line}
-                            <br />
-                        </React.Fragment>
-                        ))}
-                    </h3>
-                    <button className={`mt-3 text-sm underline ${pkg.buttonColor}`}>
-                        {t("global.requestinfo")}
-                    </button>
+                        <h3 className={`text-xl md:text-2xl lg:text-2xl ${pkg.titleColor}`}>
+                            {pkg.title.split('\n').map((line, i) => (
+                            <React.Fragment key={i}>
+                                {line}
+                                <br />
+                            </React.Fragment>
+                            ))}
+                        </h3>
+                        <button className={`mt-3 text-sm underline ${pkg.buttonColor}`}>
+                            {t("global.requestinfo")}
+                        </button>
                     </div>
                     <div className={`z-10 text-sm ${pkg.textColor}`}>
-                    {pkg.details.map((item, i) => (
-                        <p key={i}>{item}</p>
-                    ))}
+                        {pkg.details.map((item, i) => (
+                            <p key={i}>{item}</p>
+                        ))}
                     </div>
                     <div className="absolute inset-0 z-0" />
                 </div>
