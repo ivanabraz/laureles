@@ -18,11 +18,11 @@
 
     return (
         <div className="w-full h-[100vh] flex justify-center items-center">
-        <img
-            src={images[frameIndex]}
-            alt="Animación perrito corriendo"
-            className="h-16"
-        />
+            <img
+                src={images[frameIndex]}
+                alt="Animación perrito corriendo"
+                className="h-16"
+            />
         </div>
     );
     };

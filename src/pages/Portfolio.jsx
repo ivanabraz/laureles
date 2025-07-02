@@ -72,29 +72,29 @@
     const [activeFilters, setActiveFilters] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(null);
 
-        const BrandPromoCard = () => (
-    <motion.div
-        layout
-        className="aspect-[2/3] rounded-[8px] overflow-hidden relative bg-[#f5f3f6]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-    >
-        <div className="absolute inset-0 z-10 p-6 text-black overflow-auto max-h-full">
-        <p className="text-sm md:text-md lg:text-lg xl:text-xl">
-            {t("global.brand_message")} {" "}
-            <a
-            href="https://api.whatsapp.com/send?phone=5491133752356&text=Hola%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20las%20sesiones%20para%20marcas%20en%20Laureles%20Audiovisual.%20%F0%9F%93%B8%20%F0%9F%90%BE"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold underline cursor-pointer"
-            >
-                {t("global.contact_invite")}
-            </a>
-        </p>
-        </div>
-    </motion.div>
+    const BrandPromoCard = () => (
+        <motion.div
+            layout
+            className="aspect-[2/3] rounded-[8px] overflow-hidden relative bg-[#f5f3f6]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+        >
+            <div className="absolute inset-0 z-10 p-6 text-black overflow-auto max-h-full">
+            <p className="text-sm xs:text-xs sm:text-sm md:text-md lg:text-lg xl:text-xl">
+                {t("global.brand_message")} {" "}
+                <a
+                href="https://api.whatsapp.com/send?phone=5491133752356&text=Hola%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20las%20sesiones%20para%20marcas%20en%20Laureles%20Audiovisual.%20%F0%9F%93%B8%20%F0%9F%90%BE"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold underline cursor-pointer"
+                >
+                    {t("global.contact_invite")}
+                </a>
+            </p>
+            </div>
+        </motion.div>
     );
 
     const shuffledData = useMemo(() => {

@@ -9,7 +9,7 @@ import Home from './pages/Home';
 import Portfolio from './pages/Portfolio';
 import NavBar from './components/NavBar/NavBar';
 import Footer from './components/Footer/Footer';
-import Loading from './components/Loading/Loading';
+import Loading from './components/Loading/Loading perrito';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 
 const App = () => {
