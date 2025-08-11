@@ -23,17 +23,17 @@ const items = [
 
 return (
     <div id="portfolio" className="w-full pb-14">
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 2, ease: "easeInOut" }}
-                viewport={{ once: true }}
-            >
-                <p className="font-medium text-xl mb-10 px-6 md:px-10">
+        <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            viewport={{ once: true }}
+        >
+            <p className="font-medium text-xl mb-10 px-6 md:px-10">
                 {t("global.portfolio")}
-                </p>
+            </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3">
+            <div className="grid grid-cols-1 md:grid-cols-3">
                 {items.map((item, index) => (
                     <Link to={item.href}>
                         <div
@@ -47,8 +47,8 @@ return (
                         </div>
                     </Link>
                 ))}
-                </div>
-            </motion.div>
+            </div>
+        </motion.div>
     </div>
 );
 };

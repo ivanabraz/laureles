@@ -75,43 +75,27 @@
     const BrandPromoCard = () => (
         <motion.div
             layout
-            className="
-            col-span-2 sm:col-span-2 md:col-span-1
-            aspect-[2/3] xs:aspect-[5/3] sm:aspect-[5/3] md:aspect-[2/3]
-            rounded-[8px]
-            overflow-hidden
-            relative
-            "
+            className="aspect-[2/3] rounded-[8px] overflow-hidden relative bg-[#f5f3f6] col-span-3 xs:col-span-3 sm:col-span-3 md:col-span-1"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
         >
-            {/* Imagen de fondo */}
-            <img
-            src={`${process.env.PUBLIC_URL}/images/portfolio/image-gray.jpg`}
-            alt="Brand Promo"
-            className="absolute inset-0 w-full h-full object-cover"
-            />
-
-            {/* Contenido encima */}
-            <div className="absolute inset-0 z-10 p-4 flex items-top">
-            <p className="text-lg md:text-lg lg:text-lg xl:text-xl text-black p-2 rounded">
-                {t("global.brand_message")}{" "}
+            <div className="absolute inset-0 z-10 p-6 text-black overflow-auto max-h-full">
+            <p className="text-xl md:text-lg lg:text-lg xl:text-xl">
+                {t("global.brand_message")} {" "}
                 <a
                 href="https://api.whatsapp.com/send?phone=5491133752356&text=Hola%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20las%20sesiones%20para%20marcas%20en%20Laureles%20Audiovisual.%20%F0%9F%93%B8%20%F0%9F%90%BE"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold underline cursor-pointer"
                 >
-                {t("global.contact_invite")}
+                    {t("global.contact_invite")}
                 </a>
             </p>
             </div>
         </motion.div>
-        );
-
-
+    );
 
     const shuffledData = useMemo(() => {
         const imageData = [...shelters, ...brands, ...family, ...pawlidays];
@@ -198,7 +182,7 @@
         <motion.div
             key={activeFilters.join(",")}
             layout
-            className="relative grid grid-cols-2 xs:sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4"
+            className="relative grid grid-cols-2 xs:sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4"
         >
             {activeFilters.includes("brands") && <BrandPromoCard />}
 

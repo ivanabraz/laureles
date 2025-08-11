@@ -43,7 +43,7 @@ const handleNavigateAnchor = (anchor) => {
     if (element) {
         element.scrollIntoView({ behavior: "smooth" });
     }
-    }, 150); // 150ms funciona bien, ajustar si es necesario
+    }, 150);
 };
 
 const sections = [
@@ -179,7 +179,6 @@ return (
         {t("global.rights") || "Todos los derechos reservados."}
         </div>
 
-        {/* Botón Volver arriba absoluto dentro del footer */}
         {showButton && (
         <button
             onClick={handleScrollToTop}
