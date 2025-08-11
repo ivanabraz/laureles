@@ -77,7 +77,7 @@
             layout
             className="
             col-span-2 sm:col-span-2 md:col-span-1
-            aspect-[2/3] xs:aspect-[5/3] sm:aspect-[5/3] md:aspect-[2/3]
+            aspect-[5/3] xs:aspect-[5/3] sm:aspect-[5/3] md:aspect-[2/3] lg:aspect-[2/3] xl:aspect-[2/3] 2xl:aspect-[2/3]
             rounded-[8px]
             overflow-hidden
             relative
@@ -87,14 +87,12 @@
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
         >
-            {/* Imagen de fondo */}
             <img
             src={`${process.env.PUBLIC_URL}/images/portfolio/image-gray.jpg`}
             alt="Brand Promo"
             className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Contenido encima */}
             <div className="absolute inset-0 z-10 p-4 flex items-top">
             <p className="text-lg md:text-lg lg:text-lg xl:text-xl text-black p-2 rounded">
                 {t("global.brand_message")}{" "}
