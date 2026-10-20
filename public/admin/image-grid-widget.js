@@ -80,19 +80,22 @@
     return value === "outdoor" ? "Exterior" : "Estudio";
   }
 
-  var styleTagId = "laureles-image-grid-css-v7";
+  var styleTagId = "laureles-image-grid-css-v8";
   function ensureStyles() {
-    var old = document.getElementById("laureles-image-grid-css");
-    if (old) old.parentNode.removeChild(old);
+    ["laureles-image-grid-css", "laureles-image-grid-css-v7"].forEach(function (id) {
+      var old = document.getElementById(id);
+      if (old) old.parentNode.removeChild(old);
+    });
     if (document.getElementById(styleTagId)) return;
     var style = document.createElement("style");
     style.id = styleTagId;
     style.textContent = [
-      ".ig-wrap{font-family:system-ui,-apple-system,sans-serif}",
-      ".ig-layout{display:flex;align-items:flex-start;gap:16px}",
-      ".ig-main{flex:1;min-width:0}",
-      ".ig-side{width:280px;flex-shrink:0;position:sticky;top:12px;align-self:flex-start;max-height:calc(100vh - 24px);overflow-y:auto;z-index:5}",
-      "@media (max-width:900px){.ig-layout{flex-direction:column}.ig-side{width:100%;position:sticky;top:8px;max-height:none;order:-1}}",
+      ".ig-wrap{font-family:system-ui,-apple-system,sans-serif;padding-right:300px;box-sizing:border-box}",
+      ".ig-layout{display:block}",
+      ".ig-main{min-width:0}",
+      /* Fijo a la ventana: scrolleás la grilla y el panel no se mueve */
+      ".ig-side{position:fixed;top:72px;right:16px;width:280px;max-height:calc(100vh - 88px);overflow-y:auto;z-index:1000}",
+      "@media (max-width:900px){.ig-wrap{padding-right:0;padding-bottom:0}.ig-side{position:fixed;left:12px;right:12px;top:auto;bottom:12px;width:auto;max-height:42vh;z-index:1000}}",
       ".ig-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}",
       ".ig-hint{color:#666;font-size:13px;margin:0}",
       ".ig-btn{appearance:none;border:0;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;background:#222;color:#fff}",
@@ -115,8 +118,8 @@
       ".ig-del{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:18px;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}",
       ".ig-card:hover .ig-del{opacity:1}",
       ".ig-del:hover{background:#c62828}",
-      ".ig-meta{padding:16px;border:1px solid #e5e5e5;border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.06)}",
-      ".ig-meta.is-empty{background:#fafafa;border-style:dashed;color:#777}",
+      ".ig-meta{padding:16px;border:1px solid #e5e5e5;border-radius:12px;background:#fff;box-shadow:0 8px 28px rgba(0,0,0,.14)}",
+      ".ig-meta.is-empty{background:#fafafa;border-style:dashed;color:#777;box-shadow:0 4px 16px rgba(0,0,0,.06)}",
       ".ig-meta h4{margin:0 0 6px;font-size:15px}",
       ".ig-meta .ig-meta-sub{margin:0 0 12px;font-size:12px;color:#666;line-height:1.4}",
       ".ig-meta label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px}",
@@ -477,7 +480,7 @@
             h(
               "p",
               { className: "ig-meta-sub" },
-              "Click en una foto (o “Editar tags”) para cambiar categoría, lugar o pastilla. Este panel se queda fijo mientras scrolleás."
+              "Este panel queda fijo a la derecha. Click en cualquier foto (aunque esté abajo) y editá acá sin subir."
             )
           )
         );
@@ -618,7 +621,7 @@
                 visible.length +
                   " de " +
                   items.length +
-                  " · Click = tags (panel derecha) · Arrastrá = orden · × = borrar"
+                  " · Click = editar tags (panel fijo) · Arrastrá = orden · × = borrar"
               ),
               h(
                 "button",
