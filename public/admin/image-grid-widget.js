@@ -3,8 +3,22 @@
  * Value: [{ src, style, text?, href? }]  or  ["path", ...] if paths_only: true
  */
 (function () {
-  var h = window.CMS.h;
-  var createClass = window.CMS.createClass;
+  // Decap 3 exposes these on window (not CMS.*)
+  var h = window.h;
+  var createClass = window.createClass;
+  var CMS = window.CMS;
+
+  if (!CMS || !createClass || !h) {
+    console.error(
+      "[image-grid] Decap CMS APIs missing. CMS:",
+      !!CMS,
+      "createClass:",
+      !!createClass,
+      "h:",
+      !!h
+    );
+    return;
+  }
 
   var SITE = "https://laureles.netlify.app";
   var MAX_BYTES = 1024 * 1024;
@@ -405,5 +419,6 @@
     },
   });
 
-  window.CMS.registerWidget("image-grid", ImageGridControl);
+  CMS.registerWidget("image-grid", ImageGridControl);
+  console.info("[image-grid] widget registered");
 })();
