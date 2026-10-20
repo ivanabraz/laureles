@@ -131,6 +131,7 @@
         filterCategory: "all",
         filterStyle: "all",
         defaultCategory: "family",
+        didDrag: false,
       };
     },
 
@@ -251,7 +252,7 @@
     },
 
     handleDragStart: function (index, e) {
-      this.setState({ dragIndex: index });
+      this.setState({ dragIndex: index, didDrag: false });
       try {
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setData("text/plain", String(index));
@@ -260,13 +261,16 @@
 
     handleDragOver: function (index, e) {
       e.preventDefault();
+      if (this.state.dragIndex != null && this.state.dragIndex !== index) {
+        this.setState({ didDrag: true });
+      }
       if (this.state.overIndex !== index) this.setState({ overIndex: index });
     },
 
     handleDrop: function (index, e) {
       e.preventDefault();
       var from = this.state.dragIndex;
-      this.setState({ dragIndex: null, overIndex: null });
+      this.setState({ dragIndex: null, overIndex: null, didDrag: true });
       if (from == null || from === index) return;
       var items = this.getItems();
       var moved = items.splice(from, 1)[0];
@@ -280,7 +284,11 @@
 
     handleCardClick: function (index) {
       if (this.isPathsOnly()) return;
-      this.setState({ editIndex: this.state.editIndex === index ? null : index });
+      if (this.state.didDrag) {
+        this.setState({ didDrag: false });
+        return;
+      }
+      this.setState({ editIndex: index });
     },
 
     updateItem: function (index, patch) {
@@ -410,6 +418,21 @@
           style ? h("span", { className: "ig-badge" }, styleLabel(style)) : null
         ),
         pill ? h("span", { className: "ig-pill" }, pill) : null,
+        !pathsOnly
+          ? h(
+              "button",
+              {
+                type: "button",
+                className: "ig-edit-btn",
+                onClick: function (e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  self.setState({ editIndex: index, didDrag: false });
+                },
+              },
+              "Editar tags"
+            )
+          : null,
         h(
           "button",
           {
@@ -435,18 +458,32 @@
       var unified = this.isUnified();
       var style = item.style || "studio";
       var category = item.category || "family";
+      var thumb = toPublicUrl(item.src);
 
       return h(
         "div",
         { className: "ig-meta" },
-        h("h4", {}, "Editar tags de la foto"),
+        h("h4", {}, "Editar tags"),
         h(
           "p",
           { className: "ig-meta-sub" },
-          "Foto #" +
-            (index + 1) +
-            ". La pastilla es el mini nombre que se ve sobre la foto en el sitio (opcional)."
+          "Foto seleccionada" +
+            (item.src ? " · " + item.src.split("/").pop() : "") +
+            ". Cambiá categoría, lugar o pastilla y después Publish."
         ),
+        thumb
+          ? h("img", {
+              src: thumb,
+              alt: "",
+              style: {
+                width: "72px",
+                height: "108px",
+                objectFit: "cover",
+                borderRadius: "8px",
+                marginBottom: "8px",
+              },
+            })
+          : null,
         unified
           ? h(
               "div",
@@ -508,7 +545,22 @@
           onChange: function (e) {
             self.updateItem(index, { href: e.target.value });
           },
-        })
+        }),
+        h(
+          "div",
+          { className: "ig-meta-actions" },
+          h(
+            "button",
+            {
+              type: "button",
+              className: "ig-chip",
+              onClick: function () {
+                self.setState({ editIndex: null });
+              },
+            },
+            "Cerrar"
+          )
+        )
       );
     },
 
@@ -534,7 +586,7 @@
             visible.length +
               " de " +
               items.length +
-              " · Click = tags · Arrastrá = orden · Hover × = borrar"
+              " · Hover “Editar tags” o click en la foto · Arrastrá = orden · × = borrar"
           ),
           h(
             "button",
@@ -549,6 +601,7 @@
           )
         ),
         this.renderFilters(),
+        this.renderEditor(),
         h("input", {
           type: "file",
           accept: "image/*",
@@ -580,8 +633,7 @@
               { className: "ig-empty" },
               "No hay fotos con esos filtros."
             )
-          : null,
-        this.renderEditor()
+          : null
       );
     },
   });
