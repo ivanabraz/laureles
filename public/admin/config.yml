@@ -6,25 +6,35 @@ backend:
 
 local_backend: true
 
+site_url: https://laureles.netlify.app
+display_url: https://laureles.netlify.app
+
 media_folder: public/images/uploads
 public_folder: /images/uploads
 
 collections:
   - name: portfolio
     label: Portfolio
+    editor:
+      preview: false
     files:
       - name: family
-        label: Family
+        label: Fotos Family
         file: src/data/family.json
         media_folder: public/images/portfolio/family
         public_folder: /images/portfolio/family
         fields:
           - name: images
-            label: Imagenes
+            label: Fotos
+            label_singular: foto
             widget: list
-            summary: "{{fields.src}} — {{fields.style}}"
+            summary: "{{fields.style}} — {{fields.src}}"
+            hint: Maximo 1 MB por imagen. Arrastra o elegi el archivo.
             fields:
-              - { label: Imagen, name: src, widget: image }
+              - label: Foto
+                name: src
+                widget: image
+                hint: JPG o PNG, maximo 1 MB
               - label: Estilo
                 name: style
                 widget: select
@@ -34,17 +44,22 @@ collections:
                 default: studio
 
       - name: brands
-        label: Brands
+        label: Fotos Brands
         file: src/data/brands.json
         media_folder: public/images/portfolio/brands
         public_folder: /images/portfolio/brands
         fields:
           - name: images
-            label: Imagenes
+            label: Fotos
+            label_singular: foto
             widget: list
             summary: "{{fields.text}} — {{fields.style}}"
+            hint: Maximo 1 MB por imagen. Arrastra o elegi el archivo.
             fields:
-              - { label: Imagen, name: src, widget: image }
+              - label: Foto
+                name: src
+                widget: image
+                hint: JPG o PNG, maximo 1 MB
               - label: Estilo
                 name: style
                 widget: select
@@ -52,21 +67,34 @@ collections:
                   - { label: Studio, value: studio }
                   - { label: Outdoor, value: outdoor }
                 default: studio
-              - { label: Nombre (pastilla), name: text, widget: string, required: false }
-              - { label: Link, name: href, widget: string, required: false }
+              - label: Nombre en la pastilla
+                name: text
+                widget: string
+                required: false
+                hint: Ej. 3organicspets (opcional)
+              - label: Link de la pastilla
+                name: href
+                widget: string
+                required: false
+                hint: URL completa, ej. https://...
 
       - name: shelters
-        label: Shelters
+        label: Fotos Shelters
         file: src/data/shelter.json
         media_folder: public/images/portfolio/shelters
         public_folder: /images/portfolio/shelters
         fields:
           - name: images
-            label: Imagenes
+            label: Fotos
+            label_singular: foto
             widget: list
-            summary: "{{fields.src}} — {{fields.style}}"
+            summary: "{{fields.text}} — {{fields.style}}"
+            hint: Maximo 1 MB por imagen. Arrastra o elegi el archivo.
             fields:
-              - { label: Imagen, name: src, widget: image }
+              - label: Foto
+                name: src
+                widget: image
+                hint: JPG o PNG, maximo 1 MB
               - label: Estilo
                 name: style
                 widget: select
@@ -74,21 +102,32 @@ collections:
                   - { label: Studio, value: studio }
                   - { label: Outdoor, value: outdoor }
                 default: studio
-              - { label: Nombre (pastilla), name: text, widget: string, required: false }
-              - { label: Link, name: href, widget: string, required: false }
+              - label: Nombre en la pastilla
+                name: text
+                widget: string
+                required: false
+              - label: Link de la pastilla
+                name: href
+                widget: string
+                required: false
 
       - name: specials
-        label: Specials
+        label: Fotos Specials
         file: src/data/specials.json
         media_folder: public/images/portfolio/specials
         public_folder: /images/portfolio/specials
         fields:
           - name: images
-            label: Imagenes
+            label: Fotos
+            label_singular: foto
             widget: list
-            summary: "{{fields.src}} — {{fields.style}}"
+            summary: "{{fields.style}} — {{fields.src}}"
+            hint: Maximo 1 MB por imagen. Arrastra o elegi el archivo.
             fields:
-              - { label: Imagen, name: src, widget: image }
+              - label: Foto
+                name: src
+                widget: image
+                hint: JPG o PNG, maximo 1 MB
               - label: Estilo
                 name: style
                 widget: select
@@ -99,19 +138,23 @@ collections:
 
   - name: site_packages
     label: Paquetes
+    editor:
+      preview: false
     files:
       - name: packages_data
-        label: Paquetes
+        label: Imagenes de paquetes
         file: src/data/packages.json
         media_folder: public/images/packages
         public_folder: /images/packages
         fields:
           - name: packages
             label: Paquetes
+            label_singular: paquete
             widget: list
             summary: "{{fields.id}}"
+            hint: Textos del paquete se editan en el Google Sheet, aca solo fotos.
             fields:
-              - label: Paquete
+              - label: Cual paquete
                 name: id
                 widget: select
                 options:
@@ -122,12 +165,20 @@ collections:
                   - { label: Mestizo, value: mestizo }
                   - { label: Dogo, value: dogo }
                   - { label: Gift card, value: gift_card }
-              - { label: Imagen de la card, name: cover, widget: image }
+              - label: Foto de la card
+                name: cover
+                widget: image
+                hint: Maximo 1 MB
               - name: gallery
                 label: Galeria del modal
+                label_singular: foto
                 widget: list
-                field: { label: Imagen, name: image, widget: image }
-              - label: Color del titulo
+                hint: Fotos que se ven al abrir el paquete. Maximo 1 MB c/u.
+                field:
+                  label: Foto
+                  name: image
+                  widget: image
+              - label: Color del titulo en la card
                 name: titleColor
                 widget: select
                 options:

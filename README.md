@@ -2,10 +2,12 @@
 
 Sitio de Laureles Audiovisual (React / CRA).
 
+**Producción:** https://laureles.netlify.app
+
 ## Contenido editable
 
 - **Textos (ES/EN):** [Google Sheets](content/README.md)
-- **Fotos (portfolio + paquetes):** Decap CMS en `/admin` — [setup](content/cms-setup.md) · [guía Laura](content/cms-laura.md)
+- **Fotos (portfolio + paquetes):** [Admin](https://laureles.netlify.app/admin/) — [setup](content/cms-setup.md) · [guía Laura](content/cms-laura.md)
 
 ## Desarrollo
 
@@ -24,4 +26,4 @@ Luego `http://localhost:3000/admin/`.
 
 ## Deploy
 
-Push a `main` → GitHub Actions → GitHub Pages (`homepage` en `package.json`).
+Push a `main` → Netlify rebuild automático.
