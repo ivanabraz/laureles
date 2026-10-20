@@ -12,73 +12,25 @@ import {
 import PackageModal from "./PackageModal";
 import packagesContent from "../../data/packages.json";
 
-const PACKAGE_META = {
-  chihuahua: {
-    titleKey: "global.packages_description.session_chihuahua",
-    descriptionKey: "global.packages_description.desc_chihuahua",
-    detailKeys: [
-      { icon: faClock, textKey: "global.packages_description.session_60min" },
-      { icon: faCamera, textKey: "global.packages_description.session_5_photos" },
-      { icon: faBone, textKey: "global.packages_description.treats" },
-      { icon: faLocationDot, textKey: "global.packages_description.location_studio" },
-    ],
-  },
-  galgo: {
-    titleKey: "global.packages_description.session_galgo",
-    descriptionKey: "global.packages_description.desc_galgo",
-    detailKeys: [
-      { icon: faClock, textKey: "global.packages_description.session_60min" },
-      { icon: faCamera, textKey: "global.packages_description.session_10_photos" },
-      { icon: faBone, textKey: "global.packages_description.treats" },
-      { icon: faLocationDot, textKey: "global.packages_description.location_studio" },
-    ],
-  },
-  akita: {
-    titleKey: "global.packages_description.session_akita",
-    descriptionKey: "global.packages_description.desc_akita",
-    detailKeys: [
-      { icon: faClock, textKey: "global.packages_description.session_60_90min" },
-      { icon: faCamera, textKey: "global.packages_description.session_16_photos" },
-      { icon: faBone, textKey: "global.packages_description.treats" },
-      { icon: faLocationDot, textKey: "global.packages_description.location_studio" },
-    ],
-  },
-  pug: {
-    titleKey: "global.packages_description.session_pug",
-    descriptionKey: "global.packages_description.desc_pug",
-    detailKeys: [
-      { icon: faClock, textKey: "global.packages_description.session_60_90min" },
-      { icon: faCamera, textKey: "global.packages_description.session_5_photos" },
-      { icon: faBone, textKey: "global.packages_description.treats" },
-      { icon: faLocationDot, textKey: "global.packages_description.location_outdoor_1" },
-    ],
-  },
-  mestizo: {
-    titleKey: "global.packages_description.session_mestizo",
-    descriptionKey: "global.packages_description.desc_mestizo",
-    detailKeys: [
-      { icon: faClock, textKey: "global.packages_description.session_60_90min" },
-      { icon: faCamera, textKey: "global.packages_description.session_10_photos" },
-      { icon: faBone, textKey: "global.packages_description.treats" },
-      { icon: faLocationDot, textKey: "global.packages_description.location_outdoor_2" },
-    ],
-  },
-  dogo: {
-    titleKey: "global.packages_description.session_dogo",
-    descriptionKey: "global.packages_description.desc_dogo",
-    detailKeys: [
-      { icon: faClock, textKey: "global.packages_description.session_60_90min" },
-      { icon: faCamera, textKey: "global.packages_description.session_16_photos" },
-      { icon: faBone, textKey: "global.packages_description.treats" },
-      { icon: faLocationDot, textKey: "global.packages_description.location_outdoor_2" },
-    ],
-  },
-  gift_card: {
-    titleKey: "global.packages_description.gift_card",
-    descriptionKey: "global.packages_description.desc_gift_card",
-    detailKeys: [],
-  },
+const DETAIL_ICONS = {
+  session_60min: faClock,
+  session_60_90min: faClock,
+  session_5_photos: faCamera,
+  session_10_photos: faCamera,
+  session_16_photos: faCamera,
+  treats: faBone,
+  location_studio: faLocationDot,
+  location_outdoor_1: faLocationDot,
+  location_outdoor_2: faLocationDot,
 };
+
+const packageTitleKey = (id) =>
+  id === "gift_card"
+    ? "global.packages_description.gift_card"
+    : `global.packages_description.session_${id}`;
+
+const packageDescriptionKey = (id) =>
+  `global.packages_description.desc_${id}`;
 
 const withPublicUrl = (src) => {
   if (!src) return null;
@@ -105,18 +57,26 @@ const Packages = () => {
     const list = packagesContent.packages || [];
     return list
       .map((pkg) => {
-        const meta = PACKAGE_META[pkg.id];
-        if (!meta) return null;
+        if (!pkg?.id) return null;
+        const titleKey = packageTitleKey(pkg.id);
+        const descriptionKey = packageDescriptionKey(pkg.id);
         const cover = withPublicUrl(pkg.cover);
+        const detailIds = Array.isArray(pkg.details) ? pkg.details : [];
         return {
           id: pkg.id,
-          titleKey: meta.titleKey,
-          title: t(meta.titleKey),
-          description: t(meta.descriptionKey),
-          details: meta.detailKeys.map(({ icon, textKey }) => ({
-            icon,
-            text: t(textKey),
-          })),
+          titleKey,
+          title: t(titleKey),
+          description: t(descriptionKey),
+          details: detailIds
+            .map((detailId) => {
+              const icon = DETAIL_ICONS[detailId];
+              if (!icon) return null;
+              return {
+                icon,
+                text: t(`global.packages_description.${detailId}`),
+              };
+            })
+            .filter(Boolean),
           image: cover,
           gallery: normalizeGallery(pkg.gallery, pkg.cover),
           titleColor: pkg.titleColor || "text-white",
@@ -155,7 +115,7 @@ const Packages = () => {
           className="!overflow-visible py-3"
         >
           {packagesData.map((pkg, index) => (
-            <SwiperSlide key={pkg.id || pkg.titleKey || index} className="!overflow-visible">
+            <SwiperSlide key={pkg.id || index} className="!overflow-visible">
               <button
                 type="button"
                 onClick={() => setSelectedPackage(pkg)}

@@ -48,4 +48,4 @@ collections:
             widget: packages-grid
             media_folder: public/images/packages
             public_folder: /images/packages
-            hint: Cards visuales. Click = cover + galeria del modal. Textos en el Sheet.
+            hint: Agregar paquete = card nueva. Fotos acá; título/descripción = 2 filas nuevas en el Sheet.

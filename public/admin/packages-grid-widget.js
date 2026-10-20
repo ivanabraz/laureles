@@ -1,6 +1,10 @@
 /**
- * Decap widget for packages: visual cards (cover) + edit cover/gallery/titleColor.
- * Value: [{ id, cover, gallery: string[], titleColor }]
+ * Decap widget for packages: visual cards + cover/gallery/titleColor/details.
+ * Value: [{ id, cover, gallery: string[], titleColor, details: string[] }]
+ *
+ * Texts live in Google Sheets. New packages need two Sheet rows:
+ *   packages_description.session_{id}  (or .gift_card for gift_card)
+ *   packages_description.desc_{id}
  */
 (function () {
   var h = window.h;
@@ -13,9 +17,20 @@
   }
 
   var SITE = "https://laureles.netlify.app";
-  var MAX_BYTES = 1024 * 1024;
 
-  var PACKAGE_LABELS = {
+  var DETAIL_OPTIONS = [
+    { id: "session_60min", label: "60 min" },
+    { id: "session_60_90min", label: "60–90 min" },
+    { id: "session_5_photos", label: "5 fotos" },
+    { id: "session_10_photos", label: "10 fotos" },
+    { id: "session_16_photos", label: "16 fotos" },
+    { id: "treats", label: "Premios" },
+    { id: "location_studio", label: "Estudio" },
+    { id: "location_outdoor_1", label: "Exterior 1 loc." },
+    { id: "location_outdoor_2", label: "Exterior 2 loc." },
+  ];
+
+  var KNOWN_LABELS = {
     chihuahua: "Chihuahua",
     galgo: "Galgo",
     akita: "Akita",
@@ -24,8 +39,6 @@
     dogo: "Dogo",
     gift_card: "Gift card",
   };
-
-  var PACKAGE_IDS = Object.keys(PACKAGE_LABELS);
 
   function toPublicUrl(src) {
     if (!src) return "";
@@ -39,20 +52,64 @@
     return Array.isArray(value) ? value.slice() : [];
   }
 
+  function slugify(raw) {
+    return String(raw || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "")
+      .slice(0, 40);
+  }
+
+  function packageLabel(id) {
+    if (KNOWN_LABELS[id]) return KNOWN_LABELS[id];
+    return String(id || "")
+      .split("_")
+      .map(function (w) {
+        return w ? w.charAt(0).toUpperCase() + w.slice(1) : "";
+      })
+      .join(" ");
+  }
+
+  function sheetKeysFor(id) {
+    if (id === "gift_card") {
+      return ["packages_description.gift_card", "packages_description.desc_gift_card"];
+    }
+    return [
+      "packages_description.session_" + id,
+      "packages_description.desc_" + id,
+    ];
+  }
+
+  function defaultDetailsFor(id) {
+    if (id === "gift_card") return [];
+    return ["session_60min", "session_5_photos", "treats", "location_studio"];
+  }
+
   function normalizePkg(pkg) {
-    var gallery = asArray(pkg.gallery).map(function (g) {
-      return typeof g === "string" ? g : g && (g.src || g.image) || "";
-    }).filter(Boolean);
+    var gallery = asArray(pkg.gallery)
+      .map(function (g) {
+        return typeof g === "string" ? g : (g && (g.src || g.image)) || "";
+      })
+      .filter(Boolean);
+    var details = asArray(pkg.details).filter(Boolean);
+    if (!details.length && pkg.id && pkg.id !== "gift_card" && !("details" in (pkg || {}))) {
+      details = defaultDetailsFor(pkg.id);
+    }
     return {
-      id: pkg.id || "chihuahua",
+      id: pkg.id || "nuevo",
       cover: pkg.cover || gallery[0] || "",
       gallery: gallery.length ? gallery : pkg.cover ? [pkg.cover] : [],
       titleColor: pkg.titleColor || "text-white",
+      details: details,
     };
   }
 
-  var styleTagId = "laureles-packages-grid-css";
+  var styleTagId = "laureles-packages-grid-css-v2";
   function ensureStyles() {
+    var old = document.getElementById("laureles-packages-grid-css");
+    if (old) old.parentNode.removeChild(old);
     if (document.getElementById(styleTagId)) return;
     var style = document.createElement("style");
     style.id = styleTagId;
@@ -71,7 +128,7 @@
       ".pg-count{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.55);color:#fff;border-radius:999px;padding:3px 8px;font-size:11px}",
       ".pg-panel{margin-top:18px;padding:16px;border:1px solid #e5e5e5;border-radius:14px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.06)}",
       ".pg-panel h4{margin:0 0 4px;font-size:16px}",
-      ".pg-panel .pg-sub{margin:0 0 14px;font-size:12px;color:#666}",
+      ".pg-panel .pg-sub{margin:0 0 14px;font-size:12px;color:#666;line-height:1.45}",
       ".pg-panel label{display:block;font-size:12px;font-weight:600;margin:12px 0 6px}",
       ".pg-cover-row{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}",
       ".pg-cover-preview{width:120px;aspect-ratio:10/16;border-radius:12px;overflow:hidden;background:#eee;flex-shrink:0}",
@@ -82,6 +139,8 @@
       ".pg-chips{display:flex;gap:8px;flex-wrap:wrap}",
       ".pg-chip{appearance:none;border:1px solid #ccc;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}",
       ".pg-chip.is-on{background:#222;border-color:#222;color:#fff}",
+      ".pg-keys{margin-top:8px;padding:12px;background:#f7f7f7;border-radius:10px;font-size:12px;line-height:1.5}",
+      ".pg-keys code{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:#fff;border:1px solid #e5e5e5;border-radius:6px;padding:6px 8px;margin:4px 0;word-break:break-all}",
       ".pg-ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:8px}",
       ".pg-gcard{position:relative;aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:#eee;cursor:grab}",
       ".pg-gcard.is-dragging{opacity:.45}",
@@ -92,6 +151,7 @@
       ".pg-gdel:hover{background:#c62828}",
       ".pg-star{position:absolute;left:6px;bottom:6px;background:rgba(255,255,255,.95);border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700}",
       ".pg-empty{padding:24px;border:2px dashed #ccc;border-radius:12px;text-align:center;color:#777}",
+      ".pg-input{width:100%;max-width:280px;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;box-sizing:border-box}",
     ].join("");
     document.head.appendChild(style);
   }
@@ -104,7 +164,7 @@
         overIndex: null,
         gDragIndex: null,
         gOverIndex: null,
-        mediaTarget: null, // 'cover' | 'gallery'
+        mediaTarget: null,
       };
     },
 
@@ -174,6 +234,51 @@
       });
     },
 
+    handleAddPackage: function () {
+      var raw = window.prompt(
+        "Nombre interno del paquete nuevo (sin espacios, ej. beagle o golden_retriever):"
+      );
+      if (raw == null) return;
+      var id = slugify(raw);
+      if (!id) {
+        window.alert("Nombre inválido.");
+        return;
+      }
+      var items = this.getItems();
+      if (
+        items.some(function (p) {
+          return p.id === id;
+        })
+      ) {
+        window.alert("Ya existe un paquete con id “" + id + "”.");
+        return;
+      }
+
+      items.push({
+        id: id,
+        cover: "",
+        gallery: [],
+        titleColor: "text-white",
+        details: defaultDetailsFor(id),
+      });
+      this.commit(items);
+      this.setState({ editIndex: items.length - 1 });
+
+      var keys = sheetKeysFor(id);
+      window.alert(
+        "Paquete “" +
+          packageLabel(id) +
+          "” creado.\n\n" +
+          "1) Subí cover y galería acá.\n" +
+          "2) En Google Sheets agregá estas 2 filas (columna key):\n\n" +
+          keys[0] +
+          "\n" +
+          keys[1] +
+          "\n\n" +
+          "Completá es / en con el título y la descripción. Los ítems “Incluye” se eligen en el panel (reusan textos que ya existen en el Sheet)."
+      );
+    },
+
     handleDeletePackage: function (index, e) {
       if (e) {
         e.preventDefault();
@@ -184,6 +289,9 @@
       items.splice(index, 1);
       this.commit(items);
       if (this.state.editIndex === index) this.setState({ editIndex: null });
+      else if (this.state.editIndex > index) {
+        this.setState({ editIndex: this.state.editIndex - 1 });
+      }
     },
 
     handleDragStart: function (index, e) {
@@ -208,6 +316,7 @@
       var moved = items.splice(from, 1)[0];
       items.splice(index, 0, moved);
       this.commit(items);
+      if (this.state.editIndex === from) this.setState({ editIndex: index });
     },
 
     handleDragEnd: function () {
@@ -217,6 +326,18 @@
     updatePkg: function (index, patch) {
       var items = this.getItems();
       items[index] = Object.assign({}, items[index], patch);
+      this.commit(items);
+    },
+
+    toggleDetail: function (index, detailId) {
+      var items = this.getItems();
+      var pkg = Object.assign({}, items[index]);
+      var details = (pkg.details || []).slice();
+      var pos = details.indexOf(detailId);
+      if (pos >= 0) details.splice(pos, 1);
+      else details.push(detailId);
+      pkg.details = details;
+      items[index] = pkg;
       this.commit(items);
     },
 
@@ -278,28 +399,6 @@
       this.setState({ gDragIndex: null, gOverIndex: null });
     },
 
-    addMissingPackages: function () {
-      var items = this.getItems();
-      var have = {};
-      items.forEach(function (p) {
-        have[p.id] = true;
-      });
-      var added = false;
-      PACKAGE_IDS.forEach(function (id) {
-        if (!have[id]) {
-          items.push({
-            id: id,
-            cover: "",
-            gallery: [],
-            titleColor: id === "chihuahua" || id === "galgo" || id === "akita" ? "text-black" : "text-white",
-          });
-          added = true;
-        }
-      });
-      if (added) this.commit(items);
-      else window.alert("Ya están los 7 paquetes.");
-    },
-
     renderPackageCard: function (pkg, index) {
       var self = this;
       var url = toPublicUrl(pkg.cover);
@@ -338,7 +437,7 @@
         url
           ? h("img", { src: url, alt: "", loading: "lazy" })
           : h("div", { className: "pg-ph" }, "Sin cover"),
-        h("span", { className: "pg-name" }, PACKAGE_LABELS[pkg.id] || pkg.id),
+        h("span", { className: "pg-name" }, packageLabel(pkg.id)),
         h(
           "span",
           { className: "pg-count" },
@@ -355,16 +454,34 @@
       if (!pkg) return null;
       var self = this;
       var coverUrl = toPublicUrl(pkg.cover);
+      var keys = sheetKeysFor(pkg.id);
+      var details = pkg.details || [];
 
       return h(
         "div",
         { className: "pg-panel" },
-        h("h4", {}, PACKAGE_LABELS[pkg.id] || pkg.id),
+        h("h4", {}, packageLabel(pkg.id)),
         h(
           "p",
           { className: "pg-sub" },
-          "Los textos del paquete se editan en el Google Sheet. Acá solo fotos y color del título."
+          "Fotos y “Incluye” acá. Título y descripción del paquete → Google Sheet (keys abajo)."
         ),
+
+        h("label", {}, "Id interno (no cambiar si ya tiene textos en el Sheet)"),
+        h("input", {
+          className: "pg-input",
+          type: "text",
+          value: pkg.id,
+          onChange: function (e) {
+            var next = slugify(e.target.value);
+            if (!next) return;
+            var clash = items.some(function (p, i) {
+              return i !== index && p.id === next;
+            });
+            if (clash) return;
+            self.updatePkg(index, { id: next });
+          },
+        }),
 
         h("label", {}, "Foto de la card (cover)"),
         h(
@@ -422,6 +539,41 @@
             },
             "Blanco"
           )
+        ),
+
+        h("label", {}, "Incluye (ítems del modal — textos ya en el Sheet)"),
+        h(
+          "div",
+          { className: "pg-chips" },
+          DETAIL_OPTIONS.map(function (opt) {
+            return h(
+              "button",
+              {
+                key: opt.id,
+                type: "button",
+                className:
+                  "pg-chip" + (details.indexOf(opt.id) >= 0 ? " is-on" : ""),
+                onClick: function () {
+                  self.toggleDetail(index, opt.id);
+                },
+              },
+              opt.label
+            );
+          })
+        ),
+
+        h("label", {}, "Keys para Google Sheet (título + descripción)"),
+        h(
+          "div",
+          { className: "pg-keys" },
+          h(
+            "span",
+            {},
+            "Agregá estas filas si el paquete es nuevo (columnas key / es / en):"
+          ),
+          keys.map(function (k) {
+            return h("code", { key: k }, k);
+          })
         ),
 
         h("label", {}, "Galería del modal"),
@@ -532,7 +684,7 @@
             "p",
             { className: "pg-hint" },
             items.length +
-              " paquetes · Click = editar cover/galería · Arrastrá = orden en el sitio"
+              " paquetes · Click = editar · Arrastrá = orden · Textos nuevos → Sheet"
           ),
           h(
             "button",
@@ -540,10 +692,10 @@
               type: "button",
               className: "pg-btn",
               onClick: function () {
-                self.addMissingPackages();
+                self.handleAddPackage();
               },
             },
-            "Completar paquetes faltantes"
+            "Agregar paquete"
           )
         ),
         items.length
@@ -557,7 +709,7 @@
           : h(
               "div",
               { className: "pg-empty" },
-              "No hay paquetes. Tocá “Completar paquetes faltantes”."
+              "No hay paquetes. Tocá “Agregar paquete”."
             ),
         this.renderEditor()
       );
@@ -565,5 +717,5 @@
   });
 
   CMS.registerWidget("packages-grid", PackagesGridControl);
-  console.info("[packages-grid] widget registered");
+  console.info("[packages-grid] widget registered (add package + sheet keys)");
 })();
