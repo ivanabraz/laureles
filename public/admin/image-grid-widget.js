@@ -80,13 +80,19 @@
     return value === "outdoor" ? "Exterior" : "Estudio";
   }
 
-  var styleTagId = "laureles-image-grid-css";
+  var styleTagId = "laureles-image-grid-css-v7";
   function ensureStyles() {
+    var old = document.getElementById("laureles-image-grid-css");
+    if (old) old.parentNode.removeChild(old);
     if (document.getElementById(styleTagId)) return;
     var style = document.createElement("style");
     style.id = styleTagId;
     style.textContent = [
       ".ig-wrap{font-family:system-ui,-apple-system,sans-serif}",
+      ".ig-layout{display:flex;align-items:flex-start;gap:16px}",
+      ".ig-main{flex:1;min-width:0}",
+      ".ig-side{width:280px;flex-shrink:0;position:sticky;top:12px;align-self:flex-start;max-height:calc(100vh - 24px);overflow-y:auto;z-index:5}",
+      "@media (max-width:900px){.ig-layout{flex-direction:column}.ig-side{width:100%;position:sticky;top:8px;max-height:none;order:-1}}",
       ".ig-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}",
       ".ig-hint{color:#666;font-size:13px;margin:0}",
       ".ig-btn{appearance:none;border:0;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;background:#222;color:#fff}",
@@ -109,11 +115,13 @@
       ".ig-del{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:18px;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}",
       ".ig-card:hover .ig-del{opacity:1}",
       ".ig-del:hover{background:#c62828}",
-      ".ig-meta{margin:0 0 16px;padding:16px;border:1px solid #e5e5e5;border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.06);position:sticky;top:8px;z-index:5}",
+      ".ig-meta{padding:16px;border:1px solid #e5e5e5;border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.06)}",
+      ".ig-meta.is-empty{background:#fafafa;border-style:dashed;color:#777}",
       ".ig-meta h4{margin:0 0 6px;font-size:15px}",
-      ".ig-meta .ig-meta-sub{margin:0 0 12px;font-size:12px;color:#666}",
+      ".ig-meta .ig-meta-sub{margin:0 0 12px;font-size:12px;color:#666;line-height:1.4}",
       ".ig-meta label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px}",
       ".ig-meta input{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;box-sizing:border-box}",
+      ".ig-meta-thumb{width:72px;height:108px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block}",
       ".ig-style-row{display:flex;gap:8px;flex-wrap:wrap}",
       ".ig-chip{appearance:none;border:1px solid #ccc;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}",
       ".ig-chip.is-on{background:#222;border-color:#222;color:#fff}",
@@ -452,11 +460,29 @@
     },
 
     renderEditor: function () {
+      if (this.isPathsOnly()) return null;
+
       var index = this.state.editIndex;
-      if (index == null) return null;
       var items = this.getItems();
-      var item = items[index];
-      if (!item || this.isPathsOnly()) return null;
+      var item = index != null ? items[index] : null;
+
+      if (!item) {
+        return h(
+          "div",
+          { className: "ig-side" },
+          h(
+            "div",
+            { className: "ig-meta is-empty" },
+            h("h4", {}, "Tags de la foto"),
+            h(
+              "p",
+              { className: "ig-meta-sub" },
+              "Click en una foto (o “Editar tags”) para cambiar categoría, lugar o pastilla. Este panel se queda fijo mientras scrolleás."
+            )
+          )
+        );
+      }
+
       var self = this;
       var unified = this.isUnified();
       var style = item.style || "studio";
@@ -465,103 +491,99 @@
 
       return h(
         "div",
-        { className: "ig-meta" },
-        h("h4", {}, "Editar tags"),
-        h(
-          "p",
-          { className: "ig-meta-sub" },
-          "Foto seleccionada" +
-            (item.src ? " · " + item.src.split("/").pop() : "") +
-            ". Cambiá categoría, lugar o pastilla y después Publish."
-        ),
-        thumb
-          ? h("img", {
-              src: thumb,
-              alt: "",
-              style: {
-                width: "72px",
-                height: "108px",
-                objectFit: "cover",
-                borderRadius: "8px",
-                marginBottom: "8px",
-              },
-            })
-          : null,
-        unified
-          ? h(
-              "div",
-              {},
-              h("label", {}, "Categoría"),
-              h(
-                "div",
-                { className: "ig-style-row" },
-                CATEGORIES.map(function (c) {
-                  return h(
-                    "button",
-                    {
-                      key: c.value,
-                      type: "button",
-                      className: "ig-chip" + (category === c.value ? " is-on" : ""),
-                      onClick: function () {
-                        self.updateItem(index, { category: c.value });
-                      },
-                    },
-                    c.label
-                  );
-                })
-              )
-            )
-          : null,
-        h("label", {}, "Lugar"),
+        { className: "ig-side" },
         h(
           "div",
-          { className: "ig-style-row" },
-          STYLES.map(function (s) {
-            return h(
+          { className: "ig-meta" },
+          h("h4", {}, "Editar tags"),
+          h(
+            "p",
+            { className: "ig-meta-sub" },
+            item.src ? item.src.split("/").pop() : "Foto seleccionada"
+          ),
+          thumb
+            ? h("img", {
+                src: thumb,
+                alt: "",
+                className: "ig-meta-thumb",
+              })
+            : null,
+          unified
+            ? h(
+                "div",
+                {},
+                h("label", {}, "Categoría"),
+                h(
+                  "div",
+                  { className: "ig-style-row" },
+                  CATEGORIES.map(function (c) {
+                    return h(
+                      "button",
+                      {
+                        key: c.value,
+                        type: "button",
+                        className: "ig-chip" + (category === c.value ? " is-on" : ""),
+                        onClick: function () {
+                          self.updateItem(index, { category: c.value });
+                        },
+                      },
+                      c.label
+                    );
+                  })
+                )
+              )
+            : null,
+          h("label", {}, "Lugar"),
+          h(
+            "div",
+            { className: "ig-style-row" },
+            STYLES.map(function (s) {
+              return h(
+                "button",
+                {
+                  key: s.value,
+                  type: "button",
+                  className: "ig-chip" + (style === s.value ? " is-on" : ""),
+                  onClick: function () {
+                    self.updateItem(index, { style: s.value });
+                  },
+                },
+                s.label
+              );
+            })
+          ),
+          h("label", {}, "Pastilla (nombre)"),
+          h("input", {
+            type: "text",
+            value: item.text || "",
+            placeholder: "Ej. CATdopciones, 3organicspets…",
+            onChange: function (e) {
+              self.updateItem(index, { text: e.target.value });
+            },
+          }),
+          h("label", {}, "Pastilla (link)"),
+          h("input", {
+            type: "url",
+            value: item.href || "",
+            placeholder: "https://instagram.com/…",
+            onChange: function (e) {
+              self.updateItem(index, { href: e.target.value });
+            },
+          }),
+          h(
+            "div",
+            { className: "ig-meta-actions" },
+            h(
               "button",
               {
-                key: s.value,
                 type: "button",
-                className: "ig-chip" + (style === s.value ? " is-on" : ""),
+                className: "ig-chip",
                 onClick: function () {
-                  self.updateItem(index, { style: s.value });
+                  self.setState({ editIndex: null });
                 },
               },
-              s.label
-            );
-          })
-        ),
-        h("label", {}, "Pastilla (nombre)"),
-        h("input", {
-          type: "text",
-          value: item.text || "",
-          placeholder: "Ej. CATdopciones, 3organicspets…",
-          onChange: function (e) {
-            self.updateItem(index, { text: e.target.value });
-          },
-        }),
-        h("label", {}, "Pastilla (link)"),
-        h("input", {
-          type: "url",
-          value: item.href || "",
-          placeholder: "https://instagram.com/…",
-          onChange: function (e) {
-            self.updateItem(index, { href: e.target.value });
-          },
-        }),
-        h(
-          "div",
-          { className: "ig-meta-actions" },
-          h(
-            "button",
-            {
-              type: "button",
-              className: "ig-chip",
-              onClick: function () {
-                self.setState({ editIndex: null });
-              },
-            },
-            "Cerrar"
+              "Cerrar"
+            )
           )
         )
       );
@@ -571,6 +593,7 @@
       ensureStyles();
       var self = this;
       var items = this.getItems();
+      var pathsOnly = this.isPathsOnly();
       var visible = this.visibleIndexes();
       var visibleSet = {};
       visible.forEach(function (i) {
@@ -582,61 +605,69 @@
         { className: "ig-wrap " + (this.props.classNameWrapper || "") },
         h(
           "div",
-          { className: "ig-toolbar" },
+          { className: "ig-layout" },
           h(
-            "p",
-            { className: "ig-hint" },
-            visible.length +
-              " de " +
-              items.length +
-              " · Hover “Editar tags” o click en la foto · Arrastrá = orden · × = borrar"
-          ),
-          h(
-            "button",
-            {
-              type: "button",
-              className: "ig-btn",
-              onClick: function () {
-                self.handleAdd();
-              },
-            },
-            "Agregar fotos"
-          )
-        ),
-        this.renderFilters(),
-        this.renderEditor(),
-        h("input", {
-          type: "file",
-          accept: "image/*",
-          multiple: true,
-          style: { display: "none" },
-          ref: function (el) {
-            self._fileInput = el;
-          },
-          onChange: function (e) {
-            self.handleLocalFiles(e);
-          },
-        }),
-        items.length
-          ? h(
+            "div",
+            { className: "ig-main" },
+            h(
               "div",
-              { className: "ig-grid" },
-              items.map(function (item, index) {
-                return self.renderCard(item, index, !!visibleSet[index]);
-              })
-            )
-          : h(
-              "div",
-              { className: "ig-empty" },
-              "Todavía no hay fotos. Tocá “Agregar fotos”."
+              { className: "ig-toolbar" },
+              h(
+                "p",
+                { className: "ig-hint" },
+                visible.length +
+                  " de " +
+                  items.length +
+                  " · Click = tags (panel derecha) · Arrastrá = orden · × = borrar"
+              ),
+              h(
+                "button",
+                {
+                  type: "button",
+                  className: "ig-btn",
+                  onClick: function () {
+                    self.handleAdd();
+                  },
+                },
+                "Agregar fotos"
+              )
             ),
-        visible.length === 0 && items.length > 0
-          ? h(
-              "div",
-              { className: "ig-empty" },
-              "No hay fotos con esos filtros."
-            )
-          : null
+            this.renderFilters(),
+            h("input", {
+              type: "file",
+              accept: "image/*",
+              multiple: true,
+              style: { display: "none" },
+              ref: function (el) {
+                self._fileInput = el;
+              },
+              onChange: function (e) {
+                self.handleLocalFiles(e);
+              },
+            }),
+            items.length
+              ? h(
+                  "div",
+                  { className: "ig-grid" },
+                  items.map(function (item, index) {
+                    return self.renderCard(item, index, !!visibleSet[index]);
+                  })
+                )
+              : h(
+                  "div",
+                  { className: "ig-empty" },
+                  "Todavía no hay fotos. Tocá “Agregar fotos”."
+                ),
+            visible.length === 0 && items.length > 0
+              ? h(
+                  "div",
+                  { className: "ig-empty" },
+                  "No hay fotos con esos filtros."
+                )
+              : null
+          ),
+          pathsOnly ? null : this.renderEditor()
+        )
       );
     },
   });
