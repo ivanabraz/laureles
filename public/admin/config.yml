@@ -9,10 +9,8 @@ backend:
 
 local_backend: true
 
-media_library:
-  max_file_size: 1024000
-
 # Fallback media (colecciones definen su propia carpeta).
+# Límite 1 MB: validación en index.html (Decap no acepta max_file_size sin media library externa).
 media_folder: public/images/uploads
 public_folder: /images/uploads
 

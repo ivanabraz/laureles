@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Laureles — Admin</title>
-    <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
   </head>
   <body>
     <script>
@@ -27,7 +26,6 @@
           return true;
         }
 
-        // Block oversized files before Decap uploads them (drag-drop or file picker).
         document.addEventListener(
           "change",
           function (event) {
@@ -65,5 +63,6 @@
         );
       })();
     </script>
+    <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
   </body>
 </html>
