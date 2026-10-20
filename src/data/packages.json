@@ -1,51 +1,109 @@
 {
   "packages": [
     {
+      "id": "navidad",
+      "cover": "/images/packages/image-08.jpg",
+      "gallery": [
+        "/images/packages/image-08.jpg"
+      ],
+      "titleColor": "text-white",
+      "details": [
+        "session_60min",
+        "session_5_photos",
+        "treats",
+        "location_studio"
+      ]
+    },
+    {
       "id": "chihuahua",
       "cover": "/images/packages/image-04.jpg",
-      "gallery": ["/images/packages/image-04.jpg"],
+      "gallery": [
+        "/images/packages/image-04.jpg"
+      ],
       "titleColor": "text-black",
-      "details": ["session_60min", "session_5_photos", "treats", "location_studio"]
+      "details": [
+        "session_60min",
+        "session_5_photos",
+        "treats",
+        "location_studio"
+      ]
     },
     {
       "id": "galgo",
       "cover": "/images/packages/image-05.jpg",
-      "gallery": ["/images/packages/image-05.jpg"],
+      "gallery": [
+        "/images/packages/image-05.jpg"
+      ],
       "titleColor": "text-black",
-      "details": ["session_60min", "session_10_photos", "treats", "location_studio"]
+      "details": [
+        "session_60min",
+        "session_10_photos",
+        "treats",
+        "location_studio"
+      ]
     },
     {
       "id": "akita",
       "cover": "/images/packages/image-06.jpg",
-      "gallery": ["/images/packages/image-06.jpg"],
+      "gallery": [
+        "/images/packages/image-06.jpg"
+      ],
       "titleColor": "text-black",
-      "details": ["session_60_90min", "session_16_photos", "treats", "location_studio"]
+      "details": [
+        "session_60_90min",
+        "session_16_photos",
+        "treats",
+        "location_studio"
+      ]
     },
     {
       "id": "pug",
       "cover": "/images/packages/image-01.jpg",
-      "gallery": ["/images/packages/image-01.jpg"],
+      "gallery": [
+        "/images/packages/image-01.jpg"
+      ],
       "titleColor": "text-white",
-      "details": ["session_60_90min", "session_5_photos", "treats", "location_outdoor_1"]
+      "details": [
+        "session_60_90min",
+        "session_5_photos",
+        "treats",
+        "location_outdoor_1"
+      ]
     },
     {
       "id": "mestizo",
       "cover": "/images/packages/image-02.jpg",
-      "gallery": ["/images/packages/image-02.jpg"],
+      "gallery": [
+        "/images/packages/image-02.jpg"
+      ],
       "titleColor": "text-white",
-      "details": ["session_60_90min", "session_10_photos", "treats", "location_outdoor_2"]
+      "details": [
+        "session_60_90min",
+        "session_10_photos",
+        "treats",
+        "location_outdoor_2"
+      ]
     },
     {
       "id": "dogo",
       "cover": "/images/packages/image-03.jpg",
-      "gallery": ["/images/packages/image-03.jpg"],
+      "gallery": [
+        "/images/packages/image-03.jpg"
+      ],
       "titleColor": "text-white",
-      "details": ["session_60_90min", "session_16_photos", "treats", "location_outdoor_2"]
+      "details": [
+        "session_60_90min",
+        "session_16_photos",
+        "treats",
+        "location_outdoor_2"
+      ]
     },
     {
       "id": "gift_card",
       "cover": "/images/packages/image-07.jpg",
-      "gallery": ["/images/packages/image-07.jpg"],
+      "gallery": [
+        "/images/packages/image-07.jpg"
+      ],
       "titleColor": "text-white",
       "details": []
     }
