@@ -6,10 +6,7 @@
     import { faChevronLeft, faTimes, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
     // Data
-    import shelters from "../data/shelter.json";
-    import brands from "../data/brands.json";
-    import family from "../data/family.json";
-    import pawlidays from "../data/specials.json";
+    import portfolioData from "../data/portfolio.json";
 
     const CATEGORY_FILTERS = ["family", "brands", "shelters", "specials"];
     const STYLE_FILTERS = ["studio", "outdoor"];
@@ -22,9 +19,13 @@
         return `${process.env.PUBLIC_URL || ""}${src.startsWith("/") ? src : `/${src}`}`;
     };
 
-    const imagesFrom = (data, category) => {
+    const imagesFromPortfolio = (data) => {
         const list = Array.isArray(data) ? data : data?.images || [];
         return list.map((img) => {
+            const category =
+                img.category ||
+                (img.filters || []).find((f) => CATEGORY_FILTERS.includes(f)) ||
+                "family";
             const style =
                 img.style ||
                 (img.filters || []).find((f) => STYLE_FILTERS.includes(f)) ||
@@ -32,6 +33,8 @@
             return {
                 ...img,
                 src: withPublicUrl(img.src),
+                category,
+                style,
                 filters: [category, style],
             };
         });
@@ -134,15 +137,7 @@
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [direction, setDirection] = useState(0);
 
-    const imageData = useMemo(
-        () => [
-            ...imagesFrom(shelters, "shelters"),
-            ...imagesFrom(brands, "brands"),
-            ...imagesFrom(family, "family"),
-            ...imagesFrom(pawlidays, "specials"),
-        ],
-        []
-    );
+    const imageData = useMemo(() => imagesFromPortfolio(portfolioData), []);
 
     const filteredImages = useMemo(
         () => getFilteredImages(imageData, activeFilters),

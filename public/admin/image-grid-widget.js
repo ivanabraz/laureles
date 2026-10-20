@@ -1,27 +1,32 @@
 /**
  * Decap custom widget: visual image grid with drag-reorder and hover delete.
- * Value: [{ src, style, text?, href? }]  or  ["path", ...] if paths_only: true
+ *
+ * Modes:
+ * - default / unified: [{ src, category?, style, text?, href? }]
+ * - paths_only: ["path", ...]
  */
 (function () {
-  // Decap 3 exposes these on window (not CMS.*)
   var h = window.h;
   var createClass = window.createClass;
   var CMS = window.CMS;
 
   if (!CMS || !createClass || !h) {
-    console.error(
-      "[image-grid] Decap CMS APIs missing. CMS:",
-      !!CMS,
-      "createClass:",
-      !!createClass,
-      "h:",
-      !!h
-    );
+    console.error("[image-grid] Decap CMS APIs missing");
     return;
   }
 
   var SITE = "https://laureles.netlify.app";
   var MAX_BYTES = 1024 * 1024;
+  var CATEGORIES = [
+    { value: "family", label: "Family" },
+    { value: "brands", label: "Brands" },
+    { value: "shelters", label: "Shelters" },
+    { value: "specials", label: "Specials" },
+  ];
+  var STYLES = [
+    { value: "studio", label: "Estudio" },
+    { value: "outdoor", label: "Exterior" },
+  ];
 
   function toPublicUrl(src) {
     if (!src) return "";
@@ -35,23 +40,44 @@
     return Array.isArray(value) ? value.slice() : [];
   }
 
-  function normalizeItem(item, pathsOnly) {
+  function normalizeItem(item, pathsOnly, unified) {
     if (pathsOnly) {
       if (typeof item === "string") return item;
-      return item && (item.src || item.image || "") || "";
+      return (item && (item.src || item.image || "")) || "";
     }
-    if (typeof item === "string") return { src: item, style: "studio" };
-    return {
+    if (typeof item === "string") {
+      return {
+        src: item,
+        category: unified ? "family" : undefined,
+        style: "studio",
+        text: "",
+        href: "",
+      };
+    }
+    var next = {
       src: item.src || item.image || "",
       style: item.style || "studio",
       text: item.text || "",
       href: item.href || "",
     };
+    if (unified) next.category = item.category || "family";
+    return next;
   }
 
   function itemSrc(item, pathsOnly) {
     if (pathsOnly) return typeof item === "string" ? item : item && item.src;
     return item && item.src;
+  }
+
+  function categoryLabel(value) {
+    var found = CATEGORIES.find(function (c) {
+      return c.value === value;
+    });
+    return found ? found.label : value || "";
+  }
+
+  function styleLabel(value) {
+    return value === "outdoor" ? "Exterior" : "Estudio";
   }
 
   var styleTagId = "laureles-image-grid-css";
@@ -61,20 +87,25 @@
     style.id = styleTagId;
     style.textContent = [
       ".ig-wrap{font-family:system-ui,-apple-system,sans-serif}",
-      ".ig-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}",
+      ".ig-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}",
       ".ig-hint{color:#666;font-size:13px;margin:0}",
       ".ig-btn{appearance:none;border:0;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;background:#222;color:#fff}",
       ".ig-btn:hover{background:#000}",
+      ".ig-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}",
+      ".ig-filter{appearance:none;border:1px solid #ddd;background:#fff;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer;color:#444}",
+      ".ig-filter.is-on{background:#222;border-color:#222;color:#fff}",
       ".ig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}",
       ".ig-card{position:relative;aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:#eee;cursor:grab;user-select:none;box-shadow:0 1px 3px rgba(0,0,0,.12)}",
       ".ig-card:active{cursor:grabbing}",
       ".ig-card.is-dragging{opacity:.45}",
       ".ig-card.is-over{outline:3px solid #df4c8a;outline-offset:2px}",
+      ".ig-card.is-selected{outline:3px solid #df4c8a;outline-offset:2px}",
+      ".ig-card.is-hidden{display:none}",
       ".ig-card img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}",
       ".ig-card .ig-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px;text-align:center;padding:8px}",
-      ".ig-badge{position:absolute;left:8px;top:8px;background:rgba(255,255,255,.92);border-radius:999px;padding:3px 8px;font-size:11px;font-weight:600;color:#222;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}",
+      ".ig-badges{position:absolute;left:8px;top:8px;display:flex;flex-direction:column;gap:4px;max-width:75%}",
+      ".ig-badge{background:rgba(255,255,255,.92);border-radius:999px;padding:3px 8px;font-size:10px;font-weight:600;color:#222;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}",
       ".ig-pill{position:absolute;left:8px;bottom:8px;background:rgba(255,255,255,.95);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:600;color:#111;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}",
-      ".ig-card.is-selected{outline:3px solid #df4c8a;outline-offset:2px}",
       ".ig-del{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:18px;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}",
       ".ig-card:hover .ig-del{opacity:1}",
       ".ig-del:hover{background:#c62828}",
@@ -82,7 +113,7 @@
       ".ig-meta h4{margin:0 0 6px;font-size:15px}",
       ".ig-meta .ig-meta-sub{margin:0 0 12px;font-size:12px;color:#666}",
       ".ig-meta label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px}",
-      ".ig-meta select,.ig-meta input{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;box-sizing:border-box}",
+      ".ig-meta input{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;box-sizing:border-box}",
       ".ig-style-row{display:flex;gap:8px;flex-wrap:wrap}",
       ".ig-chip{appearance:none;border:1px solid #ccc;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}",
       ".ig-chip.is-on{background:#222;border-color:#222;color:#fff}",
@@ -97,6 +128,9 @@
         dragIndex: null,
         overIndex: null,
         editIndex: null,
+        filterCategory: "all",
+        filterStyle: "all",
+        defaultCategory: "family",
       };
     },
 
@@ -115,8 +149,10 @@
 
       var incoming = Array.isArray(mediaPath) ? mediaPath : [mediaPath];
       var pathsOnly = this.isPathsOnly();
+      var unified = this.isUnified();
       var items = this.getItems();
       var changed = false;
+      var cat = this.state.defaultCategory || "family";
 
       incoming.forEach(function (p) {
         if (!p) return;
@@ -125,7 +161,11 @@
         });
         if (exists) return;
         if (pathsOnly) items.push(p);
-        else items.push({ src: p, style: "studio", text: "", href: "" });
+        else {
+          var row = { src: p, style: "studio", text: "", href: "" };
+          if (unified) row.category = cat;
+          items.push(row);
+        }
         changed = true;
       });
 
@@ -137,14 +177,19 @@
 
     isPathsOnly: function () {
       var field = this.props.field;
-      if (!field || typeof field.get !== "function") return false;
-      return !!field.get("paths_only");
+      return !!(field && field.get && field.get("paths_only"));
+    },
+
+    isUnified: function () {
+      var field = this.props.field;
+      return !!(field && field.get && field.get("unified"));
     },
 
     getItems: function () {
       var pathsOnly = this.isPathsOnly();
+      var unified = this.isUnified();
       return asArray(this.props.value).map(function (item) {
-        return normalizeItem(item, pathsOnly);
+        return normalizeItem(item, pathsOnly, unified);
       });
     },
 
@@ -152,7 +197,28 @@
       this.props.onChange(items);
     },
 
+    visibleIndexes: function () {
+      var items = this.getItems();
+      var unified = this.isUnified();
+      var fc = this.state.filterCategory;
+      var fs = this.state.filterStyle;
+      var out = [];
+      items.forEach(function (item, index) {
+        if (!unified) {
+          out.push(index);
+          return;
+        }
+        var catOk = fc === "all" || item.category === fc;
+        var styleOk = fs === "all" || item.style === fs;
+        if (catOk && styleOk) out.push(index);
+      });
+      return out;
+    },
+
     handleAdd: function () {
+      if (this.isUnified() && this.state.filterCategory !== "all") {
+        this.setState({ defaultCategory: this.state.filterCategory });
+      }
       if (typeof this.props.onOpenMediaLibrary === "function") {
         this.props.onOpenMediaLibrary({
           controlID: this._controlID,
@@ -166,22 +232,9 @@
     },
 
     handleLocalFiles: function (e) {
-      var files = Array.from((e.target && e.target.files) || []);
       e.target.value = "";
-      if (!files.length) return;
-
-      var tooBig = files.filter(function (f) {
-        return f.size > MAX_BYTES;
-      });
-      if (tooBig.length) {
-        window.alert(
-          "Alguna imagen supera 1 MB. Comprimila en https://squoosh.app e intenta de nuevo."
-        );
-        return;
-      }
-
       window.alert(
-        "No se pudo abrir la biblioteca de medios. Guardá, publicá, y volvé a intentar con Login with GitHub."
+        "No se pudo abrir la biblioteca de medios. Guardá, publicá, y volvé a intentar."
       );
     },
 
@@ -230,24 +283,77 @@
       this.setState({ editIndex: this.state.editIndex === index ? null : index });
     },
 
-    styleLabel: function (style) {
-      return style === "outdoor" ? "Exterior" : "Estudio";
-    },
-
     updateItem: function (index, patch) {
       var items = this.getItems();
       if (this.isPathsOnly()) return;
       items[index] = Object.assign({}, items[index], patch);
       this.commit(items);
+      if (patch.category) this.setState({ defaultCategory: patch.category });
     },
 
-    renderCard: function (item, index) {
+    renderFilters: function () {
+      if (!this.isUnified()) return null;
+      var self = this;
+      var fc = this.state.filterCategory;
+      var fs = this.state.filterStyle;
+
+      var chips = [{ value: "all", label: "Todas" }].concat(CATEGORIES);
+      var styleChips = [{ value: "all", label: "Todos los lugares" }].concat(STYLES);
+
+      return h(
+        "div",
+        {},
+        h(
+          "div",
+          { className: "ig-filters" },
+          chips.map(function (c) {
+            return h(
+              "button",
+              {
+                key: "cat-" + c.value,
+                type: "button",
+                className: "ig-filter" + (fc === c.value ? " is-on" : ""),
+                onClick: function () {
+                  self.setState({
+                    filterCategory: c.value,
+                    defaultCategory: c.value === "all" ? self.state.defaultCategory : c.value,
+                  });
+                },
+              },
+              c.label
+            );
+          })
+        ),
+        h(
+          "div",
+          { className: "ig-filters" },
+          styleChips.map(function (c) {
+            return h(
+              "button",
+              {
+                key: "st-" + c.value,
+                type: "button",
+                className: "ig-filter" + (fs === c.value ? " is-on" : ""),
+                onClick: function () {
+                  self.setState({ filterStyle: c.value });
+                },
+              },
+              c.label
+            );
+          })
+        )
+      );
+    },
+
+    renderCard: function (item, index, visible) {
       var self = this;
       var pathsOnly = this.isPathsOnly();
+      var unified = this.isUnified();
       var src = itemSrc(item, pathsOnly);
       var url = toPublicUrl(src);
       var style = pathsOnly ? "" : item.style || "studio";
       var pill = !pathsOnly && item.text ? item.text : "";
+      var category = unified ? item.category || "family" : "";
       var dragging = this.state.dragIndex === index;
       var over = this.state.overIndex === index && this.state.dragIndex != null;
       var selected = this.state.editIndex === index;
@@ -260,7 +366,8 @@
             "ig-card" +
             (dragging ? " is-dragging" : "") +
             (over ? " is-over" : "") +
-            (selected ? " is-selected" : ""),
+            (selected ? " is-selected" : "") +
+            (visible ? "" : " is-hidden"),
           draggable: true,
           onDragStart: function (e) {
             self.handleDragStart(index, e);
@@ -291,15 +398,17 @@
           : null,
         h(
           "div",
-          {
-            className: "ig-ph",
-            style: { display: url ? "none" : "flex" },
-          },
+          { className: "ig-ph", style: { display: url ? "none" : "flex" } },
           "Sin imagen"
         ),
-        style
-          ? h("span", { className: "ig-badge" }, this.styleLabel(style))
-          : null,
+        h(
+          "div",
+          { className: "ig-badges" },
+          category
+            ? h("span", { className: "ig-badge" }, categoryLabel(category))
+            : null,
+          style ? h("span", { className: "ig-badge" }, styleLabel(style)) : null
+        ),
         pill ? h("span", { className: "ig-pill" }, pill) : null,
         h(
           "button",
@@ -323,7 +432,9 @@
       var item = items[index];
       if (!item || this.isPathsOnly()) return null;
       var self = this;
+      var unified = this.isUnified();
       var style = item.style || "studio";
+      var category = item.category || "family";
 
       return h(
         "div",
@@ -334,34 +445,51 @@
           { className: "ig-meta-sub" },
           "Foto #" +
             (index + 1) +
-            " · La categoría (Family / Brands / Shelters / Specials) es la sección del menú donde estás."
+            ". La pastilla es el mini nombre que se ve sobre la foto en el sitio (opcional)."
         ),
+        unified
+          ? h(
+              "div",
+              {},
+              h("label", {}, "Categoría"),
+              h(
+                "div",
+                { className: "ig-style-row" },
+                CATEGORIES.map(function (c) {
+                  return h(
+                    "button",
+                    {
+                      key: c.value,
+                      type: "button",
+                      className: "ig-chip" + (category === c.value ? " is-on" : ""),
+                      onClick: function () {
+                        self.updateItem(index, { category: c.value });
+                      },
+                    },
+                    c.label
+                  );
+                })
+              )
+            )
+          : null,
         h("label", {}, "Lugar"),
         h(
           "div",
           { className: "ig-style-row" },
-          h(
-            "button",
-            {
-              type: "button",
-              className: "ig-chip" + (style === "studio" ? " is-on" : ""),
-              onClick: function () {
-                self.updateItem(index, { style: "studio" });
+          STYLES.map(function (s) {
+            return h(
+              "button",
+              {
+                key: s.value,
+                type: "button",
+                className: "ig-chip" + (style === s.value ? " is-on" : ""),
+                onClick: function () {
+                  self.updateItem(index, { style: s.value });
+                },
               },
-            },
-            "Estudio"
-          ),
-          h(
-            "button",
-            {
-              type: "button",
-              className: "ig-chip" + (style === "outdoor" ? " is-on" : ""),
-              onClick: function () {
-                self.updateItem(index, { style: "outdoor" });
-              },
-            },
-            "Exterior"
-          )
+              s.label
+            );
+          })
         ),
         h("label", {}, "Pastilla (nombre)"),
         h("input", {
@@ -388,6 +516,11 @@
       ensureStyles();
       var self = this;
       var items = this.getItems();
+      var visible = this.visibleIndexes();
+      var visibleSet = {};
+      visible.forEach(function (i) {
+        visibleSet[i] = true;
+      });
 
       return h(
         "div",
@@ -398,10 +531,10 @@
           h(
             "p",
             { className: "ig-hint" },
-            items.length +
-              " foto" +
-              (items.length === 1 ? "" : "s") +
-              " · Click = editar tags · Arrastrá = ordenar · Hover × = borrar"
+            visible.length +
+              " de " +
+              items.length +
+              " · Click = tags · Arrastrá = orden · Hover × = borrar"
           ),
           h(
             "button",
@@ -415,6 +548,7 @@
             "Agregar fotos"
           )
         ),
+        this.renderFilters(),
         h("input", {
           type: "file",
           accept: "image/*",
@@ -432,7 +566,7 @@
               "div",
               { className: "ig-grid" },
               items.map(function (item, index) {
-                return self.renderCard(item, index);
+                return self.renderCard(item, index, !!visibleSet[index]);
               })
             )
           : h(
@@ -440,11 +574,18 @@
               { className: "ig-empty" },
               "Todavía no hay fotos. Tocá “Agregar fotos”."
             ),
+        visible.length === 0 && items.length > 0
+          ? h(
+              "div",
+              { className: "ig-empty" },
+              "No hay fotos con esos filtros."
+            )
+          : null,
         this.renderEditor()
       );
     },
   });
 
   CMS.registerWidget("image-grid", ImageGridControl);
-  console.info("[image-grid] widget registered");
+  console.info("[image-grid] widget registered (unified ready)");
 })();

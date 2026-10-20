@@ -28,6 +28,7 @@ En [`public/admin/config.yml`](../public/admin/config.yml):
 
 - `backend.base_url` → URL del Worker
 - `site_url` / `display_url` → `https://laureles.netlify.app`
+- Portfolio unificado en `src/data/portfolio.json` (categoría + estilo + pastilla por foto)
 
 ## 4. Acceso de Laura
 

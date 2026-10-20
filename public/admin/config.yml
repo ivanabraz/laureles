@@ -18,57 +18,19 @@ collections:
     editor:
       preview: false
     files:
-      - name: family
-        label: Fotos Family
-        file: src/data/family.json
-        media_folder: public/images/portfolio/family
-        public_folder: /images/portfolio/family
+      - name: portfolio_all
+        label: Todas las fotos
+        file: src/data/portfolio.json
+        media_folder: public/images/portfolio
+        public_folder: /images/portfolio
         fields:
           - name: images
-            label: Fotos Family
+            label: Portfolio
             widget: image-grid
-            media_folder: public/images/portfolio/family
-            public_folder: /images/portfolio/family
-            hint: Click en una foto para editar Estudio/Exterior y pastilla.
-
-      - name: brands
-        label: Fotos Brands
-        file: src/data/brands.json
-        media_folder: public/images/portfolio/brands
-        public_folder: /images/portfolio/brands
-        fields:
-          - name: images
-            label: Fotos Brands
-            widget: image-grid
-            media_folder: public/images/portfolio/brands
-            public_folder: /images/portfolio/brands
-            hint: Click en una foto para editar Estudio/Exterior y pastilla (marca).
-
-      - name: shelters
-        label: Fotos Shelters
-        file: src/data/shelter.json
-        media_folder: public/images/portfolio/shelters
-        public_folder: /images/portfolio/shelters
-        fields:
-          - name: images
-            label: Fotos Shelters
-            widget: image-grid
-            media_folder: public/images/portfolio/shelters
-            public_folder: /images/portfolio/shelters
-            hint: Click en una foto para editar Estudio/Exterior y pastilla (ej. CATdopciones).
-
-      - name: specials
-        label: Fotos Specials
-        file: src/data/specials.json
-        media_folder: public/images/portfolio/specials
-        public_folder: /images/portfolio/specials
-        fields:
-          - name: images
-            label: Fotos Specials
-            widget: image-grid
-            media_folder: public/images/portfolio/specials
-            public_folder: /images/portfolio/specials
-            hint: Click en una foto para editar Estudio/Exterior y pastilla.
+            unified: true
+            media_folder: public/images/portfolio
+            public_folder: /images/portfolio
+            hint: Todas juntas. Filtrá arriba. Click = categoría, Estudio/Exterior y pastilla.
 
   - name: site_packages
     label: Paquetes

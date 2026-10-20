@@ -10,39 +10,42 @@ Hay **dos lugares** para editar Laureles:
 ## Entrar al admin
 
 1. Abrí: https://laureles.netlify.app/admin/
-2. **Login with GitHub** (tu usuario de GitHub; la contraseña solo la ves en GitHub).
+2. **Login with GitHub**
 3. La primera vez GitHub te pide autorizar la app.
 
-## Portfolio
+## Portfolio (todas las fotos juntas)
 
-En el menú de la izquierda → **Portfolio**, después elegí:
+Menú → **Portfolio** → **Todas las fotos**.
 
-- Fotos Family  
-- Fotos Brands  
-- Fotos Shelters  
-- Fotos Specials  
+Vas a ver una **grilla** con todas las imágenes (Family, Brands, Shelters, Specials).
 
-**Subir / ordenar / borrar**
+**Filtros** arriba: Todas / Family / Brands / Shelters / Specials, y Estudio / Exterior.
 
-1. Abrí la categoría (Family, Brands, …).
-2. Vas a ver una **grilla de cards** (como el portfolio).
-3. **Agregar fotos** → elegí una o varias (máx. 1 MB c/u).
-4. **Arrastrá** una card para cambiar el orden.
-5. **Hover** sobre una card → círculo **×** para borrar.
-6. **Click** en una card → editar **Estudio / Exterior** y la **pastilla** (ej. CATdopciones + link).
-7. La categoría (Family, Brands, Shelters, Specials) es la sección del menú donde entraste.
-8. Guardá y **Publish**.
+**Agregar**
+
+1. (Opcional) Activá el filtro de la categoría donde van las fotos nuevas.
+2. **Agregar fotos** → elegí una o varias (máx. 1 MB).
+3. Si hace falta, **click** en la card y asigná la **categoría**.
+
+**Editar tags (click en una card)**
+
+- **Categoría:** Family / Brands / Shelters / Specials  
+- **Lugar:** Estudio / Exterior  
+- **Pastilla:** mini nombre + link (ej. CATdopciones). Opcional; vacío = sin pastilla en el sitio.
+
+**Ordenar / borrar**
+
+- Arrastrá una card para reordenar.  
+- Hover → **×** para borrar.
+
+Guardá y **Publish**. Esperá el deploy de Netlify (1–3 min) y refrescá la web.
 
 ## Paquetes
 
-1. Menú → **Paquetes** → **Imagenes de paquetes**.
-2. Cada ítem es un paquete (Chihuahua, Galgo, …).
-3. Podés cambiar la **foto de la card** y las de la **galería del modal**.
-4. **Publish**.
-
-Los textos de los paquetes se editan en el Sheet, no acá.
+1. Menú → **Paquetes**.
+2. Cover + galería del modal (misma idea de grilla).
+3. Los textos del paquete siguen en el Sheet.
 
 ## Importante
 
-- Máximo **1 MB** por imagen. Si pesa más, comprimila en [Squoosh](https://squoosh.app) y volvé a subir.
-- Después de **Publish**, esperá 1–3 minutos (Netlify redeploy) y refrescá la web.
+- Máximo **1 MB** por imagen ([Squoosh](https://squoosh.app) si pesa más).
