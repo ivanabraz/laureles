@@ -109,7 +109,7 @@
       ".ig-del{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:18px;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}",
       ".ig-card:hover .ig-del{opacity:1}",
       ".ig-del:hover{background:#c62828}",
-      ".ig-meta{margin-top:16px;padding:16px;border:1px solid #e5e5e5;border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.06)}",
+      ".ig-meta{margin:0 0 16px;padding:16px;border:1px solid #e5e5e5;border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.06);position:sticky;top:8px;z-index:5}",
       ".ig-meta h4{margin:0 0 6px;font-size:15px}",
       ".ig-meta .ig-meta-sub{margin:0 0 12px;font-size:12px;color:#666}",
       ".ig-meta label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px}",
@@ -117,6 +117,9 @@
       ".ig-style-row{display:flex;gap:8px;flex-wrap:wrap}",
       ".ig-chip{appearance:none;border:1px solid #ccc;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}",
       ".ig-chip.is-on{background:#222;border-color:#222;color:#fff}",
+      ".ig-meta-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}",
+      ".ig-edit-btn{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);appearance:none;border:0;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;background:rgba(0,0,0,.7);color:#fff;opacity:0;transition:opacity .15s;white-space:nowrap;z-index:2}",
+      ".ig-card:hover .ig-edit-btn{opacity:1}",
       ".ig-empty{padding:28px;border:2px dashed #ccc;border-radius:12px;text-align:center;color:#777}",
     ].join("");
     document.head.appendChild(style);
