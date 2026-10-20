@@ -1,6 +1,3 @@
-# Decap CMS — Laureles
-# Completá base_url con la URL del Cloudflare Worker OAuth (ver content/cms-setup.md).
-
 backend:
   name: github
   repo: ivanabraz/laureles
@@ -9,13 +6,12 @@ backend:
 
 local_backend: true
 
-# Fallback media (cada colección define su carpeta). Límite 1MB en index.html.
 media_folder: public/images/uploads
 public_folder: /images/uploads
 
 collections:
-  - name: portfolio_family
-    label: "Portfolio — Family"
+  - name: portfolio
+    label: Portfolio
     files:
       - name: family
         label: Family
@@ -24,13 +20,11 @@ collections:
         public_folder: /images/portfolio/family
         fields:
           - name: images
-            label: Imágenes
+            label: Imagenes
             widget: list
             summary: "{{fields.src}} — {{fields.style}}"
             fields:
-              - label: Imagen
-                name: src
-                widget: image
+              - { label: Imagen, name: src, widget: image }
               - label: Estilo
                 name: style
                 widget: select
@@ -39,9 +33,6 @@ collections:
                   - { label: Outdoor, value: outdoor }
                 default: studio
 
-  - name: portfolio_brands
-    label: "Portfolio — Brands"
-    files:
       - name: brands
         label: Brands
         file: src/data/brands.json
@@ -49,13 +40,11 @@ collections:
         public_folder: /images/portfolio/brands
         fields:
           - name: images
-            label: Imágenes
+            label: Imagenes
             widget: list
             summary: "{{fields.text}} — {{fields.style}}"
             fields:
-              - label: Imagen
-                name: src
-                widget: image
+              - { label: Imagen, name: src, widget: image }
               - label: Estilo
                 name: style
                 widget: select
@@ -63,18 +52,9 @@ collections:
                   - { label: Studio, value: studio }
                   - { label: Outdoor, value: outdoor }
                 default: studio
-              - label: Nombre (pastilla)
-                name: text
-                widget: string
-                required: false
-              - label: Link
-                name: href
-                widget: string
-                required: false
+              - { label: Nombre (pastilla), name: text, widget: string, required: false }
+              - { label: Link, name: href, widget: string, required: false }
 
-  - name: portfolio_shelters
-    label: "Portfolio — Shelters"
-    files:
       - name: shelters
         label: Shelters
         file: src/data/shelter.json
@@ -82,13 +62,11 @@ collections:
         public_folder: /images/portfolio/shelters
         fields:
           - name: images
-            label: Imágenes
+            label: Imagenes
             widget: list
             summary: "{{fields.src}} — {{fields.style}}"
             fields:
-              - label: Imagen
-                name: src
-                widget: image
+              - { label: Imagen, name: src, widget: image }
               - label: Estilo
                 name: style
                 widget: select
@@ -96,18 +74,9 @@ collections:
                   - { label: Studio, value: studio }
                   - { label: Outdoor, value: outdoor }
                 default: studio
-              - label: Nombre (pastilla)
-                name: text
-                widget: string
-                required: false
-              - label: Link
-                name: href
-                widget: string
-                required: false
+              - { label: Nombre (pastilla), name: text, widget: string, required: false }
+              - { label: Link, name: href, widget: string, required: false }
 
-  - name: portfolio_specials
-    label: "Portfolio — Specials"
-    files:
       - name: specials
         label: Specials
         file: src/data/specials.json
@@ -115,13 +84,11 @@ collections:
         public_folder: /images/portfolio/specials
         fields:
           - name: images
-            label: Imágenes
+            label: Imagenes
             widget: list
             summary: "{{fields.src}} — {{fields.style}}"
             fields:
-              - label: Imagen
-                name: src
-                widget: image
+              - { label: Imagen, name: src, widget: image }
               - label: Estilo
                 name: style
                 widget: select
@@ -130,10 +97,10 @@ collections:
                   - { label: Outdoor, value: outdoor }
                 default: studio
 
-  - name: packages
+  - name: site_packages
     label: Paquetes
     files:
-      - name: packages
+      - name: packages_data
         label: Paquetes
         file: src/data/packages.json
         media_folder: public/images/packages
@@ -155,17 +122,12 @@ collections:
                   - { label: Mestizo, value: mestizo }
                   - { label: Dogo, value: dogo }
                   - { label: Gift card, value: gift_card }
-              - label: Imagen de la card
-                name: cover
-                widget: image
-              - label: Galería del modal
-                name: gallery
+              - { label: Imagen de la card, name: cover, widget: image }
+              - name: gallery
+                label: Galeria del modal
                 widget: list
-                field:
-                  label: Imagen
-                  name: image
-                  widget: image
-              - label: Color del título
+                field: { label: Imagen, name: image, widget: image }
+              - label: Color del titulo
                 name: titleColor
                 widget: select
                 options:

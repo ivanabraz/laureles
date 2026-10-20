@@ -5,28 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Laureles — Admin</title>
-  </head>
-  <body>
     <script>
+      // Must run before decap-cms.js so it does not auto-load config.yml
       window.CMS_MANUAL_INIT = true;
     </script>
+  </head>
+  <body>
     <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
     <script src="https://unpkg.com/decap-cms@3.1.2/dist/decap-cms.js"></script>
     <script>
       (function () {
-        var MAX_BYTES = 1024 * 1024; // 1 MB
-
-        function tooLarge(file) {
-          return file && typeof file.size === "number" && file.size > MAX_BYTES;
-        }
+        var MAX_BYTES = 1024 * 1024;
 
         function rejectLarge(file) {
-          if (!tooLarge(file)) return false;
-          var mb = (file.size / (1024 * 1024)).toFixed(2);
+          if (!file || typeof file.size !== "number" || file.size <= MAX_BYTES) return false;
           window.alert(
             "La imagen pesa " +
-              mb +
-              " MB. El máximo es 1 MB.\nComprimila (por ejemplo en https://squoosh.app) e intentá de nuevo."
+              (file.size / (1024 * 1024)).toFixed(2) +
+              " MB. El maximo es 1 MB.\nComprimila en https://squoosh.app e intenta de nuevo."
           );
           return true;
         }
@@ -35,9 +31,7 @@
           "change",
           function (event) {
             var input = event.target;
-            if (!input || input.type !== "file" || !input.files || !input.files.length) {
-              return;
-            }
+            if (!input || input.type !== "file" || !input.files) return;
             for (var i = 0; i < input.files.length; i++) {
               if (rejectLarge(input.files[i])) {
                 input.value = "";
@@ -54,7 +48,7 @@
           "drop",
           function (event) {
             var dt = event.dataTransfer;
-            if (!dt || !dt.files || !dt.files.length) return;
+            if (!dt || !dt.files) return;
             for (var i = 0; i < dt.files.length; i++) {
               var file = dt.files[i];
               if (file.type && file.type.indexOf("image/") === 0 && rejectLarge(file)) {
@@ -67,19 +61,17 @@
           true
         );
 
-        var configUrl = new URL("config.yml?v=20261020c", window.location.href).href;
+        var configUrl = new URL("config.yml?v=20261020e", window.location.href).toString();
 
-        fetch(configUrl)
+        fetch(configUrl, { cache: "no-store" })
           .then(function (res) {
             if (!res.ok) throw new Error("No se pudo cargar config.yml (" + res.status + ")");
             return res.text();
           })
           .then(function (raw) {
-            var config = jsyaml.load(raw);
-            // Evita el error de schema si viene un media_library vacío/cacheado.
-            if (config && config.media_library && !config.media_library.name) {
-              delete config.media_library;
-            }
+            var config = jsyaml.load(raw) || {};
+            config.load_config_file = false;
+            delete config.media_library;
             window.CMS.init({ config: config });
           })
           .catch(function (err) {
