@@ -42,9 +42,16 @@ Guardá y **Publish**. Esperá el deploy de Netlify (1–3 min) y refrescá la w
 
 ## Paquetes
 
-1. Menú → **Paquetes**.
-2. Cover + galería del modal (misma idea de grilla).
-3. Los textos del paquete siguen en el Sheet.
+1. Menú → **Paquetes** → **Imagenes de paquetes**.
+2. Vas a ver **cards** (como en el sitio): Chihuahua, Galgo, etc.
+3. **Click** en un paquete →
+   - **Cambiar cover** (foto de la card)
+   - **Galería del modal**: agregar, ordenar (drag), borrar (hover ×)
+   - Click en una foto de la galería = usarla como cover
+   - Color del título (Negro / Blanco)
+4. Arrastrá las cards de paquetes para cambiar el orden en el carrusel.
+5. Los **textos** del paquete siguen en el Sheet.
+6. Guardá y **Publish**.
 
 ## Importante
 

@@ -13,6 +13,7 @@
     <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
     <script src="https://unpkg.com/decap-cms@3.1.2/dist/decap-cms.js"></script>
     <script src="image-grid-widget.js?v=4"></script>
+    <script src="packages-grid-widget.js?v=1"></script>
     <script>
       (function () {
         var MAX_BYTES = 1024 * 1024;
@@ -61,7 +62,7 @@
           true
         );
 
-        var configUrl = new URL("config.yml?v=20261020i", window.location.href).toString();
+        var configUrl = new URL("config.yml?v=20261020j", window.location.href).toString();
 
         fetch(configUrl, { cache: "no-store" })
           .then(function (res) {

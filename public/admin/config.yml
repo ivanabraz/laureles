@@ -45,37 +45,7 @@ collections:
         fields:
           - name: packages
             label: Paquetes
-            label_singular: paquete
-            widget: list
-            summary: "{{fields.id}}"
-            hint: Textos del paquete se editan en el Google Sheet, aca solo fotos.
-            fields:
-              - label: Cual paquete
-                name: id
-                widget: select
-                options:
-                  - { label: Chihuahua, value: chihuahua }
-                  - { label: Galgo, value: galgo }
-                  - { label: Akita, value: akita }
-                  - { label: Pug, value: pug }
-                  - { label: Mestizo, value: mestizo }
-                  - { label: Dogo, value: dogo }
-                  - { label: Gift card, value: gift_card }
-              - label: Foto de la card
-                name: cover
-                widget: image
-                hint: Maximo 1 MB
-              - name: gallery
-                label: Galeria del modal
-                widget: image-grid
-                paths_only: true
-                media_folder: public/images/packages
-                public_folder: /images/packages
-                hint: Fotos del modal — grilla con drag y borrar. Max 1 MB.
-              - label: Color del titulo en la card
-                name: titleColor
-                widget: select
-                options:
-                  - { label: Negro, value: text-black }
-                  - { label: Blanco, value: text-white }
-                default: text-white
+            widget: packages-grid
+            media_folder: public/images/packages
+            public_folder: /images/packages
+            hint: Cards visuales. Click = cover + galeria del modal. Textos en el Sheet.
