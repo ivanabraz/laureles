@@ -9,8 +9,7 @@ backend:
 
 local_backend: true
 
-# Fallback media (colecciones definen su propia carpeta).
-# Límite 1 MB: validación en index.html (Decap no acepta max_file_size sin media library externa).
+# Fallback media (cada colección define su carpeta). Límite 1MB en index.html.
 media_folder: public/images/uploads
 public_folder: /images/uploads
 
@@ -32,7 +31,6 @@ collections:
               - label: Imagen
                 name: src
                 widget: image
-                choose_url: false
               - label: Estilo
                 name: style
                 widget: select
@@ -58,7 +56,6 @@ collections:
               - label: Imagen
                 name: src
                 widget: image
-                choose_url: false
               - label: Estilo
                 name: style
                 widget: select
@@ -92,7 +89,6 @@ collections:
               - label: Imagen
                 name: src
                 widget: image
-                choose_url: false
               - label: Estilo
                 name: style
                 widget: select
@@ -126,7 +122,6 @@ collections:
               - label: Imagen
                 name: src
                 widget: image
-                choose_url: false
               - label: Estilo
                 name: style
                 widget: select
@@ -163,7 +158,6 @@ collections:
               - label: Imagen de la card
                 name: cover
                 widget: image
-                choose_url: false
               - label: Galería del modal
                 name: gallery
                 widget: list
@@ -171,7 +165,6 @@ collections:
                   label: Imagen
                   name: image
                   widget: image
-                  choose_url: false
               - label: Color del título
                 name: titleColor
                 widget: select

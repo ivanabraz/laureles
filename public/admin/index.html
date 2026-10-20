@@ -8,6 +8,11 @@
   </head>
   <body>
     <script>
+      window.CMS_MANUAL_INIT = true;
+    </script>
+    <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script src="https://unpkg.com/decap-cms@3.1.2/dist/decap-cms.js"></script>
+    <script>
       (function () {
         var MAX_BYTES = 1024 * 1024; // 1 MB
 
@@ -61,8 +66,31 @@
           },
           true
         );
+
+        var configUrl = new URL("config.yml?v=20261020c", window.location.href).href;
+
+        fetch(configUrl)
+          .then(function (res) {
+            if (!res.ok) throw new Error("No se pudo cargar config.yml (" + res.status + ")");
+            return res.text();
+          })
+          .then(function (raw) {
+            var config = jsyaml.load(raw);
+            // Evita el error de schema si viene un media_library vacío/cacheado.
+            if (config && config.media_library && !config.media_library.name) {
+              delete config.media_library;
+            }
+            window.CMS.init({ config: config });
+          })
+          .catch(function (err) {
+            document.body.innerHTML =
+              "<pre style='padding:24px;font-family:sans-serif;color:#b00020'>" +
+              "Error cargando el admin:\n" +
+              String(err && err.message ? err.message : err) +
+              "</pre>";
+            console.error(err);
+          });
       })();
     </script>
-    <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
   </body>
 </html>
