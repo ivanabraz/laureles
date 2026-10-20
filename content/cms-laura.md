@@ -22,18 +22,15 @@ En el menú de la izquierda → **Portfolio**, después elegí:
 - Fotos Shelters  
 - Fotos Specials  
 
-**Subir**
+**Subir / ordenar / borrar**
 
-1. Abrí la categoría correcta (eso ya pone la etiqueta: family, brands, etc.).
-2. En la lista **Fotos** → agregar una foto.
-3. Arrastrá la imagen (**drop**) o elegila.
-4. Elegí **Studio** u **Outdoor**.
-5. En Brands (opcional): nombre de la pastilla + link.
-6. Guardá y tocá **Publish**.
-
-**Borrar / cambiar**
-
-- Abrí la foto en la lista → borrá el ítem, o reemplazá la imagen.
+1. Abrí la categoría (Family, Brands, …).
+2. Vas a ver una **grilla de cards** (como el portfolio).
+3. **Agregar fotos** → elegí una o varias (máx. 1 MB c/u).
+4. **Arrastrá** una card para cambiar el orden.
+5. **Hover** sobre una card → círculo **×** para borrar.
+6. En Brands/Shelters: **click** en la card para editar estilo / pastilla.
+7. Guardá y **Publish**.
 
 ## Paquetes
 

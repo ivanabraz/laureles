@@ -25,23 +25,11 @@ collections:
         public_folder: /images/portfolio/family
         fields:
           - name: images
-            label: Fotos
-            label_singular: foto
-            widget: list
-            summary: "{{fields.style}} — {{fields.src}}"
-            hint: Maximo 1 MB por imagen. Arrastra o elegi el archivo.
-            fields:
-              - label: Foto
-                name: src
-                widget: image
-                hint: JPG o PNG, maximo 1 MB
-              - label: Estilo
-                name: style
-                widget: select
-                options:
-                  - { label: Studio, value: studio }
-                  - { label: Outdoor, value: outdoor }
-                default: studio
+            label: Fotos Family
+            widget: image-grid
+            media_folder: public/images/portfolio/family
+            public_folder: /images/portfolio/family
+            hint: Grilla visual — arrastra para ordenar, hover para borrar. Max 1 MB.
 
       - name: brands
         label: Fotos Brands
@@ -50,33 +38,12 @@ collections:
         public_folder: /images/portfolio/brands
         fields:
           - name: images
-            label: Fotos
-            label_singular: foto
-            widget: list
-            summary: "{{fields.text}} — {{fields.style}}"
-            hint: Maximo 1 MB por imagen. Arrastra o elegi el archivo.
-            fields:
-              - label: Foto
-                name: src
-                widget: image
-                hint: JPG o PNG, maximo 1 MB
-              - label: Estilo
-                name: style
-                widget: select
-                options:
-                  - { label: Studio, value: studio }
-                  - { label: Outdoor, value: outdoor }
-                default: studio
-              - label: Nombre en la pastilla
-                name: text
-                widget: string
-                required: false
-                hint: Ej. 3organicspets (opcional)
-              - label: Link de la pastilla
-                name: href
-                widget: string
-                required: false
-                hint: URL completa, ej. https://...
+            label: Fotos Brands
+            widget: image-grid
+            allow_meta: true
+            media_folder: public/images/portfolio/brands
+            public_folder: /images/portfolio/brands
+            hint: Click en una card para editar pastilla (nombre/link) y estilo.
 
       - name: shelters
         label: Fotos Shelters
@@ -85,31 +52,12 @@ collections:
         public_folder: /images/portfolio/shelters
         fields:
           - name: images
-            label: Fotos
-            label_singular: foto
-            widget: list
-            summary: "{{fields.text}} — {{fields.style}}"
-            hint: Maximo 1 MB por imagen. Arrastra o elegi el archivo.
-            fields:
-              - label: Foto
-                name: src
-                widget: image
-                hint: JPG o PNG, maximo 1 MB
-              - label: Estilo
-                name: style
-                widget: select
-                options:
-                  - { label: Studio, value: studio }
-                  - { label: Outdoor, value: outdoor }
-                default: studio
-              - label: Nombre en la pastilla
-                name: text
-                widget: string
-                required: false
-              - label: Link de la pastilla
-                name: href
-                widget: string
-                required: false
+            label: Fotos Shelters
+            widget: image-grid
+            allow_meta: true
+            media_folder: public/images/portfolio/shelters
+            public_folder: /images/portfolio/shelters
+            hint: Click en una card para editar pastilla y estilo.
 
       - name: specials
         label: Fotos Specials
@@ -118,23 +66,11 @@ collections:
         public_folder: /images/portfolio/specials
         fields:
           - name: images
-            label: Fotos
-            label_singular: foto
-            widget: list
-            summary: "{{fields.style}} — {{fields.src}}"
-            hint: Maximo 1 MB por imagen. Arrastra o elegi el archivo.
-            fields:
-              - label: Foto
-                name: src
-                widget: image
-                hint: JPG o PNG, maximo 1 MB
-              - label: Estilo
-                name: style
-                widget: select
-                options:
-                  - { label: Studio, value: studio }
-                  - { label: Outdoor, value: outdoor }
-                default: studio
+            label: Fotos Specials
+            widget: image-grid
+            media_folder: public/images/portfolio/specials
+            public_folder: /images/portfolio/specials
+            hint: Grilla visual — arrastra para ordenar, hover para borrar.
 
   - name: site_packages
     label: Paquetes
@@ -171,13 +107,11 @@ collections:
                 hint: Maximo 1 MB
               - name: gallery
                 label: Galeria del modal
-                label_singular: foto
-                widget: list
-                hint: Fotos que se ven al abrir el paquete. Maximo 1 MB c/u.
-                field:
-                  label: Foto
-                  name: image
-                  widget: image
+                widget: image-grid
+                paths_only: true
+                media_folder: public/images/packages
+                public_folder: /images/packages
+                hint: Fotos del modal — grilla con drag y borrar. Max 1 MB.
               - label: Color del titulo en la card
                 name: titleColor
                 widget: select
