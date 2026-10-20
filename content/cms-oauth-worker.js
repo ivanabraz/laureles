@@ -1,15 +1,12 @@
 /**
  * Cloudflare Worker — OAuth proxy for Decap CMS + GitHub
  *
- * 1. Create a Cloudflare Worker and paste this file.
- * 2. Add secrets / vars:
- *    - GITHUB_CLIENT_ID
- *    - GITHUB_CLIENT_SECRET
- * 3. Put the Worker URL in public/admin/config.yml → backend.base_url
- * 4. GitHub OAuth App Authorization callback URL:
- *    https://YOUR_WORKER.workers.dev/callback
+ * Secrets:
+ *   - GITHUB_CLIENT_ID
+ *   - GITHUB_CLIENT_SECRET
  *
- * Based on the common Decap/Netlify CMS GitHub OAuth pattern.
+ * Redirect URI in GitHub OAuth App:
+ *   https://laureles-cms-oauth.braz-ivana.workers.dev/callback
  */
 
 const CORS = {
@@ -27,8 +24,10 @@ export default {
     }
 
     if (url.pathname === "/auth") {
-      const provider = "github";
-      const redirect = `https://github.com/login/oauth/authorize?client_id=${env.GITHUB_CLIENT_ID}&scope=repo,user`;
+      const redirect =
+        "https://github.com/login/oauth/authorize" +
+        `?client_id=${encodeURIComponent(env.GITHUB_CLIENT_ID)}` +
+        "&scope=repo,user";
       return Response.redirect(redirect, 302);
     }
 
@@ -52,21 +51,37 @@ export default {
       });
 
       const data = await tokenRes.json();
-      const content = `
-        <script>
-          (function () {
-            function receiveMessage(e) {
-              window.opener.postMessage(
-                'authorization:github:success:${JSON.stringify(data)}',
-                e.origin
-              );
-              window.removeEventListener("message", receiveMessage, false);
-            }
-            window.addEventListener("message", receiveMessage, false);
-            window.opener.postMessage("authorizing:github", "*");
-          })();
-        </script>
-      `;
+
+      if (!data.access_token) {
+        return new Response(
+          `OAuth error: ${data.error || "no access_token"} — ${data.error_description || JSON.stringify(data)}`,
+          { status: 400, headers: CORS }
+        );
+      }
+
+      // Decap expects { token, provider } — NOT GitHub's { access_token, ... }
+      const payload = JSON.stringify({
+        token: data.access_token,
+        provider: "github",
+      });
+
+      const content = `<!DOCTYPE html>
+<html><body>
+<script>
+(function () {
+  function receiveMessage(e) {
+    window.opener.postMessage(
+      'authorization:github:success:${payload}',
+      e.origin
+    );
+    window.removeEventListener("message", receiveMessage, false);
+  }
+  window.addEventListener("message", receiveMessage, false);
+  window.opener.postMessage("authorizing:github", "*");
+})();
+</script>
+</body></html>`;
+
       return new Response(content, {
         headers: { "Content-Type": "text/html;charset=utf-8", ...CORS },
       });
