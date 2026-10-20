@@ -80,9 +80,9 @@
     return value === "outdoor" ? "Exterior" : "Estudio";
   }
 
-  var styleTagId = "laureles-image-grid-css-v8";
+  var styleTagId = "laureles-image-grid-css-v9";
   function ensureStyles() {
-    ["laureles-image-grid-css", "laureles-image-grid-css-v7"].forEach(function (id) {
+    ["laureles-image-grid-css", "laureles-image-grid-css-v7", "laureles-image-grid-css-v8"].forEach(function (id) {
       var old = document.getElementById(id);
       if (old) old.parentNode.removeChild(old);
     });
@@ -95,7 +95,7 @@
       ".ig-main{min-width:0}",
       /* Fijo a la ventana: scrolleás la grilla y el panel no se mueve */
       ".ig-side{position:fixed;top:72px;right:16px;width:280px;max-height:calc(100vh - 88px);overflow-y:auto;z-index:1000}",
-      "@media (max-width:900px){.ig-wrap{padding-right:0;padding-bottom:0}.ig-side{position:fixed;left:12px;right:12px;top:auto;bottom:12px;width:auto;max-height:42vh;z-index:1000}}",
+      "@media (max-width:900px){.ig-wrap{padding-right:0;padding-bottom:0}.ig-side{position:fixed;left:12px;right:12px;top:auto;bottom:12px;width:auto;max-height:42vh;z-index:1000}.ig-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}",
       ".ig-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}",
       ".ig-hint{color:#666;font-size:13px;margin:0}",
       ".ig-btn{appearance:none;border:0;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;background:#222;color:#fff}",
@@ -103,7 +103,7 @@
       ".ig-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}",
       ".ig-filter{appearance:none;border:1px solid #ddd;background:#fff;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer;color:#444}",
       ".ig-filter.is-on{background:#222;border-color:#222;color:#fff}",
-      ".ig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}",
+      ".ig-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}",
       ".ig-card{position:relative;aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:#eee;cursor:grab;user-select:none;box-shadow:0 1px 3px rgba(0,0,0,.12)}",
       ".ig-card:active{cursor:grabbing}",
       ".ig-card.is-dragging{opacity:.45}",
