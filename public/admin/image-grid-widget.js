@@ -72,14 +72,20 @@
       ".ig-card.is-over{outline:3px solid #df4c8a;outline-offset:2px}",
       ".ig-card img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}",
       ".ig-card .ig-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px;text-align:center;padding:8px}",
-      ".ig-badge{position:absolute;left:8px;top:8px;background:rgba(255,255,255,.92);border-radius:999px;padding:3px 8px;font-size:11px;font-weight:600;color:#222}",
+      ".ig-badge{position:absolute;left:8px;top:8px;background:rgba(255,255,255,.92);border-radius:999px;padding:3px 8px;font-size:11px;font-weight:600;color:#222;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}",
+      ".ig-pill{position:absolute;left:8px;bottom:8px;background:rgba(255,255,255,.95);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:600;color:#111;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}",
+      ".ig-card.is-selected{outline:3px solid #df4c8a;outline-offset:2px}",
       ".ig-del{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:18px;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}",
       ".ig-card:hover .ig-del{opacity:1}",
       ".ig-del:hover{background:#c62828}",
-      ".ig-meta{margin-top:16px;padding:14px;border:1px solid #ddd;border-radius:10px;background:#fafafa}",
-      ".ig-meta h4{margin:0 0 10px;font-size:14px}",
-      ".ig-meta label{display:block;font-size:12px;font-weight:600;margin:8px 0 4px}",
+      ".ig-meta{margin-top:16px;padding:16px;border:1px solid #e5e5e5;border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.06)}",
+      ".ig-meta h4{margin:0 0 6px;font-size:15px}",
+      ".ig-meta .ig-meta-sub{margin:0 0 12px;font-size:12px;color:#666}",
+      ".ig-meta label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px}",
       ".ig-meta select,.ig-meta input{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;box-sizing:border-box}",
+      ".ig-style-row{display:flex;gap:8px;flex-wrap:wrap}",
+      ".ig-chip{appearance:none;border:1px solid #ccc;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}",
+      ".ig-chip.is-on{background:#222;border-color:#222;color:#fff}",
       ".ig-empty{padding:28px;border:2px dashed #ccc;border-radius:12px;text-align:center;color:#777}",
     ].join("");
     document.head.appendChild(style);
@@ -133,12 +139,6 @@
       var field = this.props.field;
       if (!field || typeof field.get !== "function") return false;
       return !!field.get("paths_only");
-    },
-
-    allowMeta: function () {
-      var field = this.props.field;
-      if (!field || typeof field.get !== "function") return false;
-      return !!field.get("allow_meta");
     },
 
     getItems: function () {
@@ -226,8 +226,12 @@
     },
 
     handleCardClick: function (index) {
-      if (!this.allowMeta() && this.isPathsOnly()) return;
+      if (this.isPathsOnly()) return;
       this.setState({ editIndex: this.state.editIndex === index ? null : index });
+    },
+
+    styleLabel: function (style) {
+      return style === "outdoor" ? "Exterior" : "Estudio";
     },
 
     updateItem: function (index, patch) {
@@ -243,15 +247,20 @@
       var src = itemSrc(item, pathsOnly);
       var url = toPublicUrl(src);
       var style = pathsOnly ? "" : item.style || "studio";
+      var pill = !pathsOnly && item.text ? item.text : "";
       var dragging = this.state.dragIndex === index;
       var over = this.state.overIndex === index && this.state.dragIndex != null;
+      var selected = this.state.editIndex === index;
 
       return h(
         "div",
         {
           key: (src || "empty") + "-" + index,
           className:
-            "ig-card" + (dragging ? " is-dragging" : "") + (over ? " is-over" : ""),
+            "ig-card" +
+            (dragging ? " is-dragging" : "") +
+            (over ? " is-over" : "") +
+            (selected ? " is-selected" : ""),
           draggable: true,
           onDragStart: function (e) {
             self.handleDragStart(index, e);
@@ -289,8 +298,9 @@
           "Sin imagen"
         ),
         style
-          ? h("span", { className: "ig-badge" }, style)
+          ? h("span", { className: "ig-badge" }, this.styleLabel(style))
           : null,
+        pill ? h("span", { className: "ig-pill" }, pill) : null,
         h(
           "button",
           {
@@ -313,48 +323,64 @@
       var item = items[index];
       if (!item || this.isPathsOnly()) return null;
       var self = this;
-      var allowMeta = this.allowMeta();
+      var style = item.style || "studio";
 
       return h(
         "div",
         { className: "ig-meta" },
-        h("h4", {}, "Editar foto #" + (index + 1)),
-        h("label", {}, "Estilo"),
+        h("h4", {}, "Editar tags de la foto"),
         h(
-          "select",
-          {
-            value: item.style || "studio",
-            onChange: function (e) {
-              self.updateItem(index, { style: e.target.value });
-            },
-          },
-          h("option", { value: "studio" }, "Studio"),
-          h("option", { value: "outdoor" }, "Outdoor")
+          "p",
+          { className: "ig-meta-sub" },
+          "Foto #" +
+            (index + 1) +
+            " · La categoría (Family / Brands / Shelters / Specials) es la sección del menú donde estás."
         ),
-        allowMeta
-          ? h(
-              "div",
-              {},
-              h("label", {}, "Nombre en la pastilla"),
-              h("input", {
-                type: "text",
-                value: item.text || "",
-                placeholder: "Ej. 3organicspets",
-                onChange: function (e) {
-                  self.updateItem(index, { text: e.target.value });
-                },
-              }),
-              h("label", {}, "Link de la pastilla"),
-              h("input", {
-                type: "url",
-                value: item.href || "",
-                placeholder: "https://...",
-                onChange: function (e) {
-                  self.updateItem(index, { href: e.target.value });
-                },
-              })
-            )
-          : null
+        h("label", {}, "Lugar"),
+        h(
+          "div",
+          { className: "ig-style-row" },
+          h(
+            "button",
+            {
+              type: "button",
+              className: "ig-chip" + (style === "studio" ? " is-on" : ""),
+              onClick: function () {
+                self.updateItem(index, { style: "studio" });
+              },
+            },
+            "Estudio"
+          ),
+          h(
+            "button",
+            {
+              type: "button",
+              className: "ig-chip" + (style === "outdoor" ? " is-on" : ""),
+              onClick: function () {
+                self.updateItem(index, { style: "outdoor" });
+              },
+            },
+            "Exterior"
+          )
+        ),
+        h("label", {}, "Pastilla (nombre)"),
+        h("input", {
+          type: "text",
+          value: item.text || "",
+          placeholder: "Ej. CATdopciones, 3organicspets…",
+          onChange: function (e) {
+            self.updateItem(index, { text: e.target.value });
+          },
+        }),
+        h("label", {}, "Pastilla (link)"),
+        h("input", {
+          type: "url",
+          value: item.href || "",
+          placeholder: "https://instagram.com/…",
+          onChange: function (e) {
+            self.updateItem(index, { href: e.target.value });
+          },
+        })
       );
     },
 
@@ -375,7 +401,7 @@
             items.length +
               " foto" +
               (items.length === 1 ? "" : "s") +
-              " · Arrastrá para ordenar · Hover para borrar · Max 1 MB"
+              " · Click = editar tags · Arrastrá = ordenar · Hover × = borrar"
           ),
           h(
             "button",

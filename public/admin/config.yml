@@ -29,7 +29,7 @@ collections:
             widget: image-grid
             media_folder: public/images/portfolio/family
             public_folder: /images/portfolio/family
-            hint: Grilla visual — arrastra para ordenar, hover para borrar. Max 1 MB.
+            hint: Click en una foto para editar Estudio/Exterior y pastilla.
 
       - name: brands
         label: Fotos Brands
@@ -40,10 +40,9 @@ collections:
           - name: images
             label: Fotos Brands
             widget: image-grid
-            allow_meta: true
             media_folder: public/images/portfolio/brands
             public_folder: /images/portfolio/brands
-            hint: Click en una card para editar pastilla (nombre/link) y estilo.
+            hint: Click en una foto para editar Estudio/Exterior y pastilla (marca).
 
       - name: shelters
         label: Fotos Shelters
@@ -54,10 +53,9 @@ collections:
           - name: images
             label: Fotos Shelters
             widget: image-grid
-            allow_meta: true
             media_folder: public/images/portfolio/shelters
             public_folder: /images/portfolio/shelters
-            hint: Click en una card para editar pastilla y estilo.
+            hint: Click en una foto para editar Estudio/Exterior y pastilla (ej. CATdopciones).
 
       - name: specials
         label: Fotos Specials
@@ -70,7 +68,7 @@ collections:
             widget: image-grid
             media_folder: public/images/portfolio/specials
             public_folder: /images/portfolio/specials
-            hint: Grilla visual — arrastra para ordenar, hover para borrar.
+            hint: Click en una foto para editar Estudio/Exterior y pastilla.
 
   - name: site_packages
     label: Paquetes

@@ -29,8 +29,9 @@ En el menú de la izquierda → **Portfolio**, después elegí:
 3. **Agregar fotos** → elegí una o varias (máx. 1 MB c/u).
 4. **Arrastrá** una card para cambiar el orden.
 5. **Hover** sobre una card → círculo **×** para borrar.
-6. En Brands/Shelters: **click** en la card para editar estilo / pastilla.
-7. Guardá y **Publish**.
+6. **Click** en una card → editar **Estudio / Exterior** y la **pastilla** (ej. CATdopciones + link).
+7. La categoría (Family, Brands, Shelters, Specials) es la sección del menú donde entraste.
+8. Guardá y **Publish**.
 
 ## Paquetes
 
