@@ -35,14 +35,16 @@ return (
 
             <div className="grid grid-cols-1 md:grid-cols-3">
                 {items.map((item, index) => (
-                    <Link to={item.href}>
-                        <div
-                        key={index}
-                        className="relative aspect-square bg-cover bg-center overflow-hidden"
-                        style={{ backgroundImage: `url(${item.image})` }}
-                        >
-                            <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-all ease-in-out duration-300 flex items-center justify-center">
-                                <span className="text-white text-2xl font-semibold">{item.label}</span>
+                    <Link key={index} to={item.href} className="group block">
+                        <div className="relative aspect-square overflow-hidden">
+                            <div
+                                className="absolute inset-0 bg-cover bg-center transition-transform duration-300 ease-out will-change-transform group-hover:scale-[1.04]"
+                                style={{ backgroundImage: `url(${item.image})` }}
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <span className="relative z-10 text-white text-2xl font-semibold">
+                                    {item.label}
+                                </span>
                             </div>
                         </div>
                     </Link>

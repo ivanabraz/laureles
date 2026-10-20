@@ -45,6 +45,7 @@ const Press = ({ t }) => {
             >
                 <Swiper
                 spaceBetween={20}
+                className="!overflow-visible py-3"
                 breakpoints={{
                     0: {
                     slidesPerView: 1.5,
@@ -56,13 +57,20 @@ const Press = ({ t }) => {
                 >
                 {pressData.map((item, index) => {
                     return (
-                    <SwiperSlide key={index}>
-                        <a href={item.href} target="_blank" rel="noopener noreferrer">
-                            <div className={`flex flex-col items-start`}>
-                                <div
-                                    className="aspect-[8/9] w-full rounded-[40px] overflow-hidden bg-cover bg-center"
-                                    style={{ backgroundImage: `url(${item.image})` }}
-                                />
+                    <SwiperSlide key={index} className="!overflow-visible">
+                        <a
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group block"
+                        >
+                            <div className="flex flex-col items-start">
+                                <div className="aspect-[8/9] w-full rounded-[40px] overflow-hidden">
+                                    <div
+                                        className="h-full w-full bg-cover bg-center transition-transform duration-300 ease-out will-change-transform group-hover:scale-[1.04]"
+                                        style={{ backgroundImage: `url(${item.image})` }}
+                                    />
+                                </div>
                                 <h3 className="text-xl mt-4 text-black">{item.title}</h3>
                                 <button className="mt-1 text-sm underline text-neutral-400">
                                     {t('global.readnote')}

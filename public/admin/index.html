@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Laureles — Admin</title>
+    <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
+  </head>
+  <body>
+    <script>
+      (function () {
+        var MAX_BYTES = 1024 * 1024; // 1 MB
+
+        function tooLarge(file) {
+          return file && typeof file.size === "number" && file.size > MAX_BYTES;
+        }
+
+        function rejectLarge(file) {
+          if (!tooLarge(file)) return false;
+          var mb = (file.size / (1024 * 1024)).toFixed(2);
+          window.alert(
+            "La imagen pesa " +
+              mb +
+              " MB. El máximo es 1 MB.\nComprimila (por ejemplo en https://squoosh.app) e intentá de nuevo."
+          );
+          return true;
+        }
+
+        // Block oversized files before Decap uploads them (drag-drop or file picker).
+        document.addEventListener(
+          "change",
+          function (event) {
+            var input = event.target;
+            if (!input || input.type !== "file" || !input.files || !input.files.length) {
+              return;
+            }
+            for (var i = 0; i < input.files.length; i++) {
+              if (rejectLarge(input.files[i])) {
+                input.value = "";
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                return;
+              }
+            }
+          },
+          true
+        );
+
+        document.addEventListener(
+          "drop",
+          function (event) {
+            var dt = event.dataTransfer;
+            if (!dt || !dt.files || !dt.files.length) return;
+            for (var i = 0; i < dt.files.length; i++) {
+              var file = dt.files[i];
+              if (file.type && file.type.indexOf("image/") === 0 && rejectLarge(file)) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                return;
+              }
+            }
+          },
+          true
+        );
+      })();
+    </script>
+  </body>
+</html>

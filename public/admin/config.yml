@@ -1,0 +1,183 @@
+# Decap CMS — Laureles
+# Completá base_url con la URL del Cloudflare Worker OAuth (ver content/cms-setup.md).
+
+backend:
+  name: github
+  repo: ivanabraz/laureles
+  branch: main
+  base_url: https://laureles-cms-oauth.braz-ivana.workers.dev
+
+local_backend: true
+
+media_library:
+  max_file_size: 1024000
+
+# Fallback media (colecciones definen su propia carpeta).
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+collections:
+  - name: portfolio_family
+    label: "Portfolio — Family"
+    files:
+      - name: family
+        label: Family
+        file: src/data/family.json
+        media_folder: public/images/portfolio/family
+        public_folder: /images/portfolio/family
+        fields:
+          - name: images
+            label: Imágenes
+            widget: list
+            summary: "{{fields.src}} — {{fields.style}}"
+            fields:
+              - label: Imagen
+                name: src
+                widget: image
+                choose_url: false
+              - label: Estilo
+                name: style
+                widget: select
+                options:
+                  - { label: Studio, value: studio }
+                  - { label: Outdoor, value: outdoor }
+                default: studio
+
+  - name: portfolio_brands
+    label: "Portfolio — Brands"
+    files:
+      - name: brands
+        label: Brands
+        file: src/data/brands.json
+        media_folder: public/images/portfolio/brands
+        public_folder: /images/portfolio/brands
+        fields:
+          - name: images
+            label: Imágenes
+            widget: list
+            summary: "{{fields.text}} — {{fields.style}}"
+            fields:
+              - label: Imagen
+                name: src
+                widget: image
+                choose_url: false
+              - label: Estilo
+                name: style
+                widget: select
+                options:
+                  - { label: Studio, value: studio }
+                  - { label: Outdoor, value: outdoor }
+                default: studio
+              - label: Nombre (pastilla)
+                name: text
+                widget: string
+                required: false
+              - label: Link
+                name: href
+                widget: string
+                required: false
+
+  - name: portfolio_shelters
+    label: "Portfolio — Shelters"
+    files:
+      - name: shelters
+        label: Shelters
+        file: src/data/shelter.json
+        media_folder: public/images/portfolio/shelters
+        public_folder: /images/portfolio/shelters
+        fields:
+          - name: images
+            label: Imágenes
+            widget: list
+            summary: "{{fields.src}} — {{fields.style}}"
+            fields:
+              - label: Imagen
+                name: src
+                widget: image
+                choose_url: false
+              - label: Estilo
+                name: style
+                widget: select
+                options:
+                  - { label: Studio, value: studio }
+                  - { label: Outdoor, value: outdoor }
+                default: studio
+              - label: Nombre (pastilla)
+                name: text
+                widget: string
+                required: false
+              - label: Link
+                name: href
+                widget: string
+                required: false
+
+  - name: portfolio_specials
+    label: "Portfolio — Specials"
+    files:
+      - name: specials
+        label: Specials
+        file: src/data/specials.json
+        media_folder: public/images/portfolio/specials
+        public_folder: /images/portfolio/specials
+        fields:
+          - name: images
+            label: Imágenes
+            widget: list
+            summary: "{{fields.src}} — {{fields.style}}"
+            fields:
+              - label: Imagen
+                name: src
+                widget: image
+                choose_url: false
+              - label: Estilo
+                name: style
+                widget: select
+                options:
+                  - { label: Studio, value: studio }
+                  - { label: Outdoor, value: outdoor }
+                default: studio
+
+  - name: packages
+    label: Paquetes
+    files:
+      - name: packages
+        label: Paquetes
+        file: src/data/packages.json
+        media_folder: public/images/packages
+        public_folder: /images/packages
+        fields:
+          - name: packages
+            label: Paquetes
+            widget: list
+            summary: "{{fields.id}}"
+            fields:
+              - label: Paquete
+                name: id
+                widget: select
+                options:
+                  - { label: Chihuahua, value: chihuahua }
+                  - { label: Galgo, value: galgo }
+                  - { label: Akita, value: akita }
+                  - { label: Pug, value: pug }
+                  - { label: Mestizo, value: mestizo }
+                  - { label: Dogo, value: dogo }
+                  - { label: Gift card, value: gift_card }
+              - label: Imagen de la card
+                name: cover
+                widget: image
+                choose_url: false
+              - label: Galería del modal
+                name: gallery
+                widget: list
+                field:
+                  label: Imagen
+                  name: image
+                  widget: image
+                  choose_url: false
+              - label: Color del título
+                name: titleColor
+                widget: select
+                options:
+                  - { label: Negro, value: text-black }
+                  - { label: Blanco, value: text-white }
+                default: text-white

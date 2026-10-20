@@ -20,6 +20,8 @@
         "outdoor":"Exteriores",
         "studio":"Estudio",
         "requestinfo":"Consultar",
+        "see_more":"Ver más",
+        "reference_photo":"Foto de referencia",
         "no_results":"Oops! No hay resultados para los filtros seleccionados ☺",
         "specials": "Fechas especiales",
 
@@ -34,6 +36,16 @@
             "session_galgo": "Sesión Galgo\nestudio",
             "session_akita": "Sesión Akita\nestudio",
             "gift_card": "Regalá una\nGift card",
+
+            "desc_chihuahua": "Una sesión íntima en estudio, pensada para que tu compañero se sienta cómodo y podamos capturar su esencia con luz controlada.",
+            "desc_galgo": "Ideal para quienes buscan más variedad de fotos en un entorno calmado y pensado para animales.",
+            "desc_akita": "La experiencia más completa en estudio: tiempo extra para explorar poses, vínculos y detalles con calma.",
+            "desc_pug": "Una sesión al aire libre en una locación especial, perfecta para retratos naturales y momentos espontáneos.",
+            "desc_mestizo": "Dos locaciones exteriores para recorrer distintos escenarios y llevarte una galería más diversa.",
+            "desc_dogo": "La opción más completa outdoor: más fotos, más tiempo y dos locaciones para una sesión memorable.",
+            "desc_gift_card": "Regalá una experiencia fotográfica inolvidable. La gift card se adapta al paquete que elijan juntos.",
+
+            "includes": "Incluye",
 
             "session_60_90min": "60 a 90 min",
             "session_60min": "60 min",

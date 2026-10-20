@@ -14,13 +14,27 @@
     const CATEGORY_FILTERS = ["family", "brands", "shelters", "specials"];
     const STYLE_FILTERS = ["studio", "outdoor"];
 
-    const shuffleArray = (array) => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
+    const withPublicUrl = (src) => {
+        if (!src) return src;
+        if (src.startsWith("http") || src.startsWith(process.env.PUBLIC_URL || "")) {
+            return src;
+        }
+        return `${process.env.PUBLIC_URL || ""}${src.startsWith("/") ? src : `/${src}`}`;
+    };
+
+    const imagesFrom = (data, category) => {
+        const list = Array.isArray(data) ? data : data?.images || [];
+        return list.map((img) => {
+            const style =
+                img.style ||
+                (img.filters || []).find((f) => STYLE_FILTERS.includes(f)) ||
+                "studio";
+            return {
+                ...img,
+                src: withPublicUrl(img.src),
+                filters: [category, style],
+            };
+        });
     };
 
     const getFilteredImages = (images, filters) => {
@@ -64,6 +78,53 @@
     </button>
     );
 
+    const BrandPromoCard = ({ brandMessage, contactInvite }) => (
+        <div
+            className="
+            group
+            col-span-2 sm:col-span-2 md:col-span-1
+            aspect-[5/3] xs:aspect-[5/3] sm:aspect-[5/3] md:aspect-[2/3] lg:aspect-[2/3] xl:aspect-[2/3] 2xl:aspect-[2/3]
+            rounded-[8px]
+            overflow-hidden
+            relative
+            "
+        >
+            <img
+            src={`${process.env.PUBLIC_URL}/images/portfolio/image-gray.jpg`}
+            alt="Brand Promo"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out will-change-transform group-hover:scale-[1.04]"
+            />
+
+            <div className="absolute inset-0 z-10 p-4 flex items-top">
+            <p className="text-lg md:text-lg lg:text-lg xl:text-xl text-black p-2 rounded">
+                {brandMessage}{" "}
+                <a
+                href="https://api.whatsapp.com/send?phone=5491133752356&text=Hola%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20las%20sesiones%20para%20marcas%20en%20Laureles%20Audiovisual.%20%F0%9F%93%B8%20%F0%9F%90%BE"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold underline cursor-pointer"
+                >
+                {contactInvite}
+                </a>
+            </p>
+            </div>
+        </div>
+    );
+
+    const modalImageVariants = {
+        enter: (direction) => ({
+            x: direction > 0 ? 120 : -120,
+            opacity: 0,
+        }),
+        center: {
+            x: 0,
+            opacity: 1,
+        },
+        exit: (direction) => ({
+            x: direction < 0 ? 120 : -120,
+            opacity: 0,
+        }),
+    };
 
     const Portfolio = () => {
     const { t } = useTranslation();
@@ -71,54 +132,21 @@
     const [searchParams, setSearchParams] = useSearchParams();
     const [activeFilters, setActiveFilters] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const [direction, setDirection] = useState(0);
 
-    const BrandPromoCard = () => (
-        <motion.div
-            layout
-            className="
-            col-span-2 sm:col-span-2 md:col-span-1
-            aspect-[5/3] xs:aspect-[5/3] sm:aspect-[5/3] md:aspect-[2/3] lg:aspect-[2/3] xl:aspect-[2/3] 2xl:aspect-[2/3]
-            rounded-[8px]
-            overflow-hidden
-            relative
-            "
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-        >
-            <img
-            src={`${process.env.PUBLIC_URL}/images/portfolio/image-gray.jpg`}
-            alt="Brand Promo"
-            className="absolute inset-0 w-full h-full object-cover"
-            />
-
-            <div className="absolute inset-0 z-10 p-4 flex items-top">
-            <p className="text-lg md:text-lg lg:text-lg xl:text-xl text-black p-2 rounded">
-                {t("global.brand_message")}{" "}
-                <a
-                href="https://api.whatsapp.com/send?phone=5491133752356&text=Hola%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20las%20sesiones%20para%20marcas%20en%20Laureles%20Audiovisual.%20%F0%9F%93%B8%20%F0%9F%90%BE"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold underline cursor-pointer"
-                >
-                {t("global.contact_invite")}
-                </a>
-            </p>
-            </div>
-        </motion.div>
-        );
-
-
-
-    const shuffledData = useMemo(() => {
-        const imageData = [...shelters, ...brands, ...family, ...pawlidays];
-        return shuffleArray(imageData);
-    }, []);
+    const imageData = useMemo(
+        () => [
+            ...imagesFrom(shelters, "shelters"),
+            ...imagesFrom(brands, "brands"),
+            ...imagesFrom(family, "family"),
+            ...imagesFrom(pawlidays, "specials"),
+        ],
+        []
+    );
 
     const filteredImages = useMemo(
-        () => getFilteredImages(shuffledData, activeFilters),
-        [shuffledData, activeFilters]
+        () => getFilteredImages(imageData, activeFilters),
+        [imageData, activeFilters]
     );
 
     useEffect(() => {
@@ -142,20 +170,35 @@
         );
     }, []);
 
+    const openModal = useCallback((index) => {
+        setDirection(0);
+        setSelectedIndex(index);
+    }, []);
+
+    const closeModal = useCallback(() => {
+        setDirection(0);
+        setSelectedIndex(null);
+    }, []);
+
+    const goToImage = useCallback((index, dir) => {
+        setDirection(dir);
+        setSelectedIndex(index);
+    }, []);
+
     useEffect(() => {
         const handleKeyDown = (e) => {
         if (selectedIndex === null) return;
         if (e.key === "ArrowRight" && selectedIndex < filteredImages.length - 1) {
-            setSelectedIndex((prev) => prev + 1);
+            goToImage(selectedIndex + 1, 1);
         } else if (e.key === "ArrowLeft" && selectedIndex > 0) {
-            setSelectedIndex((prev) => prev - 1);
+            goToImage(selectedIndex - 1, -1);
         } else if (e.key === "Escape") {
-            setSelectedIndex(null);
+            closeModal();
         }
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [selectedIndex, filteredImages.length]);
+    }, [selectedIndex, filteredImages.length, goToImage, closeModal]);
 
     return (
         <div className="px-6 md:px-10">
@@ -198,7 +241,12 @@
             layout
             className="relative grid grid-cols-2 xs:sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4"
         >
-            {activeFilters.includes("brands") && <BrandPromoCard />}
+            {activeFilters.includes("brands") && (
+                <BrandPromoCard
+                    brandMessage={t("global.brand_message")}
+                    contactInvite={t("global.contact_invite")}
+                />
+            )}
 
             <AnimatePresence>
             {filteredImages.map((image, index) => (
@@ -206,17 +254,17 @@
                 layout
                 layoutId={image.id || image.src}
                 key={image.id || image.src}
-                className="relative w-full aspect-[2/3] rounded-[8px] overflow-hidden cursor-pointer"
+                className="group relative w-full aspect-[2/3] rounded-[8px] overflow-hidden cursor-pointer"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                onClick={() => setSelectedIndex(index)}
+                onClick={() => openModal(index)}
                 >
                 <img
                     src={image.src}
                     alt={image.text || ""}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-300 ease-out will-change-transform group-hover:scale-[1.04]"
                 />
                 {image.text && (
                     <div className="absolute top-2 left-2 bg-white/80 rounded-full text-neutral-900 text-xs px-2 py-1 z-10">
@@ -248,55 +296,88 @@
         </motion.div>
 
         {/* Modal con navegación */}
-        {selectedIndex !== null && (
-            <div
-            className="fixed inset-0 bg-black bg-opacity-75 z-50"
-            onClick={() => setSelectedIndex(null)}
-            >
-            <button
-                onClick={(e) => {
-                e.stopPropagation();
-                setSelectedIndex(null);
-                }}
-                aria-label="Cerrar"
-                className="absolute top-6 right-6 text-white text-3xl p-2 hover:bg-opacity-80 transition"
-            >
-                <FontAwesomeIcon icon={faTimes} />
-            </button>
-
-            {selectedIndex > 0 && (
-                <button
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedIndex((prev) => prev - 1);
-                }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 text-white text-xl p-2 z-50 hover:opacity-70"
+        <AnimatePresence>
+            {selectedIndex !== null && (
+                <motion.div
+                    className="fixed inset-0 bg-black/75 z-50"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    onClick={closeModal}
                 >
-                    <FontAwesomeIcon icon={faChevronLeft} />
-                </button>
-            )}
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            closeModal();
+                        }}
+                        aria-label="Cerrar"
+                        className="absolute top-6 right-6 text-white text-3xl p-2 z-50 hover:opacity-70 transition"
+                    >
+                        <FontAwesomeIcon icon={faTimes} />
+                    </button>
 
-            {selectedIndex < filteredImages.length - 1 && (
-                <button
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedIndex((prev) => prev + 1);
-                }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-white text-xl p-2 z-50 hover:opacity-70"
-                >
-                    <FontAwesomeIcon icon={faChevronRight} />
-                </button>
-            )}
+                    {selectedIndex > 0 && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                goToImage(selectedIndex - 1, -1);
+                            }}
+                            className="absolute left-2 top-1/2 -translate-y-1/2 text-white text-xl p-2 z-50 hover:opacity-70"
+                        >
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        </button>
+                    )}
 
-            <div className="w-full h-full flex items-center justify-center">
-                <img
-                src={filteredImages[selectedIndex]?.src}
-                alt="Ampliada"
-                className="max-w-[80%] max-h-[80vh] rounded-lg"
-                />
-            </div>
-            </div>
-        )}
+                    {selectedIndex < filteredImages.length - 1 && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                goToImage(selectedIndex + 1, 1);
+                            }}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-white text-xl p-2 z-50 hover:opacity-70"
+                        >
+                            <FontAwesomeIcon icon={faChevronRight} />
+                        </button>
+                    )}
+
+                    <motion.div
+                        className="relative w-full h-full overflow-hidden flex items-center justify-center pointer-events-none"
+                        initial={{ scale: 0.92, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.92, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                    >
+                        <AnimatePresence initial={false} custom={direction}>
+                            <motion.img
+                                key={selectedIndex}
+                                src={filteredImages[selectedIndex]?.src}
+                                alt="Ampliada"
+                                custom={direction}
+                                variants={modalImageVariants}
+                                initial="enter"
+                                animate="center"
+                                exit="exit"
+                                transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
+                                drag="x"
+                                dragConstraints={{ left: 0, right: 0 }}
+                                dragElastic={0.2}
+                                onDragEnd={(e, { offset, velocity }) => {
+                                    const swipePower = offset.x * velocity.x;
+                                    if ((offset.x < -80 || swipePower < -8000) && selectedIndex < filteredImages.length - 1) {
+                                        goToImage(selectedIndex + 1, 1);
+                                    } else if ((offset.x > 80 || swipePower > 8000) && selectedIndex > 0) {
+                                        goToImage(selectedIndex - 1, -1);
+                                    }
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="absolute max-w-[80%] max-h-[80vh] object-contain rounded-lg pointer-events-auto cursor-grab active:cursor-grabbing"
+                            />
+                        </AnimatePresence>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
         </div>
     );
     };

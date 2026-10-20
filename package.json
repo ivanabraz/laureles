@@ -2,6 +2,7 @@
   "name": "laureles",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://ivanabraz.github.io/laureles",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
@@ -33,9 +34,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && node scripts/spa-github-pages.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate:locales-csv": "node scripts/generate-locales-csv.js",
+    "cms": "npx decap-server"
   },
   "eslintConfig": {
     "extends": [

@@ -1,0 +1,60 @@
+{
+  "packages": [
+    {
+      "id": "chihuahua",
+      "cover": "/images/packages/image-04.jpg",
+      "gallery": [
+        "/images/packages/image-04.jpg"
+      ],
+      "titleColor": "text-black"
+    },
+    {
+      "id": "galgo",
+      "cover": "/images/packages/image-05.jpg",
+      "gallery": [
+        "/images/packages/image-05.jpg"
+      ],
+      "titleColor": "text-black"
+    },
+    {
+      "id": "akita",
+      "cover": "/images/packages/image-06.jpg",
+      "gallery": [
+        "/images/packages/image-06.jpg"
+      ],
+      "titleColor": "text-black"
+    },
+    {
+      "id": "pug",
+      "cover": "/images/packages/image-01.jpg",
+      "gallery": [
+        "/images/packages/image-01.jpg"
+      ],
+      "titleColor": "text-white"
+    },
+    {
+      "id": "mestizo",
+      "cover": "/images/packages/image-02.jpg",
+      "gallery": [
+        "/images/packages/image-02.jpg"
+      ],
+      "titleColor": "text-white"
+    },
+    {
+      "id": "dogo",
+      "cover": "/images/packages/image-03.jpg",
+      "gallery": [
+        "/images/packages/image-03.jpg"
+      ],
+      "titleColor": "text-white"
+    },
+    {
+      "id": "gift_card",
+      "cover": "/images/packages/image-07.jpg",
+      "gallery": [
+        "/images/packages/image-07.jpg"
+      ],
+      "titleColor": "text-white"
+    }
+  ]
+}

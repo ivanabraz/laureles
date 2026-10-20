@@ -1,110 +1,112 @@
-[
+{
+  "images": [
     {
-    "src": "/images/portfolio/shelters/catdopciones-01.jpg",
-    "text": "CATdopciones",
-    "href": "https://www.instagram.com/catdopciones/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/catdopciones-01.jpg",
+      "style": "studio",
+      "text": "CATdopciones",
+      "href": "https://www.instagram.com/catdopciones/"
     },
     {
-    "src": "/images/portfolio/shelters/catdopciones-02.jpg",
-    "text": "CATdopciones",
-    "href": "https://www.instagram.com/catdopciones/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/catdopciones-02.jpg",
+      "style": "studio",
+      "text": "CATdopciones",
+      "href": "https://www.instagram.com/catdopciones/"
     },
     {
-    "src": "/images/portfolio/shelters/catdopciones-03.jpg",
-    "text": "CATdopciones",
-    "href": "https://www.instagram.com/catdopciones/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/catdopciones-03.jpg",
+      "style": "studio",
+      "text": "CATdopciones",
+      "href": "https://www.instagram.com/catdopciones/"
     },
     {
-    "src": "/images/portfolio/shelters/catdopciones-04.jpg",
-    "text": "CATdopciones",
-    "href": "https://www.instagram.com/catdopciones/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/catdopciones-04.jpg",
+      "style": "studio",
+      "text": "CATdopciones",
+      "href": "https://www.instagram.com/catdopciones/"
     },
     {
-    "src": "/images/portfolio/shelters/catdopciones-05.jpg",
-    "text": "CATdopciones",
-    "href": "https://www.instagram.com/catdopciones/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/catdopciones-05.jpg",
+      "style": "studio",
+      "text": "CATdopciones",
+      "href": "https://www.instagram.com/catdopciones/"
     },
     {
-    "src": "/images/portfolio/shelters/catdopciones-06.jpg",
-    "text": "CATdopciones",
-    "href": "https://www.instagram.com/catdopciones/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/catdopciones-06.jpg",
+      "style": "studio",
+      "text": "CATdopciones",
+      "href": "https://www.instagram.com/catdopciones/"
     },
     {
-    "src": "/images/portfolio/shelters/catdopciones-07.jpg",
-    "text": "CATdopciones",
-    "href": "https://www.instagram.com/catdopciones/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/catdopciones-07.jpg",
+      "style": "studio",
+      "text": "CATdopciones",
+      "href": "https://www.instagram.com/catdopciones/"
     },
     {
-    "src": "/images/portfolio/shelters/catdopciones-08.jpg",
-    "text": "CATdopciones",
-    "href": "https://www.instagram.com/catdopciones/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/catdopciones-08.jpg",
+      "style": "studio",
+      "text": "CATdopciones",
+      "href": "https://www.instagram.com/catdopciones/"
     },
     {
-    "src": "/images/portfolio/shelters/catdopciones-09.jpg",
-    "text": "CATdopciones",
-    "href": "https://www.instagram.com/catdopciones/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/catdopciones-09.jpg",
+      "style": "studio",
+      "text": "CATdopciones",
+      "href": "https://www.instagram.com/catdopciones/"
     },
     {
-    "src": "/images/portfolio/shelters/catdopciones-10.jpg",
-    "text": "CATdopciones",
-    "href": "https://www.instagram.com/catdopciones/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/catdopciones-10.jpg",
+      "style": "studio",
+      "text": "CATdopciones",
+      "href": "https://www.instagram.com/catdopciones/"
     },
     {
-    "src": "/images/portfolio/shelters/fortalezapitbull-01.jpg",
-    "text": "Fortaleza Pitbull",
-    "href": "https://www.instagram.com/fortalezapitbull/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/fortalezapitbull-01.jpg",
+      "style": "studio",
+      "text": "Fortaleza Pitbull",
+      "href": "https://www.instagram.com/fortalezapitbull/"
     },
     {
-    "src": "/images/portfolio/shelters/fortalezapitbull-02.jpg",
-    "text": "Fortaleza Pitbull",
-    "href": "https://www.instagram.com/fortalezapitbull/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/fortalezapitbull-02.jpg",
+      "style": "studio",
+      "text": "Fortaleza Pitbull",
+      "href": "https://www.instagram.com/fortalezapitbull/"
     },
     {
-    "src": "/images/portfolio/shelters/fortalezapitbull-03.jpg",
-    "text": "Fortaleza Pitbull",
-    "href": "https://www.instagram.com/fortalezapitbull/",
-    "filters": ["shelters", "studio"]
+      "src": "/images/portfolio/shelters/fortalezapitbull-03.jpg",
+      "style": "studio",
+      "text": "Fortaleza Pitbull",
+      "href": "https://www.instagram.com/fortalezapitbull/"
     },
     {
-    "src": "/images/portfolio/shelters/fortalezapitbull-04.jpg",
-    "text": "Fortaleza Pitbull",
-    "href": "https://www.instagram.com/fortalezapitbull/",
-    "filters": ["shelters", "outdoor"]
+      "src": "/images/portfolio/shelters/fortalezapitbull-04.jpg",
+      "style": "outdoor",
+      "text": "Fortaleza Pitbull",
+      "href": "https://www.instagram.com/fortalezapitbull/"
     },
     {
-    "src": "/images/portfolio/shelters/fortalezapitbull-05.jpg",
-    "text": "Fortaleza Pitbull",
-    "href": "https://www.instagram.com/fortalezapitbull/",
-    "filters": ["shelters", "outdoor"]
+      "src": "/images/portfolio/shelters/fortalezapitbull-05.jpg",
+      "style": "outdoor",
+      "text": "Fortaleza Pitbull",
+      "href": "https://www.instagram.com/fortalezapitbull/"
     },
     {
-    "src": "/images/portfolio/shelters/fortalezapitbull-06.jpg",
-    "text": "Fortaleza Pitbull",
-    "href": "https://www.instagram.com/fortalezapitbull/",
-    "filters": ["shelters", "outdoor"]
+      "src": "/images/portfolio/shelters/fortalezapitbull-06.jpg",
+      "style": "outdoor",
+      "text": "Fortaleza Pitbull",
+      "href": "https://www.instagram.com/fortalezapitbull/"
     },
     {
-    "src": "/images/portfolio/shelters/fortalezapitbull-07.jpg",
-    "text": "Fortaleza Pitbull",
-    "href": "https://www.instagram.com/fortalezapitbull/",
-    "filters": ["shelters", "outdoor"]
+      "src": "/images/portfolio/shelters/fortalezapitbull-07.jpg",
+      "style": "outdoor",
+      "text": "Fortaleza Pitbull",
+      "href": "https://www.instagram.com/fortalezapitbull/"
     },
     {
-    "src": "/images/portfolio/shelters/fortalezapitbull-08.jpg",
-    "text": "Fortaleza Pitbull",
-    "href": "https://www.instagram.com/fortalezapitbull/",
-    "filters": ["shelters", "outdoor"]
+      "src": "/images/portfolio/shelters/fortalezapitbull-08.jpg",
+      "style": "outdoor",
+      "text": "Fortaleza Pitbull",
+      "href": "https://www.instagram.com/fortalezapitbull/"
     }
-]
+  ]
+}
