@@ -80,9 +80,14 @@
     return value === "outdoor" ? "Exterior" : "Estudio";
   }
 
-  var styleTagId = "laureles-image-grid-css-v9";
+  var styleTagId = "laureles-image-grid-css-v10";
   function ensureStyles() {
-    ["laureles-image-grid-css", "laureles-image-grid-css-v7", "laureles-image-grid-css-v8"].forEach(function (id) {
+    [
+      "laureles-image-grid-css",
+      "laureles-image-grid-css-v7",
+      "laureles-image-grid-css-v8",
+      "laureles-image-grid-css-v9",
+    ].forEach(function (id) {
       var old = document.getElementById(id);
       if (old) old.parentNode.removeChild(old);
     });
@@ -90,12 +95,15 @@
     var style = document.createElement("style");
     style.id = styleTagId;
     style.textContent = [
-      ".ig-wrap{font-family:system-ui,-apple-system,sans-serif;padding-right:300px;box-sizing:border-box}",
-      ".ig-layout{display:block}",
-      ".ig-main{min-width:0}",
-      /* Fijo a la ventana: scrolleás la grilla y el panel no se mueve */
-      ".ig-side{position:fixed;top:72px;right:16px;width:280px;max-height:calc(100vh - 88px);overflow-y:auto;z-index:1000}",
-      "@media (max-width:900px){.ig-wrap{padding-right:0;padding-bottom:0}.ig-side{position:fixed;left:12px;right:12px;top:auto;bottom:12px;width:auto;max-height:42vh;z-index:1000}.ig-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}",
+      /* Ensanchar el editor de Decap (suele venir con max-width ~800px) */
+      '[class*="ControlPaneContainer"],[class*="EntryContainer"],[class*="EditorContainer"],[class*="AppMainContainer"]{max-width:none!important;width:100%!important}',
+      "body > #nc-root > div{max-width:none!important}",
+      ".ig-wrap{font-family:system-ui,-apple-system,sans-serif;box-sizing:border-box;width:100%}",
+      ".ig-layout{display:flex;align-items:flex-start;gap:18px;width:100%}",
+      ".ig-main{flex:1;min-width:0}",
+      /* Panel pegado al lado de la grilla (no flotando fuera del card) */
+      ".ig-side{width:260px;flex-shrink:0;position:sticky;top:12px;align-self:flex-start;max-height:calc(100vh - 24px);overflow-y:auto;z-index:5}",
+      "@media (max-width:900px){.ig-layout{flex-direction:column}.ig-side{width:100%;position:sticky;top:8px;max-height:none;order:-1}.ig-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}",
       ".ig-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}",
       ".ig-hint{color:#666;font-size:13px;margin:0}",
       ".ig-btn{appearance:none;border:0;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;background:#222;color:#fff}",
@@ -118,12 +126,12 @@
       ".ig-del{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:18px;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}",
       ".ig-card:hover .ig-del{opacity:1}",
       ".ig-del:hover{background:#c62828}",
-      ".ig-meta{padding:16px;border:1px solid #e5e5e5;border-radius:12px;background:#fff;box-shadow:0 8px 28px rgba(0,0,0,.14)}",
-      ".ig-meta.is-empty{background:#fafafa;border-style:dashed;color:#777;box-shadow:0 4px 16px rgba(0,0,0,.06)}",
+      ".ig-meta{padding:16px;border:1px solid #e5e5e5;border-radius:12px;background:#fafafa}",
+      ".ig-meta.is-empty{border-style:dashed;color:#777}",
       ".ig-meta h4{margin:0 0 6px;font-size:15px}",
       ".ig-meta .ig-meta-sub{margin:0 0 12px;font-size:12px;color:#666;line-height:1.4}",
       ".ig-meta label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px}",
-      ".ig-meta input{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;box-sizing:border-box}",
+      ".ig-meta input{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;box-sizing:border-box;background:#fff}",
       ".ig-meta-thumb{width:72px;height:108px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block}",
       ".ig-style-row{display:flex;gap:8px;flex-wrap:wrap}",
       ".ig-chip{appearance:none;border:1px solid #ccc;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}",
@@ -134,6 +142,29 @@
       ".ig-empty{padding:28px;border:2px dashed #ccc;border-radius:12px;text-align:center;color:#777}",
     ].join("");
     document.head.appendChild(style);
+  }
+
+  function widenDecapAncestors(el) {
+    if (!el || !el.parentElement) return;
+    var node = el.parentElement;
+    var depth = 0;
+    while (node && node !== document.body && depth < 14) {
+      var cs = window.getComputedStyle(node);
+      var mw = cs.maxWidth;
+      if (mw && mw !== "none") {
+        var px = parseFloat(mw);
+        if (!isNaN(px) && px > 0 && px < 1400) {
+          node.style.maxWidth = "none";
+          node.style.width = "100%";
+          if (cs.marginLeft !== "0px" || cs.marginRight !== "0px") {
+            node.style.marginLeft = "0";
+            node.style.marginRight = "0";
+          }
+        }
+      }
+      node = node.parentElement;
+      depth += 1;
+    }
   }
 
   var ImageGridControl = createClass({
@@ -152,6 +183,10 @@
     componentDidMount: function () {
       ensureStyles();
       this._controlID = "ig-" + Math.random().toString(36).slice(2);
+      var self = this;
+      requestAnimationFrame(function () {
+        if (self._rootEl) widenDecapAncestors(self._rootEl);
+      });
     },
 
     componentDidUpdate: function (prevProps) {
@@ -480,7 +515,7 @@
             h(
               "p",
               { className: "ig-meta-sub" },
-              "Este panel queda fijo a la derecha. Click en cualquier foto (aunque esté abajo) y editá acá sin subir."
+              "Click en una foto para editar tags acá. El panel queda al lado de la grilla mientras scrolleás."
             )
           )
         );
@@ -605,7 +640,13 @@
 
       return h(
         "div",
-        { className: "ig-wrap " + (this.props.classNameWrapper || "") },
+        {
+          className: "ig-wrap " + (this.props.classNameWrapper || ""),
+          ref: function (el) {
+            self._rootEl = el;
+            if (el) widenDecapAncestors(el);
+          },
+        },
         h(
           "div",
           { className: "ig-layout" },
