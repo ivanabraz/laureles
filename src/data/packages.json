@@ -1,6 +1,20 @@
 {
   "packages": [
     {
+      "id": "navidad",
+      "cover": "/images/packages/image-08.jpg",
+      "gallery": [
+        "/images/packages/image-08.jpg"
+      ],
+      "titleColor": "text-white",
+      "details": [
+        "session_60min",
+        "session_5_photos",
+        "treats",
+        "location_studio"
+      ]
+    },
+    {
       "id": "chihuahua",
       "cover": "/images/packages/image-04.jpg",
       "gallery": [
@@ -92,18 +106,6 @@
       ],
       "titleColor": "text-white",
       "details": []
-    },
-    {
-      "id": "navidad",
-      "cover": "",
-      "gallery": [],
-      "titleColor": "text-white",
-      "details": [
-        "session_60min",
-        "session_5_photos",
-        "treats",
-        "location_studio"
-      ]
     }
   ]
 }
