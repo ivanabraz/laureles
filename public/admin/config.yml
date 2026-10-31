@@ -13,6 +13,25 @@ media_folder: public/images/uploads
 public_folder: /images/uploads
 
 collections:
+  - name: hero
+    label: Inicio
+    editor:
+      preview: false
+    files:
+      - name: hero_images
+        label: Imagen del inicio
+        file: src/data/hero.json
+        media_folder: public/images/photos
+        public_folder: /images/photos
+        fields:
+          - name: images
+            label: Imágenes
+            widget: image-grid
+            paths_only: true
+            media_folder: public/images/photos
+            public_folder: /images/photos
+            hint: Arrastrá para ordenar. Con una sola foto, el inicio no muestra los puntos.
+
   - name: portfolio
     label: Portfolio
     editor:

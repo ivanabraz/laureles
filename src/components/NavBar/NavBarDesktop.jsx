@@ -5,8 +5,8 @@ import NavBarLanguage from "./NavBarLanguage";
 
 const NavBarDesktop = ({ navigation, scrolled }) => {
     return (
-        <nav className={`absolute w-full hidden lg:flex lg:flex-col z-40 justify-center items-center text-center 
-            transition-all duration-300 bg-gradient-to-b from-black/50 to-transparent py-6`}>
+        <nav className={`absolute top-[var(--announcement-offset,0px)] w-full hidden lg:flex lg:flex-col z-40 justify-center items-center text-center 
+            transition-all duration-300 py-6`}>
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}

@@ -99,7 +99,7 @@
             />
 
             <div className="absolute inset-0 z-10 p-4 flex items-top">
-            <p className="text-lg md:text-lg lg:text-lg xl:text-xl text-black p-2 rounded">
+            <p className="brand-promo-copy text-lg md:text-lg lg:text-lg xl:text-xl text-black p-2 rounded">
                 {brandMessage}{" "}
                 <a
                 href="https://api.whatsapp.com/send?phone=5491133752356&text=Hola%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20las%20sesiones%20para%20marcas%20en%20Laureles%20Audiovisual.%20%F0%9F%93%B8%20%F0%9F%90%BE"
@@ -206,7 +206,7 @@
         </button>
 
         {/* Filtros */}
-        <div className="w-full flex flex-wrap justify-center gap-3 mb-3">
+        <div className="portfolio-filters w-full flex flex-wrap justify-center gap-3 mb-3">
             {CATEGORY_FILTERS.map((filter) => (
             <FilterButton
                 key={filter}
@@ -218,7 +218,7 @@
             ))}
         </div>
 
-        <div className="w-full flex flex-wrap justify-center gap-3 mb-8">
+        <div className="portfolio-filters w-full flex flex-wrap justify-center gap-3 mb-8">
             {STYLE_FILTERS.map((filter) => (
             <FilterButton
                 key={filter}
@@ -234,7 +234,7 @@
         <motion.div
             key={activeFilters.join(",")}
             layout
-            className="relative grid grid-cols-2 xs:sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4"
+            className="relative grid grid-cols-2 xs:sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 pb-14"
         >
             {activeFilters.includes("brands") && (
                 <BrandPromoCard

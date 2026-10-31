@@ -16,7 +16,13 @@
     return;
   }
 
-  var SITE = "https://laureles.netlify.app";
+  var SITE_HOSTS = [
+    "https://laureles.netlify.app",
+    "https://www.laureles.netlify.app",
+    "https://laurelesaudiovisual.com",
+    "https://www.laurelesaudiovisual.com",
+    "https://ivanabraz.github.io/laureles",
+  ];
 
   var DETAIL_OPTIONS = [
     { id: "session_60min", label: "60 min" },
@@ -40,10 +46,87 @@
     gift_card: "Gift card",
   };
 
+  function mediaSrc(value) {
+    if (!value) return "";
+    if (typeof value === "string") return value;
+    if (typeof value.toJS === "function") return mediaSrc(value.toJS());
+    if (typeof value === "object") return value.path || value.src || value.url || "";
+    return "";
+  }
+
+  function asMediaList(mediaPath) {
+    if (mediaPath == null || mediaPath === "") return [];
+    if (typeof mediaPath.toJS === "function") {
+      var js = mediaPath.toJS();
+      return asMediaList(js);
+    }
+    var list = Array.isArray(mediaPath) ? mediaPath : [mediaPath];
+    return list.map(mediaSrc).filter(Boolean);
+  }
+
+  function sitePath(src) {
+    src = mediaSrc(src);
+    if (!src || /^(blob:|data:)/i.test(src)) return "";
+    var i;
+    for (i = 0; i < SITE_HOSTS.length; i++) {
+      if (src.indexOf(SITE_HOSTS[i]) === 0) {
+        return src.slice(SITE_HOSTS[i].length) || "/";
+      }
+    }
+    if (/^https?:\/\//i.test(src)) return "";
+    return src.charAt(0) === "/" ? src : "/" + src;
+  }
+
   function toPublicUrl(src) {
+    src = mediaSrc(src);
     if (!src) return "";
-    if (/^https?:\/\//i.test(src)) return src;
-    return SITE + (src.charAt(0) === "/" ? src : "/" + src);
+    if (/^(blob:|data:)/i.test(src)) return src;
+    var path = sitePath(src);
+    if (!path) return src;
+    return window.location.origin + path;
+  }
+
+  function repoRawUrl(src) {
+    var path = sitePath(src);
+    if (!path) return "";
+    var rel = path.replace(/^\//, "");
+    if (rel.indexOf("public/") !== 0) rel = "public/" + rel;
+    return "https://raw.githubusercontent.com/ivanabraz/laureles/main/" + rel;
+  }
+
+  function draftAssetUrl(getAsset, field, src) {
+    if (typeof getAsset !== "function") return "";
+    var path = sitePath(src);
+    if (!path) return "";
+    var name = path.split("/").filter(Boolean).pop();
+    if (!name) return "";
+    var asset;
+    try {
+      asset = getAsset("public/images/packages/" + name, field);
+    } catch (err) {
+      return "";
+    }
+    if (!asset || asset.path === "empty.svg") return "";
+    var url = asset.url || "";
+    if (/^(blob:|data:)/i.test(url)) return url;
+    return "";
+  }
+
+  function previewImg(src, alt, getAsset, field) {
+    var url = draftAssetUrl(getAsset, field, src) || toPublicUrl(src);
+    var raw = repoRawUrl(src);
+    return h("img", {
+      src: url,
+      alt: alt || "",
+      "data-raw": raw && raw !== url ? raw : "",
+      onError: function (ev) {
+        var img = ev.target;
+        if (!img || img.getAttribute("data-tried")) return;
+        var fallback = img.getAttribute("data-raw");
+        img.setAttribute("data-tried", "1");
+        if (fallback) img.src = fallback;
+      },
+    });
   }
 
   function asArray(value) {
@@ -181,7 +264,7 @@
       var prevPath = prevProps.mediaPaths && prevProps.mediaPaths.get(this._controlID);
       if (mediaPath === prevPath) return;
 
-      var incoming = Array.isArray(mediaPath) ? mediaPath : [mediaPath];
+      var incoming = asMediaList(mediaPath);
       var target = this.state.mediaTarget;
       var editIndex = this.state.editIndex;
       if (editIndex == null || !target) return;
@@ -435,7 +518,7 @@
           },
         },
         url
-          ? h("img", { src: url, alt: "", loading: "lazy" })
+          ? previewImg(pkg.cover, "", self.props.getAsset, self.props.field)
           : h("div", { className: "pg-ph" }, "Sin cover"),
         h("span", { className: "pg-name" }, packageLabel(pkg.id)),
         h(
@@ -491,7 +574,7 @@
             "div",
             { className: "pg-cover-preview" },
             coverUrl
-              ? h("img", { src: coverUrl, alt: "" })
+              ? previewImg(pkg.cover, "", self.props.getAsset, self.props.field)
               : h("div", { className: "pg-ph" }, "Sin cover")
           ),
           h(
@@ -629,7 +712,7 @@
                     },
                     title: "Click = usar como cover",
                   },
-                  url ? h("img", { src: url, alt: "" }) : null,
+                  url ? previewImg(src, "", self.props.getAsset, self.props.field) : null,
                   isCover ? h("span", { className: "pg-star" }, "Cover") : null,
                   h(
                     "button",

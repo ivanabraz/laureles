@@ -64,8 +64,24 @@ async function fetchJson(url) {
   return response.json();
 }
 
+async function ensureLocalBundles() {
+  await Promise.all(
+    ["es", "en"].map(async (lng) => {
+      const json = await fetchJson(
+        `${process.env.PUBLIC_URL}/locales/${lng}/global.json`
+      );
+      applyBundles({ [lng]: json });
+    })
+  );
+}
+
 async function loadRemoteLocales() {
   try {
+    // Load both locale files first. The Sheet only ships keys it contains;
+    // without this, a language that was not the initial one can miss new keys
+    // and fall back to Spanish.
+    await ensureLocalBundles();
+
     if (LOCALES_URL) {
       const data = await fetchJson(LOCALES_URL);
       if (data?.error) throw new Error(data.error);

@@ -65,6 +65,21 @@
 
     "sections": "Sections",
     "language": "Language",
-    "followus": "Follow me!"
+    "followus": "Follow me!",
+
+    "announcement_show": "true",
+    "announcement_text": "New dates available. <link>Book your session</link>",
+    "announcement_url": "https://api.whatsapp.com/send?phone=5491133752356",
+    "announcement_close": "Close",
+    "announcement_bg": "#000000",
+    "announcement_color": "#ffffff",
+
+    "promo_show": "true",
+    "promo_text": "Book the\nChristmas\nsession.",
+    "promo_cta": "Book now",
+    "promo_url": "https://api.whatsapp.com/send?phone=5491133752356&text=Hi!%20I%27d%20like%20to%20book%20the%20Christmas%20session.",
+    "promo_image": "/images/packages/image-07.jpg",
+    "promo_close": "Close",
+    "christmas_hint": "press me"
     }
 }

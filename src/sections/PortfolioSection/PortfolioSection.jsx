@@ -22,14 +22,14 @@ const items = [
 ];
 
 return (
-    <div id="portfolio" className="w-full pb-14">
+    <div id="portfolio" className="w-full bg-white pt-10 pb-14">
         <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 2, ease: "easeInOut" }}
             viewport={{ once: true }}
         >
-            <p className="font-medium text-xl mb-10 px-6 md:px-10">
+            <p className="christmas-accent font-medium text-xl mb-10 px-6 md:px-10">
                 {t("global.portfolio")}
             </p>
 

@@ -1,6 +1,12 @@
 key,es,en
 about,Sobre,About
 about-text,"Soy Laura de los laureles, fotógrafa y amante de los animales. ¡Me hace mucha ilusión la posibilidad de conocer tu familia multiespecie! Cuando decides hacerte una sesión de fotos con quien más amas, estas invirtiendo en una experiencia de vida inolvidable. Quiero ser parte de esa experiencia con ustedes, capturando el vinculo más autentico, dulce y divertido en imágenes que atesorarán para siempre. No solo obtendrás sesiones de fotografía, sino una experiencia completa de disfrute y confort en un espacio completamente pensado para animales amados. Mi objetivo es que tú y tu amigo peludo se sientan cómodos y relajados durante la sesión, para que podamos capturar momentos conmovedores y divertidos que perduren e iluminen tu vida cada vez que mires las imágenes en tu celular, en la decoración de tu casa, en la compu o en donde quieras sentirte cerca de tu amado peludo.","I'm Laura de los Laureles, a photographer and animal lover. I'm thrilled at the possibility of meeting your multispecies family! When you decide to have a photo session with those you love the most, you're investing in an unforgettable life experience. I want to be part of that experience with you—capturing the most authentic, sweet, and joyful bond in images that you'll treasure forever. You're not just getting photography sessions, but a complete experience of joy and comfort in a space entirely designed for beloved animals. My goal is for you and your furry friend to feel comfortable and relaxed during the session, so we can capture heartwarming and fun moments that will last—and light up your life every time you see the images on your phone, decorating your home, on your computer, or anywhere you want to feel close to your beloved companion."
+announcement_bg,#000000,#000000
+announcement_close,Cerrar,Close
+announcement_color,#ffffff,#ffffff
+announcement_show,false,false
+announcement_text,Nuevas fechas disponibles. <link>Reservá tu sesión</link>,New dates available. <link>Book your session</link>
+announcement_url,https://api.whatsapp.com/send?phone=5491133752356,https://api.whatsapp.com/send?phone=5491133752356
 back,Volver,Back
 backtotop,Volver arriba,Back to top
 brand_message,¿Tienes una marca que ama a los animales tanto como yo? Creamos juntos contenido visual auténtico y profesional que conecte con tu audiencia.,Do you have a brand that loves animals as much as I do? Let’s create authentic and professional visual content together that connects with your audience.
@@ -55,6 +61,16 @@ session"
 packages_description.treats,Premios comestibles,Edible treats
 portfolio,Portfolio,Portfolio
 press,Prensa,Press
+promo_close,Cerrar,Close
+promo_cta,Reservar,Book now
+promo_image,/images/packages/image-07.jpg,/images/packages/image-07.jpg
+promo_show,true,true
+promo_text,"Aprovechá
+la sesión
+de Navidad.","Book the
+Christmas
+session."
+promo_url,https://api.whatsapp.com/send?phone=5491133752356&text=Hola!%20Quiero%20aprovechar%20la%20sesi%C3%B3n%20de%20Navidad.,https://api.whatsapp.com/send?phone=5491133752356&text=Hi!%20I%27d%20like%20to%20book%20the%20Christmas%20session.
 readnote,Ver nota,Read note
 reference_photo,Foto de referencia,Reference photo
 requestinfo,Consultar,Request info

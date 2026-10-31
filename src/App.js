@@ -11,6 +11,9 @@ import NavBar from './components/NavBar/NavBar';
 import Footer from './components/Footer/Footer';
 import Loading from './components/Loading/Loading perrito';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import AnnouncementBar from './components/AnnouncementBar/AnnouncementBar';
+import PromoModal from './components/PromoModal/PromoModal';
+import ChristmasButton from './components/ChristmasMode/ChristmasButton';
 
 const App = () => {
     const { i18n } = useTranslation();
@@ -48,6 +51,8 @@ const App = () => {
                         <Loading i18n={i18n} />
                     ) : (
                         <>
+                            <AnnouncementBar />
+                            <PromoModal />
                             <div className="content">
                                 {showNavBar && (
                                     <NavBar 
@@ -67,6 +72,7 @@ const App = () => {
                                     currentLanguage={i18n.language} 
                                 />
                             </div>
+                            <ChristmasButton />
                         </>
                     )}
                 </AnimatePresence>

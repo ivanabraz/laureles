@@ -57,7 +57,7 @@ const Packages = () => {
     const list = packagesContent.packages || [];
     return list
       .map((pkg) => {
-        if (!pkg?.id) return null;
+        if (!pkg?.id || !pkg.cover) return null;
         const titleKey = packageTitleKey(pkg.id);
         const descriptionKey = packageDescriptionKey(pkg.id);
         const cover = withPublicUrl(pkg.cover);
@@ -86,7 +86,7 @@ const Packages = () => {
   }, [t]);
 
   return (
-    <div id="packages" className="w-full text-black flex flex-col items-center">
+    <div id="packages" className="w-full bg-white pt-10 text-black flex flex-col items-center">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -94,7 +94,7 @@ const Packages = () => {
         viewport={{ once: true }}
         className="w-full"
       >
-        <p className="font-medium text-xl mb-10 pl-6 md:pl-10">{t("global.packages")}</p>
+        <p className="christmas-accent font-medium text-xl mb-10 pl-6 md:pl-10">{t("global.packages")}</p>
       </motion.div>
 
       <motion.div
@@ -102,20 +102,21 @@ const Packages = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 2, ease: "easeInOut" }}
         viewport={{ once: true }}
-        className="w-full px-6 md:px-10"
+        className="w-full min-w-0 max-w-full overflow-x-clip"
       >
         <Swiper
           spaceBetween={20}
           slidesPerView={1.5}
+          slidesOffsetBefore={24}
           breakpoints={{
-            768: { slidesPerView: 2.5 },
-            1024: { slidesPerView: 3.5 },
-            1280: { slidesPerView: 4.5 },
+            768: { slidesPerView: 2.5, slidesOffsetBefore: 40 },
+            1024: { slidesPerView: 3.5, slidesOffsetBefore: 40 },
+            1280: { slidesPerView: 4.5, slidesOffsetBefore: 40 },
           }}
-          className="!overflow-visible py-3"
+          className="!overflow-visible !py-5"
         >
           {packagesData.map((pkg, index) => (
-            <SwiperSlide key={pkg.id || index} className="!overflow-visible">
+            <SwiperSlide key={pkg.id || index} className="!overflow-visible hover:z-10">
               <button
                 type="button"
                 onClick={() => setSelectedPackage(pkg)}

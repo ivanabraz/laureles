@@ -5,7 +5,7 @@ const About = ({ t }) => {
     const image = `${process.env.PUBLIC_URL}/images/photos/image-02.jpg`;
     
     return (
-        <div id='about' className="w-full grid grid-cols-1 md:grid-cols-2">
+        <div id='about' className="w-full bg-white grid grid-cols-1 md:grid-cols-2">
             <motion.div 
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -19,7 +19,7 @@ const About = ({ t }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: "easeInOut" }}
-            className="aspect-square p-10 w-full h-full  overflow-hidden -z-10"
+            className="aspect-square p-10 w-full h-full overflow-hidden"
             >
                 <img
                     src={image}

@@ -5,13 +5,23 @@ Hay **dos lugares** para editar Laureles:
 | Qué | Dónde |
 |-----|--------|
 | Textos (ES / EN) | [Google Sheet](./README.md) |
-| Fotos (portfolio y paquetes) | [Admin](https://laureles.netlify.app/admin/) |
+| Fotos (inicio, portfolio y paquetes) | [Admin](https://laureles.netlify.app/admin/) |
 
 ## Entrar al admin
 
 1. Abrí: https://laureles.netlify.app/admin/
 2. **Login with GitHub**
 3. La primera vez GitHub te pide autorizar la app.
+
+## Inicio (foto del hero)
+
+Menú → **Inicio** → **Imagen del inicio**.
+
+1. **Agregar fotos** (máx. 1 MB). Podés subir varias.
+2. Arrastrá para cambiar el orden. Hover → **×** para borrar.
+3. Guardá y **Publish**.
+
+En la web se pueden pasar deslizando a los costados. Los puntos (blanco / gris) aparecen solo si hay **más de una** foto.
 
 ## Portfolio (todas las fotos juntas)
 

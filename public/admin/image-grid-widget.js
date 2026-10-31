@@ -15,7 +15,13 @@
     return;
   }
 
-  var SITE = "https://laureles.netlify.app";
+  var SITE_HOSTS = [
+    "https://laureles.netlify.app",
+    "https://www.laureles.netlify.app",
+    "https://laurelesaudiovisual.com",
+    "https://www.laurelesaudiovisual.com",
+    "https://ivanabraz.github.io/laureles",
+  ];
   var MAX_BYTES = 1024 * 1024;
   var CATEGORIES = [
     { value: "family", label: "Family" },
@@ -28,10 +34,62 @@
     { value: "outdoor", label: "Exterior" },
   ];
 
+  function mediaSrc(value) {
+    if (!value) return "";
+    if (typeof value === "string") return value;
+    if (typeof value.toJS === "function") return mediaSrc(value.toJS());
+    if (typeof value === "object") return value.path || value.src || value.url || "";
+    return "";
+  }
+
+  function asMediaList(mediaPath) {
+    if (mediaPath == null || mediaPath === "") return [];
+    if (typeof mediaPath.toJS === "function") return asMediaList(mediaPath.toJS());
+    var list = Array.isArray(mediaPath) ? mediaPath : [mediaPath];
+    return list.map(mediaSrc).filter(Boolean);
+  }
+
+  function sitePath(src) {
+    src = mediaSrc(src);
+    if (!src || /^(blob:|data:)/i.test(src)) return "";
+    var i;
+    for (i = 0; i < SITE_HOSTS.length; i++) {
+      if (src.indexOf(SITE_HOSTS[i]) === 0) {
+        return src.slice(SITE_HOSTS[i].length) || "/";
+      }
+    }
+    if (/^https?:\/\//i.test(src)) return "";
+    return src.charAt(0) === "/" ? src : "/" + src;
+  }
+
   function toPublicUrl(src) {
+    src = mediaSrc(src);
     if (!src) return "";
-    if (/^https?:\/\//i.test(src)) return src;
-    return SITE + (src.charAt(0) === "/" ? src : "/" + src);
+    if (/^(blob:|data:)/i.test(src)) return src;
+    var path = sitePath(src);
+    if (!path) return src;
+    return window.location.origin + path;
+  }
+
+  function repoRawUrl(src) {
+    var path = sitePath(src);
+    if (!path) return "";
+    var rel = path.replace(/^\//, "");
+    if (rel.indexOf("public/") !== 0) rel = "public/" + rel;
+    return "https://raw.githubusercontent.com/ivanabraz/laureles/main/" + rel;
+  }
+
+  function onPreviewError(ev) {
+    var img = ev.target;
+    if (!img || img.getAttribute("data-tried")) return;
+    var fallback = img.getAttribute("data-raw");
+    img.setAttribute("data-tried", "1");
+    if (fallback) {
+      img.src = fallback;
+      return;
+    }
+    img.style.display = "none";
+    if (img.nextSibling) img.nextSibling.style.display = "flex";
   }
 
   function asArray(value) {
@@ -197,7 +255,7 @@
       var prevPath = prevProps.mediaPaths && prevProps.mediaPaths.get(this._controlID);
       if (mediaPath === prevPath) return;
 
-      var incoming = Array.isArray(mediaPath) ? mediaPath : [mediaPath];
+      var incoming = asMediaList(mediaPath);
       var pathsOnly = this.isPathsOnly();
       var unified = this.isUnified();
       var items = this.getItems();
@@ -447,10 +505,8 @@
               src: url,
               alt: "",
               loading: "lazy",
-              onError: function (ev) {
-                ev.target.style.display = "none";
-                if (ev.target.nextSibling) ev.target.nextSibling.style.display = "flex";
-              },
+              "data-raw": repoRawUrl(src),
+              onError: onPreviewError,
             })
           : null,
         h(
@@ -544,6 +600,8 @@
                 src: thumb,
                 alt: "",
                 className: "ig-meta-thumb",
+                "data-raw": repoRawUrl(item.src),
+                onError: onPreviewError,
               })
             : null,
           unified
@@ -659,10 +717,14 @@
               h(
                 "p",
                 { className: "ig-hint" },
-                visible.length +
-                  " de " +
-                  items.length +
-                  " · Click = editar tags (panel fijo) · Arrastrá = orden · × = borrar"
+                pathsOnly
+                  ? items.length +
+                    (items.length === 1 ? " foto" : " fotos") +
+                    " · Arrastrá = orden · × = borrar"
+                  : visible.length +
+                    " de " +
+                    items.length +
+                    " · Click = editar tags (panel fijo) · Arrastrá = orden · × = borrar"
               ),
               h(
                 "button",

@@ -12,8 +12,8 @@
   <body>
     <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
     <script src="https://unpkg.com/decap-cms@3.1.2/dist/decap-cms.js"></script>
-    <script src="image-grid-widget.js?v=10"></script>
-    <script src="packages-grid-widget.js?v=2"></script>
+    <script src="image-grid-widget.js?v=12"></script>
+    <script src="packages-grid-widget.js?v=4"></script>
     <script>
       (function () {
         var MAX_BYTES = 1024 * 1024;
@@ -62,7 +62,7 @@
           true
         );
 
-        var configUrl = new URL("config.yml?v=20261020k", window.location.href).toString();
+        var configUrl = new URL("config.yml?v=20261020l", window.location.href).toString();
 
         fetch(configUrl, { cache: "no-store" })
           .then(function (res) {
@@ -73,6 +73,12 @@
             var config = jsyaml.load(raw) || {};
             config.load_config_file = false;
             delete config.media_library;
+            if (
+              window.location.hostname === "localhost" ||
+              window.location.hostname === "127.0.0.1"
+            ) {
+              delete config.display_url;
+            }
             window.CMS.init({ config: config });
           })
           .catch(function (err) {

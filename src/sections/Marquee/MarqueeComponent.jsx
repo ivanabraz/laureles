@@ -13,10 +13,10 @@ const MarqueeComponent = ({ t }) => {
                 viewport={{ once: true }}
             >
                 <Marquee speed={40} gradient={false}>
-                    <span className="text-black px-12 leading-[1.25]">
+                    <span className="christmas-accent text-black px-12 leading-[1.25]">
                         {t('global.multispecies')}.
                     </span>
-                    <span className="text-black px-12 leading-[1.25]">
+                    <span className="christmas-accent text-black px-12 leading-[1.25]">
                         {t('global.multispecies')}.
                     </span>
                 </Marquee>

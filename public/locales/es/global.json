@@ -66,6 +66,21 @@
 
         "sections": "Secciones",
         "language": "Idioma",
-        "followus": "Sígueme en redes!"
+        "followus": "Sígueme en redes!",
+
+        "announcement_show": "true",
+        "announcement_text": "Nuevas fechas disponibles. <link>Reservá tu sesión</link>",
+        "announcement_url": "https://api.whatsapp.com/send?phone=5491133752356",
+        "announcement_close": "Cerrar",
+        "announcement_bg": "#000000",
+        "announcement_color": "#ffffff",
+
+        "promo_show": "true",
+        "promo_text": "Aprovechá\nla sesión\nde Navidad.",
+        "promo_cta": "Reservar",
+        "promo_url": "https://api.whatsapp.com/send?phone=5491133752356&text=Hola!%20Quiero%20aprovechar%20la%20sesi%C3%B3n%20de%20Navidad.",
+        "promo_image": "/images/packages/image-07.jpg",
+        "promo_close": "Cerrar",
+        "christmas_hint": "presioname"
     }
 }

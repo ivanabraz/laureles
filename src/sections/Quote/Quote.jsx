@@ -5,7 +5,7 @@ import { Trans } from "react-i18next";
 
 const Quote = () => {
     return (
-        <div id="quote" className="w-full text-center py-24 text-black justify-center font-normal">
+        <div id="quote" className="christmas-accent w-full text-center py-24 text-black justify-center font-normal">
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}

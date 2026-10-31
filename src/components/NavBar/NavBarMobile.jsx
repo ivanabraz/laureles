@@ -10,7 +10,7 @@ const NavBarMobile = ({ logo, navigation, scrolled }) => {
     return (
         <>
             {/* Barra superior */}
-            <nav className={`w-full flex flex-row justify-between fixed top-0 left-0 z-100 py-5 px-10 ${scrolled ? 'bg-white' : 'bg-transparent'}`}>
+            <nav className={`w-full flex flex-row justify-between fixed top-[var(--announcement-offset,0px)] left-0 z-100 py-5 px-10 ${scrolled ? 'bg-white' : 'bg-transparent'}`}>
                 {/* Botón burger */}
                 <motion.button
                     initial={{ opacity: 0, }}
@@ -38,7 +38,7 @@ const NavBarMobile = ({ logo, navigation, scrolled }) => {
 
             {/* Menú Mobile */}
             {open && (
-                <div className="fixed inset-0 flex z-50 lg:hidden">
+                <div className="fixed left-0 right-0 bottom-0 top-[var(--announcement-offset,0px)] flex z-50 lg:hidden">
                     <div className="relative w-full bg-white p-6 flex flex-col overflow-y-auto transform transition-transform duration-300">
                         {/* Botón para cerrar */}
                         <div className="flex justify-start mb-10 relative z-10">

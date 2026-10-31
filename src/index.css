@@ -10,6 +10,10 @@ html {
     scroll-behavior: smooth;
 }
 
+:root {
+    --announcement-offset: 0px;
+}
+
 body{ 
     font-family: "Poppins", sans-serif;
     font-weight: 400;
@@ -24,10 +28,230 @@ body{
 
 .content {
     flex: 1;
+    padding-top: var(--announcement-offset, 0px);
 }
 
 .paused {
     animation-play-state: paused;
+}
+
+html.christmas {
+    --christmas-red: #991b1b;
+    background-color: var(--christmas-red);
+}
+
+html.christmas body {
+    background-color: var(--christmas-red);
+    color: #ffffff;
+}
+
+html.christmas .christmas-accent {
+    color: #ffffff;
+}
+
+html.christmas #quote {
+    background-color: #ffffff;
+    color: var(--christmas-red);
+}
+
+html.christmas #marquee {
+    background-color: var(--christmas-red);
+}
+
+html.christmas #about,
+html.christmas #packages,
+html.christmas #press,
+html.christmas #contact,
+html.christmas #contact .bg-neutral-100,
+html.christmas footer {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+html.christmas #portfolio {
+    background-color: var(--christmas-red);
+    color: #ffffff;
+}
+
+html.christmas .portfolio-filters button,
+html.christmas .portfolio-filters button span {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+html.christmas .brand-promo-copy,
+html.christmas .brand-promo-copy a {
+    color: var(--christmas-red);
+}
+
+html.christmas #quote,
+html.christmas #packages .christmas-accent,
+html.christmas #press .christmas-accent,
+html.christmas #contact .christmas-accent {
+    color: var(--christmas-red);
+}
+
+html.christmas #contact .bg-\[\#25D366\] {
+    background-color: var(--christmas-red);
+}
+
+html.christmas #contact .group:hover .christmas-accent {
+    color: #ffffff;
+}
+
+html.christmas nav.bg-white {
+    background-color: var(--christmas-red);
+    color: #ffffff;
+}
+
+html.christmas nav.bg-white .text-black {
+    color: #ffffff;
+}
+
+html.christmas nav img.invert {
+    filter: none;
+}
+
+html.christmas [aria-label="Anuncio"] {
+    background-color: #ffffff !important;
+    color: var(--christmas-red) !important;
+}
+
+html.christmas [aria-label="Anuncio"] button {
+    border-color: rgba(153, 27, 27, 0.35) !important;
+    color: var(--christmas-red);
+}
+
+.christmas-snow {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.christmas-snow span {
+    position: absolute;
+    top: -28px;
+    color: #ffffff;
+    animation: christmas-fall linear infinite;
+}
+
+.christmas-snow svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.45));
+    animation: christmas-spin linear infinite;
+    animation-duration: var(--spin, 12s);
+}
+
+.christmas-snow span.is-reverse svg {
+    animation-direction: reverse;
+}
+
+.christmas-snow span.is-still,
+.christmas-snow span.is-still svg {
+    animation: none;
+}
+
+@keyframes christmas-fall {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(var(--drift), 110vh, 0);
+    }
+}
+
+.christmas-nudge {
+    animation: christmas-nudge 0.7s ease-in-out;
+}
+
+@keyframes christmas-nudge {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    15% {
+        transform: translateX(-6px);
+    }
+    30% {
+        transform: translateX(6px);
+    }
+    45% {
+        transform: translateX(-5px);
+    }
+    60% {
+        transform: translateX(4px);
+    }
+    75% {
+        transform: translateX(-2px);
+    }
+}
+
+.christmas-hint {
+    pointer-events: none;
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.35rem);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    white-space: nowrap;
+    color: #ff0000;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    animation: christmas-hint 1.6s ease-out forwards;
+}
+
+.christmas-hint-chevrons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.christmas-hint-chevrons svg {
+    width: 16px;
+    height: 16px;
+}
+
+.christmas-hint-chevrons svg + svg {
+    margin-top: -8px;
+}
+
+@keyframes christmas-hint {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+    18% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    70% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-12px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-28px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .christmas-snow span,
+    .christmas-snow svg,
+    .christmas-nudge {
+        animation: none;
+    }
+
+    .christmas-hint {
+        display: none;
+    }
 }
 
     .swiper-pagination {
