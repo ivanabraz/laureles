@@ -22,7 +22,7 @@ const items = [
 ];
 
 return (
-    <div id="portfolio" className="w-full bg-white pt-10 pb-14">
+    <div id="portfolio" className="w-full bg-white pt-10 pb-0 md:pb-14">
         <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}

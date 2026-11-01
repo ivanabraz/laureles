@@ -1,0 +1,16 @@
+{
+  "copy": {
+    "es": {
+      "talk": "Hablemos!",
+      "requestinfo": "Consultar",
+      "contact_invite": "Contáctame!",
+      "brand_message": "¿Tienes una marca que ama a los animales tanto como yo? Creamos juntos contenido visual auténtico y profesional que conecte con tu audiencia."
+    },
+    "en": {
+      "talk": "Lets talk!",
+      "requestinfo": "Request info",
+      "contact_invite": "Contact me!",
+      "brand_message": "Do you have a brand that loves animals as much as I do? Let’s create authentic and professional visual content together that connects with your audience."
+    }
+  }
+}

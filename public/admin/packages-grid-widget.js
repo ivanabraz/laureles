@@ -1,10 +1,8 @@
 /**
- * Decap widget for packages: visual cards + cover/gallery/titleColor/details.
- * Value: [{ id, cover, gallery: string[], titleColor, details: string[] }]
+ * Decap widget for packages: visual cards + cover/gallery/titleColor/copy/info.
+ * Value: [{ id, cover, gallery, titleColor, copy, info }]
  *
- * Texts live in Google Sheets. New packages need two Sheet rows:
- *   packages_description.session_{id}  (or .gift_card for gift_card)
- *   packages_description.desc_{id}
+ * Each card stores cover, gallery, title color, bilingual copy, and includes.
  */
 (function () {
   var h = window.h;
@@ -22,18 +20,6 @@
     "https://laurelesaudiovisual.com",
     "https://www.laurelesaudiovisual.com",
     "https://ivanabraz.github.io/laureles",
-  ];
-
-  var DETAIL_OPTIONS = [
-    { id: "session_60min", label: "60 min" },
-    { id: "session_60_90min", label: "60–90 min" },
-    { id: "session_5_photos", label: "5 fotos" },
-    { id: "session_10_photos", label: "10 fotos" },
-    { id: "session_16_photos", label: "16 fotos" },
-    { id: "treats", label: "Premios" },
-    { id: "location_studio", label: "Estudio" },
-    { id: "location_outdoor_1", label: "Exterior 1 loc." },
-    { id: "location_outdoor_2", label: "Exterior 2 loc." },
   ];
 
   var KNOWN_LABELS = {
@@ -155,19 +141,81 @@
       .join(" ");
   }
 
-  function sheetKeysFor(id) {
-    if (id === "gift_card") {
-      return ["packages_description.gift_card", "packages_description.desc_gift_card"];
-    }
-    return [
-      "packages_description.session_" + id,
-      "packages_description.desc_" + id,
-    ];
+  function emptyCopy() {
+    return {
+      es: { title: "", description: "" },
+      en: { title: "", description: "" },
+    };
   }
 
-  function defaultDetailsFor(id) {
-    if (id === "gift_card") return [];
-    return ["session_60min", "session_5_photos", "treats", "location_studio"];
+  function normalizeCopy(copy) {
+    var plain = copy;
+    if (plain && typeof plain.toJS === "function") plain = plain.toJS();
+    plain = plain || {};
+    function side(locale) {
+      locale = locale || {};
+      return {
+        title: locale.title == null ? "" : String(locale.title),
+        description: locale.description == null ? "" : String(locale.description),
+      };
+    }
+    return {
+      es: side(plain.es),
+      en: side(plain.en),
+    };
+  }
+
+  function cardName(pkg) {
+    var title = pkg.copy && pkg.copy.es && pkg.copy.es.title;
+    if (title) return String(title).split("\n")[0];
+    return packageLabel(pkg.id);
+  }
+
+  function bilingual(value) {
+    var plain = value;
+    if (plain && typeof plain.toJS === "function") plain = plain.toJS();
+    plain = plain || {};
+    return {
+      es: plain.es == null ? "" : String(plain.es),
+      en: plain.en == null ? "" : String(plain.en),
+    };
+  }
+
+  function emptyInfo() {
+    return {
+      duration: { es: "", en: "" },
+      photos: { es: "", en: "" },
+      treats: false,
+      place: "",
+      placeText: { es: "", en: "" },
+    };
+  }
+
+  function defaultInfo(id) {
+    if (id === "gift_card") return emptyInfo();
+    return {
+      duration: { es: "60 min", en: "60 min" },
+      photos: {
+        es: "5 fotos editadas digitales",
+        en: "5 edited digital photos",
+      },
+      treats: true,
+      place: "studio",
+      placeText: { es: "Estudio (Recoleta)", en: "Studio (Recoleta)" },
+    };
+  }
+
+  function normalizeInfo(info) {
+    if (!info || typeof info !== "object") return emptyInfo();
+    if (typeof info.toJS === "function") info = info.toJS();
+    var place = info.place === "studio" || info.place === "outdoor" ? info.place : "";
+    return {
+      duration: bilingual(info.duration),
+      photos: bilingual(info.photos),
+      treats: info.treats === true || info.treats === "true",
+      place: place,
+      placeText: bilingual(info.placeText),
+    };
   }
 
   function normalizePkg(pkg) {
@@ -176,23 +224,22 @@
         return typeof g === "string" ? g : (g && (g.src || g.image)) || "";
       })
       .filter(Boolean);
-    var details = asArray(pkg.details).filter(Boolean);
-    if (!details.length && pkg.id && pkg.id !== "gift_card" && !("details" in (pkg || {}))) {
-      details = defaultDetailsFor(pkg.id);
-    }
     return {
       id: pkg.id || "nuevo",
       cover: pkg.cover || gallery[0] || "",
       gallery: gallery.length ? gallery : pkg.cover ? [pkg.cover] : [],
       titleColor: pkg.titleColor || "text-white",
-      details: details,
+      copy: normalizeCopy(pkg.copy),
+      info: pkg.info ? normalizeInfo(pkg.info) : defaultInfo(pkg.id),
     };
   }
 
-  var styleTagId = "laureles-packages-grid-css-v2";
+  var styleTagId = "laureles-packages-grid-css-v4";
   function ensureStyles() {
-    var old = document.getElementById("laureles-packages-grid-css");
-    if (old) old.parentNode.removeChild(old);
+    ["laureles-packages-grid-css", "laureles-packages-grid-css-v2", "laureles-packages-grid-css-v3"].forEach(function (id) {
+      var old = document.getElementById(id);
+      if (old) old.parentNode.removeChild(old);
+    });
     if (document.getElementById(styleTagId)) return;
     var style = document.createElement("style");
     style.id = styleTagId;
@@ -222,8 +269,6 @@
       ".pg-chips{display:flex;gap:8px;flex-wrap:wrap}",
       ".pg-chip{appearance:none;border:1px solid #ccc;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}",
       ".pg-chip.is-on{background:#222;border-color:#222;color:#fff}",
-      ".pg-keys{margin-top:8px;padding:12px;background:#f7f7f7;border-radius:10px;font-size:12px;line-height:1.5}",
-      ".pg-keys code{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:#fff;border:1px solid #e5e5e5;border-radius:6px;padding:6px 8px;margin:4px 0;word-break:break-all}",
       ".pg-ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:8px}",
       ".pg-gcard{position:relative;aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:#eee;cursor:grab}",
       ".pg-gcard.is-dragging{opacity:.45}",
@@ -235,6 +280,13 @@
       ".pg-star{position:absolute;left:6px;bottom:6px;background:rgba(255,255,255,.95);border-radius:999px;padding:2px 7px;font-size:10px;font-weight:700}",
       ".pg-empty{padding:24px;border:2px dashed #ccc;border-radius:12px;text-align:center;color:#777}",
       ".pg-input{width:100%;max-width:280px;padding:8px 10px;border:1px solid #ccc;border-radius:8px;font-size:14px;box-sizing:border-box}",
+      ".pg-line{width:100%;box-sizing:border-box;border:1px solid #ddd;border-radius:10px;padding:10px 12px;font:inherit;font-size:14px}",
+      ".pg-check{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;margin:12px 0}",
+      ".pg-check input{width:16px;height:16px}",
+      ".pg-tabs{display:flex;gap:8px;margin:4px 0 12px}",
+      ".pg-tab{appearance:none;border:1px solid #ddd;background:#f6f6f6;color:#222;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:650;cursor:pointer}",
+      ".pg-tab.is-on{background:#161616;border-color:#161616;color:#fff}",
+      ".pg-area{width:100%;box-sizing:border-box;border:1px solid #ddd;border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;line-height:1.4;resize:vertical;min-height:64px}",
     ].join("");
     document.head.appendChild(style);
   }
@@ -243,6 +295,7 @@
     getInitialState: function () {
       return {
         editIndex: null,
+        lang: "es",
         dragIndex: null,
         overIndex: null,
         gDragIndex: null,
@@ -298,7 +351,7 @@
     },
 
     commit: function (items) {
-      this.props.onChange(items);
+      this.props.onChange(items.map(normalizePkg));
     },
 
     openMedia: function (target, allowMultiple) {
@@ -342,23 +395,16 @@
         cover: "",
         gallery: [],
         titleColor: "text-white",
-        details: defaultDetailsFor(id),
+        info: defaultInfo(id),
+        copy: emptyCopy(),
       });
       this.commit(items);
-      this.setState({ editIndex: items.length - 1 });
+      this.setState({ editIndex: items.length - 1, lang: "es" });
 
-      var keys = sheetKeysFor(id);
       window.alert(
         "Paquete “" +
           packageLabel(id) +
-          "” creado.\n\n" +
-          "1) Subí cover y galería acá.\n" +
-          "2) En Google Sheets agregá estas 2 filas (columna key):\n\n" +
-          keys[0] +
-          "\n" +
-          keys[1] +
-          "\n\n" +
-          "Completá es / en con el título y la descripción. Los ítems “Incluye” se eligen en el panel (reusan textos que ya existen en el Sheet)."
+          "” creado.\n\nSubí las fotos y completá el título y la descripción en Español y en English, en esta misma card."
       );
     },
 
@@ -406,20 +452,38 @@
       this.setState({ dragIndex: null, overIndex: null });
     },
 
+    setCopy: function (index, lang, key, text) {
+      var items = this.getItems();
+      var pkg = Object.assign({}, items[index]);
+      var copy = normalizeCopy(pkg.copy);
+      copy[lang] = Object.assign({}, copy[lang]);
+      copy[lang][key] = text;
+      pkg.copy = copy;
+      items[index] = pkg;
+      this.commit(items);
+    },
+
     updatePkg: function (index, patch) {
       var items = this.getItems();
       items[index] = Object.assign({}, items[index], patch);
       this.commit(items);
     },
 
-    toggleDetail: function (index, detailId) {
+    setInfoText: function (index, key, lang, text) {
       var items = this.getItems();
       var pkg = Object.assign({}, items[index]);
-      var details = (pkg.details || []).slice();
-      var pos = details.indexOf(detailId);
-      if (pos >= 0) details.splice(pos, 1);
-      else details.push(detailId);
-      pkg.details = details;
+      var info = normalizeInfo(pkg.info);
+      info[key] = Object.assign({}, info[key]);
+      info[key][lang] = text;
+      pkg.info = info;
+      items[index] = pkg;
+      this.commit(items);
+    },
+
+    setInfo: function (index, patch) {
+      var items = this.getItems();
+      var pkg = Object.assign({}, items[index]);
+      pkg.info = Object.assign(normalizeInfo(pkg.info), patch);
       items[index] = pkg;
       this.commit(items);
     },
@@ -520,7 +584,7 @@
         url
           ? previewImg(pkg.cover, "", self.props.getAsset, self.props.field)
           : h("div", { className: "pg-ph" }, "Sin cover"),
-        h("span", { className: "pg-name" }, packageLabel(pkg.id)),
+        h("span", { className: "pg-name" }, cardName(pkg)),
         h(
           "span",
           { className: "pg-count" },
@@ -537,8 +601,10 @@
       if (!pkg) return null;
       var self = this;
       var coverUrl = toPublicUrl(pkg.cover);
-      var keys = sheetKeysFor(pkg.id);
-      var details = pkg.details || [];
+      var lang = this.state.lang === "en" ? "en" : "es";
+      var localeCopy = (pkg.copy && pkg.copy[lang]) || { title: "", description: "" };
+      var info = pkg.info || emptyInfo();
+      var place = info.place || "";
 
       return h(
         "div",
@@ -547,10 +613,133 @@
         h(
           "p",
           { className: "pg-sub" },
-          "Fotos y “Incluye” acá. Título y descripción del paquete → Google Sheet (keys abajo)."
+          "Título, descripción, duración, fotos y lugar siguen la pestaña de idioma. Enter en el título baja de línea."
         ),
+        h(
+          "div",
+          { className: "pg-tabs" },
+          h(
+            "button",
+            {
+              type: "button",
+              className: "pg-tab" + (lang === "es" ? " is-on" : ""),
+              onClick: function () {
+                self.setState({ lang: "es" });
+              },
+            },
+            "Español"
+          ),
+          h(
+            "button",
+            {
+              type: "button",
+              className: "pg-tab" + (lang === "en" ? " is-on" : ""),
+              onClick: function () {
+                self.setState({ lang: "en" });
+              },
+            },
+            "English"
+          )
+        ),
+        h("label", {}, "Título"),
+        h("textarea", {
+          className: "pg-area",
+          rows: 2,
+          value: localeCopy.title || "",
+          spellCheck: true,
+          onChange: function (event) {
+            self.setCopy(index, lang, "title", event.target.value);
+          },
+        }),
+        h("label", {}, "Descripción"),
+        h("textarea", {
+          className: "pg-area",
+          rows: 4,
+          value: localeCopy.description || "",
+          spellCheck: true,
+          onChange: function (event) {
+            self.setCopy(index, lang, "description", event.target.value);
+          },
+        }),
+        h("label", {}, "Duración"),
+        h("input", {
+          className: "pg-line",
+          type: "text",
+          value: (info.duration && info.duration[lang]) || "",
+          spellCheck: true,
+          placeholder: lang === "en" ? "60 to 90 min" : "60 min",
+          onChange: function (event) {
+            self.setInfoText(index, "duration", lang, event.target.value);
+          },
+        }),
+        h("label", {}, "Cantidad de fotos"),
+        h("input", {
+          className: "pg-line",
+          type: "text",
+          value: (info.photos && info.photos[lang]) || "",
+          spellCheck: true,
+          placeholder:
+            lang === "en" ? "5 edited digital photos" : "5 fotos editadas digitales",
+          onChange: function (event) {
+            self.setInfoText(index, "photos", lang, event.target.value);
+          },
+        }),
+        h(
+          "label",
+          { className: "pg-check" },
+          h("input", {
+            type: "checkbox",
+            checked: !!info.treats,
+            onChange: function (event) {
+              self.setInfo(index, { treats: event.target.checked });
+            },
+          }),
+          "Incluye premios comestibles"
+        ),
+        h("label", {}, "Lugar"),
+        h(
+          "div",
+          { className: "pg-chips" },
+          [
+            { id: "", label: "Ninguno" },
+            { id: "studio", label: "Estudio" },
+            { id: "outdoor", label: "Exterior" },
+          ].map(function (opt) {
+            return h(
+              "button",
+              {
+                key: opt.id || "none",
+                type: "button",
+                className: "pg-chip" + (place === opt.id ? " is-on" : ""),
+                onClick: function () {
+                  self.setInfo(index, { place: opt.id });
+                },
+              },
+              opt.label
+            );
+          })
+        ),
+        place
+          ? h("input", {
+              className: "pg-line",
+              type: "text",
+              value: (info.placeText && info.placeText[lang]) || "",
+              spellCheck: true,
+              placeholder:
+                place === "outdoor"
+                  ? lang === "en"
+                    ? "Outdoor, 1 location"
+                    : "Exterior, 1 locación"
+                  : lang === "en"
+                    ? "Studio (Recoleta)"
+                    : "Estudio (Recoleta)",
+              onChange: function (event) {
+                self.setInfoText(index, "placeText", lang, event.target.value);
+              },
+            })
+          : null,
 
-        h("label", {}, "Id interno (no cambiar si ya tiene textos en el Sheet)"),
+        h("label", {}, "Id interno"),
         h("input", {
           className: "pg-input",
           type: "text",
@@ -622,41 +811,6 @@
             },
             "Blanco"
           )
-        ),
-
-        h("label", {}, "Incluye (ítems del modal — textos ya en el Sheet)"),
-        h(
-          "div",
-          { className: "pg-chips" },
-          DETAIL_OPTIONS.map(function (opt) {
-            return h(
-              "button",
-              {
-                key: opt.id,
-                type: "button",
-                className:
-                  "pg-chip" + (details.indexOf(opt.id) >= 0 ? " is-on" : ""),
-                onClick: function () {
-                  self.toggleDetail(index, opt.id);
-                },
-              },
-              opt.label
-            );
-          })
-        ),
-
-        h("label", {}, "Keys para Google Sheet (título + descripción)"),
-        h(
-          "div",
-          { className: "pg-keys" },
-          h(
-            "span",
-            {},
-            "Agregá estas filas si el paquete es nuevo (columnas key / es / en):"
-          ),
-          keys.map(function (k) {
-            return h("code", { key: k }, k);
-          })
         ),
 
         h("label", {}, "Galería del modal"),
@@ -767,7 +921,7 @@
             "p",
             { className: "pg-hint" },
             items.length +
-              " paquetes · Click = editar · Arrastrá = orden · Textos nuevos → Sheet"
+              " paquetes · Click = editar · Arrastrá = orden"
           ),
           h(
             "button",
@@ -800,5 +954,5 @@
   });
 
   CMS.registerWidget("packages-grid", PackagesGridControl);
-  console.info("[packages-grid] widget registered (add package + sheet keys)");
+  console.info("[packages-grid] widget registered");
 })();

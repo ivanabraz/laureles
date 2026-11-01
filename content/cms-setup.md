@@ -3,7 +3,7 @@
 **Sitio oficial:** https://laureles.netlify.app  
 **Admin:** https://laureles.netlify.app/admin/  
 
-Fotos vía Decap + GitHub. Textos en [Google Sheets](./README.md).
+Fotos y textos vía Decap + GitHub, un archivo por sección ([guía](./README.md)).
 
 ## 1. GitHub OAuth App
 
@@ -40,10 +40,7 @@ En [`public/admin/config.yml`](../public/admin/config.yml):
 
 Netlify está conectado al repo: cada push a `main` rebuilda el sitio (incluido `/admin`).
 
-Variables útiles en Netlify (si hace falta el Sheet en build):
-
-- `REACT_APP_GOOGLE_SHEETS_ID`
-- `REACT_APP_GOOGLE_SHEETS_TAB`
+Los textos no usan variables de Netlify: van en los JSON de `src/data/` (hero, about, portfolio, packages, contact, promo, nav).
 
 ## Local (opcional)
 

@@ -3,11 +3,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import i18next from "i18next";
 import "swiper/css";
 
 const TitleLines = ({ title, className, id }) => {
-  const lines = title.split("\n");
+  const lines = String(title || "").split("\n");
 
   return (
     <h3 id={id} className={className}>
@@ -23,7 +22,6 @@ const TitleLines = ({ title, className, id }) => {
 
 const PackageModal = ({ pkg, onClose }) => {
   const { t } = useTranslation();
-  const tEs = i18next.getFixedT("es");
   const [swiper, setSwiper] = useState(null);
 
   useEffect(() => {
@@ -44,7 +42,8 @@ const PackageModal = ({ pkg, onClose }) => {
   if (!pkg) return null;
 
   const gallery = pkg.gallery?.length ? pkg.gallery : [pkg.image, null, null];
-  const whatsappMessage = `Hola! Me gustaría recibir información sobre el paquete ${tEs(pkg.titleKey)}`;
+  const spanishTitle = String(pkg.titleEs || pkg.title || "").replace(/\n/g, " ");
+  const whatsappMessage = `Hola! Me gustaría recibir información sobre el paquete ${spanishTitle}`;
   const whatsappURL = `https://api.whatsapp.com/send?phone=5491133752356&text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
@@ -81,7 +80,7 @@ const PackageModal = ({ pkg, onClose }) => {
               className="w-full aspect-[4/5] bg-neutral-100 [&_.swiper-wrapper]:h-full [&_.swiper-slide]:h-full"
             >
               {gallery.map((src, index) => (
-                <SwiperSlide key={`${pkg.titleKey}-${index}`}>
+                <SwiperSlide key={`${pkg.id}-${index}`}>
                   {src ? (
                     <img
                       src={src}
@@ -135,7 +134,7 @@ const PackageModal = ({ pkg, onClose }) => {
             {pkg.details.length > 0 && (
               <div className="mb-10">
                 <p className="text-xs tracking-widest uppercase text-neutral-400 mb-3">
-                  {t("global.packages_description.includes")}
+                  {pkg.includesLabel}
                 </p>
                 <ul className="space-y-3 text-sm text-neutral-800">
                   {pkg.details.map((item, index) => (

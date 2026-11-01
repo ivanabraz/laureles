@@ -1,28 +1,61 @@
 /**
- * Regenerates content/locales-seed.csv from public/locales/{es,en}/global.json
+ * Regenerates content/locales-seed.csv from the section JSON files.
  * Usage: npm run generate:locales-csv
  */
 const fs = require("fs");
 const path = require("path");
 
 const root = path.join(__dirname, "..");
-const esPath = path.join(root, "public/locales/es/global.json");
-const enPath = path.join(root, "public/locales/en/global.json");
+const data = path.join(root, "src/data");
 const outPath = path.join(root, "content/locales-seed.csv");
 
-const es = JSON.parse(fs.readFileSync(esPath, "utf8")).global;
-const en = JSON.parse(fs.readFileSync(enPath, "utf8")).global;
+function read(name) {
+  return JSON.parse(fs.readFileSync(path.join(data, name), "utf8"));
+}
 
-function flatten(obj, prefix = "", out = {}) {
-  for (const [k, v] of Object.entries(obj)) {
-    const key = prefix ? `${prefix}.${k}` : k;
-    if (v !== null && typeof v === "object" && !Array.isArray(v)) {
-      flatten(v, key, out);
-    } else {
-      out[key] = v == null ? "" : String(v);
-    }
-  }
-  return out;
+function copyFor(file, lang) {
+  const copy = file && file.copy && file.copy[lang];
+  return copy && typeof copy === "object" ? copy : {};
+}
+
+const hero = read("hero.json");
+const about = read("about.json");
+const portfolio = read("portfolio.json");
+const contact = read("contact.json");
+const promo = read("promo.json");
+const nav = read("nav.json");
+const packagesFile = read("packages.json");
+
+function bundle(lang) {
+  const flat = {
+    ...copyFor(nav, lang),
+    ...copyFor(hero, lang),
+    ...copyFor(about, lang),
+    ...copyFor(portfolio, lang),
+    ...copyFor(contact, lang),
+    ...copyFor(promo, lang),
+    ...(packagesFile.includes && packagesFile.includes[lang]
+      ? Object.fromEntries(
+          Object.entries(packagesFile.includes[lang]).map(([key, value]) => [
+            `packages_description.${key}`,
+            value == null ? "" : String(value),
+          ])
+        )
+      : {}),
+  };
+
+  (packagesFile.packages || []).forEach((pkg) => {
+    const side = pkg.copy && pkg.copy[lang];
+    if (!side) return;
+    const titleKey =
+      pkg.id === "gift_card"
+        ? "packages_description.gift_card"
+        : `packages_description.session_${pkg.id}`;
+    flat[titleKey] = side.title || "";
+    flat[`packages_description.desc_${pkg.id}`] = side.description || "";
+  });
+
+  return flat;
 }
 
 function csvEscape(value) {
@@ -31,15 +64,12 @@ function csvEscape(value) {
   return s;
 }
 
-const flatEs = flatten(es);
-const flatEn = flatten(en);
-const keys = [...new Set([...Object.keys(flatEs), ...Object.keys(flatEn)])].sort();
-
+const es = bundle("es");
+const en = bundle("en");
+const keys = [...new Set([...Object.keys(es), ...Object.keys(en)])].sort();
 const rows = ["key,es,en"];
 for (const key of keys) {
-  rows.push(
-    [key, csvEscape(flatEs[key] ?? ""), csvEscape(flatEn[key] ?? "")].join(",")
-  );
+  rows.push([key, csvEscape(es[key] ?? ""), csvEscape(en[key] ?? "")].join(","));
 }
 
 fs.mkdirSync(path.dirname(outPath), { recursive: true });

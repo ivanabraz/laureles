@@ -1,11 +1,20 @@
 # Fotos del sitio — guía rápida (Laura)
 
-Hay **dos lugares** para editar Laureles:
+Todo se edita en el [admin](https://laureles.netlify.app/admin/), por sección. En cada pantalla están las fotos y los textos de esa parte del sitio. Arriba de los textos hay dos pestañas: **Español** y **English**.
 
-| Qué | Dónde |
+| Sección | Qué hay |
 |-----|--------|
-| Textos (ES / EN) | [Google Sheet](./README.md) |
-| Fotos (inicio, portfolio y paquetes) | [Admin](https://laureles.netlify.app/admin/) |
+| Inicio | Fotos del hero y la frase |
+| Sobre mí | Texto |
+| Portfolio | Fotos y nombres de los filtros |
+| Paquetes | Cada card con sus fotos, título y descripción |
+| Contacto | Textos |
+| Aviso y promo | Barra, ventana e imagen |
+| Menú y pie | Nombres del menú y del pie |
+
+Los campos con la pastilla **Ambos idiomas** se guardan igual en los dos idiomas.
+
+**Publish**. Esperá el deploy (1–3 min) y refrescá la web.
 
 ## Entrar al admin
 
@@ -15,7 +24,7 @@ Hay **dos lugares** para editar Laureles:
 
 ## Inicio (foto del hero)
 
-Menú → **Inicio** → **Imagen del inicio**.
+Menú → **Inicio**. Las fotos están arriba. La frase, abajo, en **Español** / **English**.
 
 1. **Agregar fotos** (máx. 1 MB). Podés subir varias.
 2. Arrastrá para cambiar el orden. Hover → **×** para borrar.
@@ -25,7 +34,7 @@ En la web se pueden pasar deslizando a los costados. Los puntos (blanco / gris) 
 
 ## Portfolio (todas las fotos juntas)
 
-Menú → **Portfolio** → **Todas las fotos**.
+Menú → **Portfolio**. Las fotos están arriba. Los nombres de los filtros, abajo.
 
 Vas a ver una **grilla** con todas las imágenes (Family, Brands, Shelters, Specials).
 
@@ -52,33 +61,28 @@ Guardá y **Publish**. Esperá el deploy de Netlify (1–3 min) y refrescá la w
 
 ## Paquetes
 
-1. Menú → **Paquetes** → **Imagenes de paquetes**.
+1. Menú → **Paquetes**.
 2. Vas a ver **cards** (como en el sitio): Chihuahua, Galgo, etc.
 3. **Click** en un paquete →
+   - **Español** / **English**: título, descripción, duración, cantidad de fotos y frase del lugar
+   - **Incluye premios comestibles**: un check. La frase se edita una sola vez, abajo
+   - **Lugar**: Estudio, Exterior o Ninguno. Si elegís uno, escribí la frase (por ejemplo `Estudio (Recoleta)` o `Exterior, 1 locación`)
    - **Cambiar cover** (foto de la card)
    - **Galería del modal**: agregar, ordenar (drag), borrar (hover ×)
    - Click en una foto de la galería = usarla como cover
    - Color del título (Negro / Blanco)
-   - **Incluye**: chips de duración / fotos / premios / lugar (textos que ya existen en el Sheet)
 4. Arrastrá las cards de paquetes para cambiar el orden en el carrusel.
 5. Guardá y **Publish**.
 
+Un campo vacío no aparece en el modal. La gift card puede quedar sin ninguno.
+
+Abajo, en **Textos de Incluye**, se editan solo dos frases para todos los paquetes: el título **Incluye** y **Premios comestibles**.
+
 ### Paquete nuevo
 
-El admin **no escribe en Google Sheets** (solo en GitHub). Flujo:
-
-1. En el admin → **Agregar paquete** → poné un id (ej. `beagle`).
-2. Subí cover + galería, elegí color e “Incluye”.
-3. En el panel aparecen **2 keys** para el Sheet. Agregá esas filas en el Google Sheet:
-
-| key | es | en |
-|-----|----|----|
-| `packages_description.session_beagle` | Sesión Beagle… | Beagle session… |
-| `packages_description.desc_beagle` | Descripción… | Description… |
-
-4. Publish en el admin + filas en el Sheet → el paquete aparece en el sitio.
-
-Los ítems de “Incluye” (60 min, 5 fotos, etc.) **no** necesitan filas nuevas: se reusan keys que ya están en el Sheet.
+1. **Agregar paquete** → poné un id (ej. `beagle`).
+2. En esa card: título y descripción en **Español** y en **English**, fotos, color, duración, cantidad de fotos, premios y lugar.
+3. **Publish**.
 
 ## Importante
 

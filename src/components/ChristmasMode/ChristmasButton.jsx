@@ -31,6 +31,7 @@ const ChristmasButton = () => {
     const { t } = useTranslation();
     const buttonRef = useRef(null);
     const dragRef = useRef(null);
+    const suppressClick = useRef(false);
     const [active, setActive] = useState(readActive);
     const [position, setPosition] = useState(null);
     const [dragging, setDragging] = useState(false);
@@ -38,8 +39,11 @@ const ChristmasButton = () => {
 
     useLayoutEffect(() => {
         document.documentElement.classList.toggle("christmas", active);
-        return () => document.documentElement.classList.remove("christmas");
     }, [active]);
+
+    useEffect(() => {
+        return () => document.documentElement.classList.remove("christmas");
+    }, []);
 
     useEffect(() => {
         try {
@@ -88,6 +92,7 @@ const ChristmasButton = () => {
 
     const onPointerDown = (event) => {
         if (event.button !== 0 || dragRef.current) return;
+        suppressClick.current = false;
         const rect = event.currentTarget.getBoundingClientRect();
         const drag = {
             pointerId: event.pointerId,
@@ -101,8 +106,7 @@ const ChristmasButton = () => {
         };
         dragRef.current = drag;
 
-        const samePointer = (moveEvent) =>
-            moveEvent.pointerId == null || moveEvent.pointerId === drag.pointerId;
+        const samePointer = (moveEvent) => moveEvent.pointerId === drag.pointerId;
 
         const onMove = (moveEvent) => {
             if (!samePointer(moveEvent)) return;
@@ -126,33 +130,29 @@ const ChristmasButton = () => {
         const onUp = (upEvent) => {
             if (!samePointer(upEvent)) return;
             window.removeEventListener("pointermove", onMove);
-            window.removeEventListener("mousemove", onMove);
             window.removeEventListener("pointerup", onUp);
-            window.removeEventListener("mouseup", onUp);
-            window.removeEventListener("pointercancel", onCancel);
+            window.removeEventListener("pointercancel", onUp);
+            suppressClick.current = drag.moved;
             dragRef.current = null;
             setDragging(false);
-            if (!drag.moved) {
-                setActive((current) => !current);
-            }
-        };
-
-        const onCancel = (cancelEvent) => {
-            if (!samePointer(cancelEvent)) return;
-            drag.moved = true;
-            onUp(cancelEvent);
         };
 
         window.addEventListener("pointermove", onMove);
-        window.addEventListener("mousemove", onMove);
         window.addEventListener("pointerup", onUp);
-        window.addEventListener("mouseup", onUp);
-        window.addEventListener("pointercancel", onCancel);
+        window.addEventListener("pointercancel", onUp);
         try {
             event.currentTarget.setPointerCapture(event.pointerId);
         } catch {
             // Window listeners still follow the pointer if capture is unavailable.
         }
+    };
+
+    const onClick = () => {
+        if (suppressClick.current) {
+            suppressClick.current = false;
+            return;
+        }
+        setActive((current) => !current);
     };
 
     return (
@@ -164,7 +164,7 @@ const ChristmasButton = () => {
                 aria-pressed={active}
                 aria-label="Modo Navidad"
                 onPointerDown={onPointerDown}
-                onMouseDown={onPointerDown}
+                onClick={onClick}
                 className={`group fixed z-[45] w-[108px] touch-none select-none border-0 bg-transparent p-0 sm:w-[128px] ${
                     dragging ? "cursor-grabbing" : "cursor-grab"
                 } ${position ? "" : "bottom-5 right-5"}`}

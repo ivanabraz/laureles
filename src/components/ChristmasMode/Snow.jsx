@@ -1,14 +1,17 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const FLAKE_COUNT = 36;
+const DESKTOP_COUNT = 36;
+const MOBILE_COUNT = 14;
+const MOBILE_QUERY = "(max-width: 767px)";
 
-function makeFlakes(reduced) {
-    return Array.from({ length: FLAKE_COUNT }, (_, id) => ({
+function makeFlakes(reduced, mobile) {
+    const count = mobile ? MOBILE_COUNT : DESKTOP_COUNT;
+    return Array.from({ length: count }, (_, id) => ({
         id,
         left: Math.random() * 100,
         delay: Math.random() * -18,
         duration: 10 + Math.random() * 14,
-        size: 14 + Math.random() * 16,
+        size: mobile ? 8 + Math.random() * 8 : 14 + Math.random() * 16,
         opacity: 0.55 + Math.random() * 0.4,
         drift: `${-40 + Math.random() * 80}px`,
         spin: 8 + Math.random() * 10,
@@ -53,9 +56,20 @@ const Snow = ({ active }) => {
         () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
         []
     );
+    const [mobile, setMobile] = useState(
+        () => window.matchMedia(MOBILE_QUERY).matches
+    );
+
+    useEffect(() => {
+        const media = window.matchMedia(MOBILE_QUERY);
+        const onChange = () => setMobile(media.matches);
+        media.addEventListener("change", onChange);
+        return () => media.removeEventListener("change", onChange);
+    }, []);
+
     const flakes = useMemo(
-        () => (active ? makeFlakes(reduced) : []),
-        [active, reduced]
+        () => (active ? makeFlakes(reduced, mobile) : []),
+        [active, reduced, mobile]
     );
 
     if (!active) return null;

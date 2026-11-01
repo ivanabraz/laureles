@@ -11,7 +11,7 @@ const About = ({ t }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, ease: "easeInOut" }}
-                className="w-5/6 md:w-3/4 m-auto text-base text-justify">
+                className="w-5/6 md:w-3/4 m-auto pt-16 md:pt-20 text-base text-justify">
                 <p>{t('global.about-text')}</p>
             </motion.div>
             <motion.div

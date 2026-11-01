@@ -1,0 +1,36 @@
+{
+  "copy": {
+    "es": {
+      "about": "Sobre",
+      "portfolio": "Portfolio",
+      "packages": "Paquetes",
+      "press": "Prensa",
+      "contact": "Contacto",
+      "testimony": "Testimonios",
+      "loading": "Cargando",
+      "back": "Volver",
+      "backtotop": "Volver arriba",
+      "rights": "Todos los derechos reservados",
+      "sections": "Secciones",
+      "language": "Idioma",
+      "followus": "Sígueme en redes!",
+      "readnote": "Ver nota"
+    },
+    "en": {
+      "about": "About",
+      "portfolio": "Portfolio",
+      "packages": "Packages",
+      "press": "Press",
+      "contact": "Contact",
+      "testimony": "Testimony",
+      "loading": "Loading",
+      "back": "Back",
+      "backtotop": "Back to top",
+      "rights": "All rights reserved",
+      "sections": "Sections",
+      "language": "Language",
+      "followus": "Follow me!",
+      "readnote": "Read note"
+    }
+  }
+}

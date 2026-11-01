@@ -6,8 +6,7 @@ Sitio de Laureles Audiovisual (React / CRA).
 
 ## Contenido editable
 
-- **Textos (ES/EN):** [Google Sheets](content/README.md)
-- **Fotos (portfolio + paquetes):** [Admin](https://laureles.netlify.app/admin/) — [setup](content/cms-setup.md) · [guía Laura](content/cms-laura.md)
+- **Por sección (fotos y textos, español e inglés):** [Admin](https://laureles.netlify.app/admin/) — [guía](content/README.md) · [setup](content/cms-setup.md) · [guía Laura](content/cms-laura.md)
 
 ## Desarrollo
 

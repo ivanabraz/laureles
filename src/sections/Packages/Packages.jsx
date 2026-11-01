@@ -12,25 +12,34 @@ import {
 import PackageModal from "./PackageModal";
 import packagesContent from "../../data/packages.json";
 
-const DETAIL_ICONS = {
-  session_60min: faClock,
-  session_60_90min: faClock,
-  session_5_photos: faCamera,
-  session_10_photos: faCamera,
-  session_16_photos: faCamera,
-  treats: faBone,
-  location_studio: faLocationDot,
-  location_outdoor_1: faLocationDot,
-  location_outdoor_2: faLocationDot,
+const infoText = (info, field, lang) => {
+  const side = info?.[field];
+  if (!side || typeof side !== "object") return "";
+  return String(side[lang] || "").trim();
 };
 
-const packageTitleKey = (id) =>
-  id === "gift_card"
-    ? "global.packages_description.gift_card"
-    : `global.packages_description.session_${id}`;
+const packageDetails = (info, lang, treatsLabel) => {
+  const details = [];
+  const duration = infoText(info, "duration", lang);
+  const photos = infoText(info, "photos", lang);
+  const place =
+    info?.place === "studio" || info?.place === "outdoor"
+      ? infoText(info, "placeText", lang)
+      : "";
+  if (duration) details.push({ icon: faClock, text: duration });
+  if (photos) details.push({ icon: faCamera, text: photos });
+  if (info?.treats && treatsLabel) details.push({ icon: faBone, text: treatsLabel });
+  if (place) details.push({ icon: faLocationDot, text: place });
+  return details;
+};
 
-const packageDescriptionKey = (id) =>
-  `global.packages_description.desc_${id}`;
+const siteLang = (language) =>
+  String(language || "").toLowerCase().startsWith("en") ? "en" : "es";
+
+const packageCopy = (pkg, lang) => {
+  const copy = pkg?.copy || {};
+  return copy[lang] || copy.es || {};
+};
 
 const withPublicUrl = (src) => {
   if (!src) return null;
@@ -50,43 +59,36 @@ const normalizeGallery = (gallery, cover) => {
 };
 
 const Packages = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [selectedPackage, setSelectedPackage] = useState(null);
 
   const packagesData = useMemo(() => {
+    const lang = siteLang(i18n.language);
+    const phrases =
+      packagesContent.includes?.[lang] || packagesContent.includes?.es || {};
     const list = packagesContent.packages || [];
     return list
       .map((pkg) => {
         if (!pkg?.id || !pkg.cover) return null;
-        const titleKey = packageTitleKey(pkg.id);
-        const descriptionKey = packageDescriptionKey(pkg.id);
+        const copy = packageCopy(pkg, lang);
         const cover = withPublicUrl(pkg.cover);
-        const detailIds = Array.isArray(pkg.details) ? pkg.details : [];
         return {
           id: pkg.id,
-          titleKey,
-          title: t(titleKey),
-          description: t(descriptionKey),
-          details: detailIds
-            .map((detailId) => {
-              const icon = DETAIL_ICONS[detailId];
-              if (!icon) return null;
-              return {
-                icon,
-                text: t(`global.packages_description.${detailId}`),
-              };
-            })
-            .filter(Boolean),
+          title: String(copy.title || ""),
+          titleEs: String(packageCopy(pkg, "es").title || ""),
+          description: String(copy.description || ""),
+          includesLabel: phrases.includes || "",
+          details: packageDetails(pkg.info, lang, phrases.treats || ""),
           image: cover,
           gallery: normalizeGallery(pkg.gallery, pkg.cover),
           titleColor: pkg.titleColor || "text-white",
         };
       })
       .filter(Boolean);
-  }, [t]);
+  }, [i18n.language]);
 
   return (
-    <div id="packages" className="w-full bg-white pt-10 text-black flex flex-col items-center">
+    <div id="packages" className="w-full bg-white pt-10 pb-14 text-black flex flex-col items-center">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -127,7 +129,7 @@ const Packages = () => {
                   style={{ backgroundImage: `url(${pkg.image})` }}
                 >
                   <h3 className={`relative z-10 text-xl md:text-2xl lg:text-2xl ${pkg.titleColor}`}>
-                    {pkg.title.split("\n").map((line, i) => (
+                    {String(pkg.title || "").split("\n").map((line, i) => (
                       <React.Fragment key={i}>
                         {line}
                         <br />

@@ -1,5 +1,18 @@
 {
   "images": [
-    "/images/photos/image-01h.jpg"
-  ]
+    {
+      "src": "/images/photos/image-01h.jpg",
+      "mobile": ""
+    }
+  ],
+  "copy": {
+    "es": {
+      "tagline": "Donde las <u>patas</u>, las <u>manos</u> y los corazones cuentan su <u>historia</u> en una sola imagen.",
+      "multispecies": "Fotografía multiespecie"
+    },
+    "en": {
+      "tagline": "Where <u>paws</u>, <u>hands</u> and hearts tell their <u>story</u> in a single image.",
+      "multispecies": "Multispecies photography"
+    }
+  }
 }

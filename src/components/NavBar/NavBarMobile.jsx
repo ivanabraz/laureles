@@ -10,7 +10,7 @@ const NavBarMobile = ({ logo, navigation, scrolled }) => {
     return (
         <>
             {/* Barra superior */}
-            <nav className={`w-full flex flex-row justify-between fixed top-[var(--announcement-offset,0px)] left-0 z-100 py-5 px-10 ${scrolled ? 'bg-white' : 'bg-transparent'}`}>
+            <nav className={`w-full flex flex-row justify-between fixed top-[var(--announcement-offset,0px)] left-0 z-40 py-5 px-10 ${scrolled ? 'bg-white' : 'bg-transparent'}`}>
                 {/* Botón burger */}
                 <motion.button
                     initial={{ opacity: 0, }}

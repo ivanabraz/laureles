@@ -4,13 +4,14 @@ about-text,"Soy Laura de los laureles, fotógrafa y amante de los animales. ¡Me
 announcement_bg,#000000,#000000
 announcement_close,Cerrar,Close
 announcement_color,#ffffff,#ffffff
-announcement_show,false,false
+announcement_show,true,true
 announcement_text,Nuevas fechas disponibles. <link>Reservá tu sesión</link>,New dates available. <link>Book your session</link>
 announcement_url,https://api.whatsapp.com/send?phone=5491133752356,https://api.whatsapp.com/send?phone=5491133752356
 back,Volver,Back
 backtotop,Volver arriba,Back to top
 brand_message,¿Tienes una marca que ama a los animales tanto como yo? Creamos juntos contenido visual auténtico y profesional que conecte con tu audiencia.,Do you have a brand that loves animals as much as I do? Let’s create authentic and professional visual content together that connects with your audience.
 brands,Marcas,Brands
+christmas_hint,presioname,press me
 contact,Contacto,Contact
 contact_invite,Contáctame!,Contact me!
 family,Familia,Family
@@ -27,19 +28,12 @@ packages_description.desc_dogo,"La opción más completa outdoor: más fotos, m�
 packages_description.desc_galgo,Ideal para quienes buscan más variedad de fotos en un entorno calmado y pensado para animales.,Ideal if you want more photo variety in a calm space thoughtfully set up for animals.
 packages_description.desc_gift_card,Regalá una experiencia fotográfica inolvidable. La gift card se adapta al paquete que elijan juntos.,Gift an unforgettable photography experience. The gift card can be used for the package you choose together.
 packages_description.desc_mestizo,Dos locaciones exteriores para recorrer distintos escenarios y llevarte una galería más diversa.,Two outdoor locations to explore different settings and take home a more varied gallery.
+packages_description.desc_navidad,,
 packages_description.desc_pug,"Una sesión al aire libre en una locación especial, perfecta para retratos naturales y momentos espontáneos.","An outdoor session at a special location, perfect for natural portraits and spontaneous moments."
 packages_description.gift_card,"Regalá una
 Gift card","Send a
 gift card"
 packages_description.includes,Incluye,Includes
-packages_description.location_outdoor_1,"Exterior, 1 locación","Outdoor, 1 location"
-packages_description.location_outdoor_2,"Exterior, 2 locaciones","Outdoor, 2 locations"
-packages_description.location_studio,Estudio (Recoleta),Studio (Recoleta)
-packages_description.session_10_photos,10 fotos editadas digitales,10 edited digital photos
-packages_description.session_16_photos,16 fotos editadas digitales,16 edited digital photos
-packages_description.session_5_photos,5 fotos editadas digitales,5 edited digital photos
-packages_description.session_60_90min,60 a 90 min,60 to 90 min
-packages_description.session_60min,60 min,60 min
 packages_description.session_akita,"Sesión Akita
 estudio","Akita studio
 session"
@@ -55,6 +49,7 @@ session"
 packages_description.session_mestizo,"Sesión Mestizo
 exterior","Mestizo outdoor
 session"
+packages_description.session_navidad,,
 packages_description.session_pug,"Sesión Pug
 exterior","Pug outdoor
 session"

@@ -7,12 +7,32 @@
         "/images/packages/image-08.jpg"
       ],
       "titleColor": "text-white",
-      "details": [
-        "session_60min",
-        "session_5_photos",
-        "treats",
-        "location_studio"
-      ]
+      "copy": {
+        "es": {
+          "title": "Sesión Navidad",
+          "description": ""
+        },
+        "en": {
+          "title": "",
+          "description": ""
+        }
+      },
+      "info": {
+        "duration": {
+          "es": "60 min",
+          "en": "60 min"
+        },
+        "photos": {
+          "es": "5 fotos editadas digitales",
+          "en": "5 edited digital photos"
+        },
+        "treats": true,
+        "place": "studio",
+        "placeText": {
+          "es": "Estudio (Recoleta)",
+          "en": "Studio (Recoleta)"
+        }
+      }
     },
     {
       "id": "chihuahua",
@@ -21,12 +41,32 @@
         "/images/packages/image-04.jpg"
       ],
       "titleColor": "text-black",
-      "details": [
-        "session_60min",
-        "session_5_photos",
-        "treats",
-        "location_studio"
-      ]
+      "copy": {
+        "es": {
+          "title": "Sesión Chihuahua\nestudio",
+          "description": "Una sesión íntima en estudio, pensada para que tu compañero se sienta cómodo y podamos capturar su esencia con luz controlada."
+        },
+        "en": {
+          "title": "Chihuahua studio\nsession",
+          "description": "An intimate studio session designed so your companion feels at ease while we capture their essence with controlled light."
+        }
+      },
+      "info": {
+        "duration": {
+          "es": "60 min",
+          "en": "60 min"
+        },
+        "photos": {
+          "es": "5 fotos editadas digitales",
+          "en": "5 edited digital photos"
+        },
+        "treats": true,
+        "place": "studio",
+        "placeText": {
+          "es": "Estudio (Recoleta)",
+          "en": "Studio (Recoleta)"
+        }
+      }
     },
     {
       "id": "galgo",
@@ -35,12 +75,32 @@
         "/images/packages/image-05.jpg"
       ],
       "titleColor": "text-black",
-      "details": [
-        "session_60min",
-        "session_10_photos",
-        "treats",
-        "location_studio"
-      ]
+      "copy": {
+        "es": {
+          "title": "Sesión Galgo\nestudio",
+          "description": "Ideal para quienes buscan más variedad de fotos en un entorno calmado y pensado para animales."
+        },
+        "en": {
+          "title": "Galgo studio\nsession",
+          "description": "Ideal if you want more photo variety in a calm space thoughtfully set up for animals."
+        }
+      },
+      "info": {
+        "duration": {
+          "es": "60 min",
+          "en": "60 min"
+        },
+        "photos": {
+          "es": "10 fotos editadas digitales",
+          "en": "10 edited digital photos"
+        },
+        "treats": true,
+        "place": "studio",
+        "placeText": {
+          "es": "Estudio (Recoleta)",
+          "en": "Studio (Recoleta)"
+        }
+      }
     },
     {
       "id": "akita",
@@ -49,12 +109,32 @@
         "/images/packages/image-06.jpg"
       ],
       "titleColor": "text-black",
-      "details": [
-        "session_60_90min",
-        "session_16_photos",
-        "treats",
-        "location_studio"
-      ]
+      "copy": {
+        "es": {
+          "title": "Sesión Akita\nestudio",
+          "description": "La experiencia más completa en estudio: tiempo extra para explorar poses, vínculos y detalles con calma."
+        },
+        "en": {
+          "title": "Akita studio\nsession",
+          "description": "The most complete studio experience: extra time to explore poses, bonds, and details at an unhurried pace."
+        }
+      },
+      "info": {
+        "duration": {
+          "es": "60 a 90 min",
+          "en": "60 to 90 min"
+        },
+        "photos": {
+          "es": "16 fotos editadas digitales",
+          "en": "16 edited digital photos"
+        },
+        "treats": true,
+        "place": "studio",
+        "placeText": {
+          "es": "Estudio (Recoleta)",
+          "en": "Studio (Recoleta)"
+        }
+      }
     },
     {
       "id": "pug",
@@ -63,12 +143,32 @@
         "/images/packages/image-01.jpg"
       ],
       "titleColor": "text-white",
-      "details": [
-        "session_60_90min",
-        "session_5_photos",
-        "treats",
-        "location_outdoor_1"
-      ]
+      "copy": {
+        "es": {
+          "title": "Sesión Pug\nexterior",
+          "description": "Una sesión al aire libre en una locación especial, perfecta para retratos naturales y momentos espontáneos."
+        },
+        "en": {
+          "title": "Pug outdoor\nsession",
+          "description": "An outdoor session at a special location, perfect for natural portraits and spontaneous moments."
+        }
+      },
+      "info": {
+        "duration": {
+          "es": "60 a 90 min",
+          "en": "60 to 90 min"
+        },
+        "photos": {
+          "es": "5 fotos editadas digitales",
+          "en": "5 edited digital photos"
+        },
+        "treats": true,
+        "place": "outdoor",
+        "placeText": {
+          "es": "Exterior, 1 locación",
+          "en": "Outdoor, 1 location"
+        }
+      }
     },
     {
       "id": "mestizo",
@@ -77,12 +177,32 @@
         "/images/packages/image-02.jpg"
       ],
       "titleColor": "text-white",
-      "details": [
-        "session_60_90min",
-        "session_10_photos",
-        "treats",
-        "location_outdoor_2"
-      ]
+      "copy": {
+        "es": {
+          "title": "Sesión Mestizo\nexterior",
+          "description": "Dos locaciones exteriores para recorrer distintos escenarios y llevarte una galería más diversa."
+        },
+        "en": {
+          "title": "Mestizo outdoor\nsession",
+          "description": "Two outdoor locations to explore different settings and take home a more varied gallery."
+        }
+      },
+      "info": {
+        "duration": {
+          "es": "60 a 90 min",
+          "en": "60 to 90 min"
+        },
+        "photos": {
+          "es": "10 fotos editadas digitales",
+          "en": "10 edited digital photos"
+        },
+        "treats": true,
+        "place": "outdoor",
+        "placeText": {
+          "es": "Exterior, 2 locaciones",
+          "en": "Outdoor, 2 locations"
+        }
+      }
     },
     {
       "id": "dogo",
@@ -91,12 +211,32 @@
         "/images/packages/image-03.jpg"
       ],
       "titleColor": "text-white",
-      "details": [
-        "session_60_90min",
-        "session_16_photos",
-        "treats",
-        "location_outdoor_2"
-      ]
+      "copy": {
+        "es": {
+          "title": "Sesión Dogo\nexterior",
+          "description": "La opción más completa outdoor: más fotos, más tiempo y dos locaciones para una sesión memorable."
+        },
+        "en": {
+          "title": "Dogo outdoor\nsession",
+          "description": "The most complete outdoor option: more photos, more time, and two locations for a memorable session."
+        }
+      },
+      "info": {
+        "duration": {
+          "es": "60 a 90 min",
+          "en": "60 to 90 min"
+        },
+        "photos": {
+          "es": "16 fotos editadas digitales",
+          "en": "16 edited digital photos"
+        },
+        "treats": true,
+        "place": "outdoor",
+        "placeText": {
+          "es": "Exterior, 2 locaciones",
+          "en": "Outdoor, 2 locations"
+        }
+      }
     },
     {
       "id": "gift_card",
@@ -105,7 +245,42 @@
         "/images/packages/image-07.jpg"
       ],
       "titleColor": "text-white",
-      "details": []
+      "copy": {
+        "es": {
+          "title": "Regalá una\nGift card",
+          "description": "Regalá una experiencia fotográfica inolvidable. La gift card se adapta al paquete que elijan juntos."
+        },
+        "en": {
+          "title": "Send a\ngift card",
+          "description": "Gift an unforgettable photography experience. The gift card can be used for the package you choose together."
+        }
+      },
+      "info": {
+        "duration": {
+          "es": "",
+          "en": ""
+        },
+        "photos": {
+          "es": "",
+          "en": ""
+        },
+        "treats": false,
+        "place": "",
+        "placeText": {
+          "es": "",
+          "en": ""
+        }
+      }
     }
-  ]
+  ],
+  "includes": {
+    "es": {
+      "includes": "Incluye",
+      "treats": "Premios comestibles"
+    },
+    "en": {
+      "includes": "Includes",
+      "treats": "Edible treats"
+    }
+  }
 }

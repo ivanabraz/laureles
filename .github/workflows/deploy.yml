@@ -34,9 +34,6 @@ jobs:
         run: npm run build
         env:
           CI: false
-          REACT_APP_GOOGLE_SHEETS_ID: ${{ secrets.REACT_APP_GOOGLE_SHEETS_ID }}
-          REACT_APP_GOOGLE_SHEETS_TAB: ${{ secrets.REACT_APP_GOOGLE_SHEETS_TAB }}
-          REACT_APP_LOCALES_URL: ${{ secrets.REACT_APP_LOCALES_URL }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

@@ -36,7 +36,7 @@ const NavBar = ({ onLanguageChange, currentLanguage }) => {
     return (
         <>
             {/* Versión Mobile */}
-            <div className="absolute flex w-full justify-between h-16 lg:hidden mx-auto px-4 sm:px-6 items-center z-10">
+            <div className="absolute flex w-full justify-between h-16 lg:hidden mx-auto px-4 sm:px-6 items-center z-40">
                 <NavBarMobile 
                     logo={`${process.env.PUBLIC_URL}/images/logo/logo.svg`}
                     navigation={navigation} 

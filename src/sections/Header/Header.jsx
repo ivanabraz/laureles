@@ -10,19 +10,52 @@ function toSrc(path) {
     return `${process.env.PUBLIC_URL}${normalized}`;
 }
 
-function heroImages() {
-    const raw = Array.isArray(heroData?.images) ? heroData.images : [];
-    const list = raw
-        .map((item) => (typeof item === "string" ? item : item?.src || item?.image || ""))
-        .map(toSrc)
-        .filter(Boolean);
-
-    if (list.length) return list;
-    return [`${process.env.PUBLIC_URL}/images/photos/image-01h.jpg`];
+function slideFrom(item) {
+    if (typeof item === "string") {
+        return { desktop: toSrc(item), mobile: "" };
+    }
+    return {
+        desktop: toSrc(item?.src || item?.image || ""),
+        mobile: toSrc(item?.mobile || ""),
+    };
 }
 
-const IMAGES = heroImages();
-const CHRISTMAS_HERO = `${process.env.PUBLIC_URL}/images/christmas/image-03h.jpg`;
+function heroSlides() {
+    const raw = Array.isArray(heroData?.images) ? heroData.images : [];
+    const list = raw.map(slideFrom).filter((slide) => slide.desktop);
+    if (list.length) return list;
+    return [{ desktop: `${process.env.PUBLIC_URL}/images/photos/image-01h.jpg`, mobile: "" }];
+}
+
+function slideSrc(slide, isMobile) {
+    if (isMobile && slide.mobile) return slide.mobile;
+    return slide.desktop;
+}
+
+const MOBILE_QUERY = "(max-width: 767px)";
+const SLIDES = heroSlides();
+const CHRISTMAS_SLIDES = [
+    {
+        desktop: `${process.env.PUBLIC_URL}/images/christmas/image-03h.jpg`,
+        mobile: `${process.env.PUBLIC_URL}/images/christmas/image-03v.jpg`,
+    },
+];
+
+function useIsMobile() {
+    const [isMobile, setIsMobile] = useState(() =>
+        typeof window !== "undefined" ? window.matchMedia(MOBILE_QUERY).matches : false
+    );
+
+    useEffect(() => {
+        const media = window.matchMedia(MOBILE_QUERY);
+        const sync = () => setIsMobile(media.matches);
+        sync();
+        media.addEventListener("change", sync);
+        return () => media.removeEventListener("change", sync);
+    }, []);
+
+    return isMobile;
+}
 
 function useChristmasMode() {
     const [on, setOn] = useState(() => document.documentElement.classList.contains("christmas"));
@@ -43,10 +76,11 @@ function useChristmasMode() {
 
 const Header = () => {
     const christmas = useChristmasMode();
-    const images = christmas ? [CHRISTMAS_HERO] : IMAGES;
+    const isMobile = useIsMobile();
+    const slides = christmas ? CHRISTMAS_SLIDES : SLIDES;
     const [swiper, setSwiper] = useState(null);
     const [active, setActive] = useState(0);
-    const multiple = images.length > 1;
+    const multiple = slides.length > 1;
 
     useEffect(() => {
         setActive(0);
@@ -70,8 +104,10 @@ const Header = () => {
                 grabCursor={multiple}
                 className="hero-swiper absolute inset-0 h-full w-full [&_.swiper-wrapper]:h-full [&_.swiper-slide]:!h-full"
             >
-                {images.map((src, index) => (
-                    <SwiperSlide key={`${src}-${index}`}>
+                {slides.map((slide, index) => {
+                    const src = slideSrc(slide, isMobile);
+                    return (
+                    <SwiperSlide key={`${slide.desktop}-${index}`}>
                         <img
                             src={src}
                             alt="Laureles"
@@ -79,12 +115,13 @@ const Header = () => {
                             className="h-full w-full object-cover select-none"
                         />
                     </SwiperSlide>
-                ))}
+                    );
+                })}
             </Swiper>
 
             {multiple && (
                 <div className="absolute bottom-7 left-0 right-0 z-10 flex items-center justify-center gap-2.5">
-                    {images.map((_, index) => {
+                    {slides.map((_, index) => {
                         const isActive = index === active;
                         return (
                             <button

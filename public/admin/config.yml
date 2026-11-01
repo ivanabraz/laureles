@@ -13,14 +13,15 @@ media_folder: public/images/uploads
 public_folder: /images/uploads
 
 collections:
-  - name: hero
+  - name: home
     label: Inicio
     editor:
       preview: false
     files:
-      - name: hero_images
-        label: Imagen del inicio
+      - name: home_page
+        label: Inicio
         file: src/data/hero.json
+        format: json
         media_folder: public/images/photos
         public_folder: /images/photos
         fields:
@@ -28,9 +29,29 @@ collections:
             label: Imágenes
             widget: image-grid
             paths_only: true
+            with_mobile: true
             media_folder: public/images/photos
             public_folder: /images/photos
-            hint: Arrastrá para ordenar. Con una sola foto, el inicio no muestra los puntos.
+            hint: Cada foto puede tener una vertical para el teléfono. Si no la subís, se usa la horizontal.
+          - name: copy
+            label: Textos
+            widget: section-copy
+            section: home
+
+  - name: about
+    label: Sobre mí
+    editor:
+      preview: false
+    files:
+      - name: about_page
+        label: Sobre mí
+        file: src/data/about.json
+        format: json
+        fields:
+          - name: copy
+            label: Textos
+            widget: section-copy
+            section: about
 
   - name: portfolio
     label: Portfolio
@@ -38,18 +59,23 @@ collections:
       preview: false
     files:
       - name: portfolio_all
-        label: Todas las fotos
+        label: Portfolio
         file: src/data/portfolio.json
+        format: json
         media_folder: public/images/portfolio
         public_folder: /images/portfolio
         fields:
           - name: images
-            label: Portfolio
+            label: Fotos
             widget: image-grid
             unified: true
             media_folder: public/images/portfolio
             public_folder: /images/portfolio
             hint: Todas juntas. Filtrá arriba. Click = categoría, Estudio/Exterior y pastilla.
+          - name: copy
+            label: Textos
+            widget: section-copy
+            section: portfolio
 
   - name: site_packages
     label: Paquetes
@@ -57,14 +83,64 @@ collections:
       preview: false
     files:
       - name: packages_data
-        label: Imagenes de paquetes
+        label: Paquetes
         file: src/data/packages.json
+        format: json
         media_folder: public/images/packages
         public_folder: /images/packages
         fields:
           - name: packages
-            label: Paquetes
+            label: Cards
             widget: packages-grid
             media_folder: public/images/packages
             public_folder: /images/packages
-            hint: Agregar paquete = card nueva. Fotos acá; título/descripción = 2 filas nuevas en el Sheet.
+            hint: Cada card tiene sus fotos, el título, la descripción, la duración, la cantidad de fotos y el lugar.
+          - name: includes
+            label: Textos de Incluye
+            widget: section-copy
+            section: includes
+
+  - name: contact
+    label: Contacto
+    editor:
+      preview: false
+    files:
+      - name: contact_page
+        label: Contacto
+        file: src/data/contact.json
+        format: json
+        fields:
+          - name: copy
+            label: Textos
+            widget: section-copy
+            section: contact
+
+  - name: promo
+    label: Aviso y promo
+    editor:
+      preview: false
+    files:
+      - name: promo_page
+        label: Aviso y promo
+        file: src/data/promo.json
+        format: json
+        fields:
+          - name: copy
+            label: Textos
+            widget: section-copy
+            section: promo
+
+  - name: nav
+    label: Menú y pie
+    editor:
+      preview: false
+    files:
+      - name: nav_page
+        label: Menú y pie
+        file: src/data/nav.json
+        format: json
+        fields:
+          - name: copy
+            label: Textos
+            widget: section-copy
+            section: nav

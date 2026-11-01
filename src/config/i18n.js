@@ -1,123 +1,40 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import HttpApi from "i18next-http-backend";
+import hero from "../data/hero.json";
+import about from "../data/about.json";
+import portfolio from "../data/portfolio.json";
+import contact from "../data/contact.json";
+import promo from "../data/promo.json";
+import nav from "../data/nav.json";
 
-const SHEETS_ID = process.env.REACT_APP_GOOGLE_SHEETS_ID;
-const SHEETS_TAB = process.env.REACT_APP_GOOGLE_SHEETS_TAB || "1";
-const LOCALES_URL = process.env.REACT_APP_LOCALES_URL;
-
-function unflatten(flat) {
-  const root = {};
-  Object.keys(flat).forEach((dotted) => {
-    const parts = dotted.split(".");
-    let cursor = root;
-    for (let i = 0; i < parts.length - 1; i++) {
-      const part = parts[i];
-      if (!cursor[part] || typeof cursor[part] !== "object") {
-        cursor[part] = {};
-      }
-      cursor = cursor[part];
-    }
-    cursor[parts[parts.length - 1]] = flat[dotted];
-  });
-  return root;
+function copyFor(file, lang) {
+  const copy = file && file.copy;
+  const locale = copy && copy[lang];
+  return locale && typeof locale === "object" ? locale : {};
 }
 
-function bundlesFromSheetRows(rows) {
-  const esFlat = {};
-  const enFlat = {};
-
-  rows.forEach((row) => {
-    const key = String(row.key || "").trim();
-    if (!key) return;
-    esFlat[key] = row.es == null ? "" : String(row.es);
-    enFlat[key] = row.en == null ? "" : String(row.en);
-  });
-
-  // Match public/locales/*/global.json shape: { global: { ... } }
+function bundle(lang) {
   return {
-    es: { global: unflatten(esFlat) },
-    en: { global: unflatten(enFlat) },
+    global: {
+      ...copyFor(nav, lang),
+      ...copyFor(hero, lang),
+      ...copyFor(about, lang),
+      ...copyFor(portfolio, lang),
+      ...copyFor(contact, lang),
+      ...copyFor(promo, lang),
+    },
   };
 }
 
-function applyBundles(data) {
-  ["es", "en"].forEach((lng) => {
-    const bundle = data?.[lng];
-    if (bundle && typeof bundle === "object") {
-      // deep + overwrite so Sheet values replace local JSON
-      i18n.addResourceBundle(lng, "global", bundle, true, true);
-    }
-  });
-}
-
-async function fetchJson(url) {
-  const response = await fetch(url, {
-    method: "GET",
-    redirect: "follow",
-    cache: "no-store",
-  });
-  if (!response.ok) {
-    throw new Error(`Remote locales HTTP ${response.status}`);
-  }
-  return response.json();
-}
-
-async function ensureLocalBundles() {
-  await Promise.all(
-    ["es", "en"].map(async (lng) => {
-      const json = await fetchJson(
-        `${process.env.PUBLIC_URL}/locales/${lng}/global.json`
-      );
-      applyBundles({ [lng]: json });
-    })
-  );
-}
-
-async function loadRemoteLocales() {
-  try {
-    // Load both locale files first. The Sheet only ships keys it contains;
-    // without this, a language that was not the initial one can miss new keys
-    // and fall back to Spanish.
-    await ensureLocalBundles();
-
-    if (LOCALES_URL) {
-      const data = await fetchJson(LOCALES_URL);
-      if (data?.error) throw new Error(data.error);
-      // Apps Script returns { es: { global: {...} }, en: { global: {...} } }
-      applyBundles({
-        es: data?.es,
-        en: data?.en,
-      });
-    } else if (SHEETS_ID) {
-      const url = `https://opensheet.elk.sh/${SHEETS_ID}/${encodeURIComponent(SHEETS_TAB)}`;
-      const rows = await fetchJson(url);
-      if (!Array.isArray(rows)) {
-        throw new Error(
-          rows?.error ||
-            "Respuesta inválida del Sheet. Revisá que esté compartido como “Cualquiera con el enlace”."
-        );
-      }
-      applyBundles(bundlesFromSheetRows(rows));
-    } else {
-      return;
-    }
-
-    await i18n.changeLanguage(i18n.language);
-  } catch (error) {
-    console.warn(
-      "[i18n] No se pudieron cargar textos remotos; se usan los JSON locales.",
-      error
-    );
-  }
-}
-
 i18n
-  .use(HttpApi)
   .use(initReactI18next)
   .use(LanguageDetector)
   .init({
+    resources: {
+      es: { global: bundle("es") },
+      en: { global: bundle("en") },
+    },
     supportedLngs: ["es", "en", "de"],
     fallbackLng: "es",
     detection: {
@@ -131,11 +48,7 @@ i18n
     react: {
       useSuspense: true,
     },
-    backend: {
-      loadPath: `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`,
-    },
     ns: ["global"],
-  })
-  .then(() => loadRemoteLocales());
+  });
 
 export default i18n;

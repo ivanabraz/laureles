@@ -926,5 +926,29 @@
       "category": "specials",
       "style": "studio"
     }
-  ]
+  ],
+  "copy": {
+    "es": {
+      "family": "Familia",
+      "brands": "Marcas",
+      "shelters": "Refugios",
+      "outdoor": "Exteriores",
+      "studio": "Estudio",
+      "specials": "Fechas especiales",
+      "see_more": "Ver más",
+      "reference_photo": "Foto de referencia",
+      "no_results": "Oops! No hay resultados para los filtros seleccionados ☺"
+    },
+    "en": {
+      "family": "Family",
+      "brands": "Brands",
+      "shelters": "Shelters",
+      "outdoor": "Outdoor",
+      "studio": "Studio",
+      "specials": "Special dates",
+      "see_more": "See more",
+      "reference_photo": "Reference photo",
+      "no_results": "Oops! No results for the selected filters ☺"
+    }
+  }
 }

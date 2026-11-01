@@ -39,9 +39,7 @@ const Press = ({ t }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 2, ease: "easeInOut" }}
                 viewport={{ once: true }}
-                className="px-6 md:px-10"
-                slidesOffsetBefore={window.innerWidth >= 768 ? 40 : 24}
-                slidesOffsetAfter={window.innerWidth >= 768 ? 40 : 24}
+                className="min-w-0 max-w-full overflow-x-clip px-6 md:px-10"
             >
                 <Swiper
                 spaceBetween={20}

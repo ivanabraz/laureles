@@ -98,7 +98,14 @@
     return Array.isArray(value) ? value.slice() : [];
   }
 
-  function normalizeItem(item, pathsOnly, unified) {
+  function normalizeItem(item, pathsOnly, unified, withMobile) {
+    if (withMobile) {
+      if (typeof item === "string") return { src: item, mobile: "" };
+      return {
+        src: (item && (item.src || item.image || "")) || "",
+        mobile: (item && item.mobile) || "",
+      };
+    }
     if (pathsOnly) {
       if (typeof item === "string") return item;
       return (item && (item.src || item.image || "")) || "";
@@ -138,13 +145,14 @@
     return value === "outdoor" ? "Exterior" : "Estudio";
   }
 
-  var styleTagId = "laureles-image-grid-css-v10";
+  var styleTagId = "laureles-image-grid-css-v11";
   function ensureStyles() {
     [
       "laureles-image-grid-css",
       "laureles-image-grid-css-v7",
       "laureles-image-grid-css-v8",
       "laureles-image-grid-css-v9",
+      "laureles-image-grid-css-v10",
     ].forEach(function (id) {
       var old = document.getElementById(id);
       if (old) old.parentNode.removeChild(old);
@@ -197,6 +205,11 @@
       ".ig-meta-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}",
       ".ig-edit-btn{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);appearance:none;border:0;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;background:rgba(0,0,0,.7);color:#fff;opacity:0;transition:opacity .15s;white-space:nowrap;z-index:2}",
       ".ig-card:hover .ig-edit-btn{opacity:1}",
+      ".ig-mobile{position:absolute;left:8px;right:8px;bottom:8px;display:flex;gap:6px;z-index:2}",
+      ".ig-mobile-btn,.ig-mobile-clear{appearance:none;border:0;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:600;cursor:pointer;background:rgba(0,0,0,.72);color:#fff}",
+      ".ig-mobile-clear{background:rgba(198,40,40,.9)}",
+      ".ig-card:hover .ig-mobile-btn,.ig-card:hover .ig-mobile-clear{opacity:1}",
+      ".ig-mobile-thumb{position:absolute;right:8px;bottom:40px;width:34px;height:52px;object-fit:cover;border-radius:6px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25);pointer-events:none;z-index:2}",
       ".ig-empty{padding:28px;border:2px dashed #ccc;border-radius:12px;text-align:center;color:#777}",
     ].join("");
     document.head.appendChild(style);
@@ -257,25 +270,39 @@
 
       var incoming = asMediaList(mediaPath);
       var pathsOnly = this.isPathsOnly();
+      var withMobile = this.isWithMobile();
       var unified = this.isUnified();
       var items = this.getItems();
       var changed = false;
       var cat = this.state.defaultCategory || "family";
+      var mobileIndex = this._mobileIndex;
 
-      incoming.forEach(function (p) {
-        if (!p) return;
-        var exists = items.some(function (it) {
-          return itemSrc(it, pathsOnly) === p;
-        });
-        if (exists) return;
-        if (pathsOnly) items.push(p);
-        else {
-          var row = { src: p, style: "studio", text: "", href: "" };
-          if (unified) row.category = cat;
-          items.push(row);
+      if (withMobile && mobileIndex != null) {
+        this._mobileIndex = null;
+        if (incoming[0] && items[mobileIndex]) {
+          items[mobileIndex] = {
+            src: items[mobileIndex].src,
+            mobile: incoming[0],
+          };
+          changed = true;
         }
-        changed = true;
-      });
+      } else {
+        incoming.forEach(function (p) {
+          if (!p) return;
+          var exists = items.some(function (it) {
+            return itemSrc(it, pathsOnly) === p;
+          });
+          if (exists) return;
+          if (withMobile) items.push({ src: p, mobile: "" });
+          else if (pathsOnly) items.push(p);
+          else {
+            var row = { src: p, style: "studio", text: "", href: "" };
+            if (unified) row.category = cat;
+            items.push(row);
+          }
+          changed = true;
+        });
+      }
 
       if (changed) this.commit(items);
       if (this.props.onRemoveInsertedMedia) {
@@ -288,6 +315,11 @@
       return !!(field && field.get && field.get("paths_only"));
     },
 
+    isWithMobile: function () {
+      var field = this.props.field;
+      return !!(field && field.get && field.get("with_mobile"));
+    },
+
     isUnified: function () {
       var field = this.props.field;
       return !!(field && field.get && field.get("unified"));
@@ -296,8 +328,9 @@
     getItems: function () {
       var pathsOnly = this.isPathsOnly();
       var unified = this.isUnified();
+      var withMobile = this.isWithMobile();
       return asArray(this.props.value).map(function (item) {
-        return normalizeItem(item, pathsOnly, unified);
+        return normalizeItem(item, pathsOnly, unified, withMobile);
       });
     },
 
@@ -324,6 +357,7 @@
     },
 
     handleAdd: function () {
+      this._mobileIndex = null;
       if (this.isUnified() && this.state.filterCategory !== "all") {
         this.setState({ defaultCategory: this.state.filterCategory });
       }
@@ -337,6 +371,33 @@
         return;
       }
       if (this._fileInput) this._fileInput.click();
+    },
+
+    handleAddMobile: function (index, e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      this._mobileIndex = index;
+      if (typeof this.props.onOpenMediaLibrary === "function") {
+        this.props.onOpenMediaLibrary({
+          controlID: this._controlID,
+          forImage: true,
+          allowMultiple: false,
+          field: this.props.field,
+        });
+      }
+    },
+
+    handleClearMobile: function (index, e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      var items = this.getItems();
+      if (!items[index]) return;
+      items[index] = { src: items[index].src, mobile: "" };
+      this.commit(items);
     },
 
     handleLocalFiles: function (e) {
@@ -463,8 +524,10 @@
     renderCard: function (item, index, visible) {
       var self = this;
       var pathsOnly = this.isPathsOnly();
+      var withMobile = this.isWithMobile();
       var unified = this.isUnified();
       var src = itemSrc(item, pathsOnly);
+      var mobileSrc = withMobile && item && item.mobile ? item.mobile : "";
       var url = toPublicUrl(src);
       var style = pathsOnly ? "" : item.style || "studio";
       var pill = !pathsOnly && item.text ? item.text : "";
@@ -523,6 +586,45 @@
           style ? h("span", { className: "ig-badge" }, styleLabel(style)) : null
         ),
         pill ? h("span", { className: "ig-pill" }, pill) : null,
+        withMobile
+          ? h(
+              "div",
+              { className: "ig-mobile" },
+              h(
+                "button",
+                {
+                  type: "button",
+                  className: "ig-mobile-btn",
+                  onClick: function (e) {
+                    self.handleAddMobile(index, e);
+                  },
+                },
+                mobileSrc ? "Cambiar vertical" : "Foto mobile"
+              ),
+              mobileSrc
+                ? h(
+                    "button",
+                    {
+                      type: "button",
+                      className: "ig-mobile-clear",
+                      onClick: function (e) {
+                        self.handleClearMobile(index, e);
+                      },
+                    },
+                    "Quitar"
+                  )
+                : null
+            )
+          : null,
+        withMobile && mobileSrc
+          ? h("img", {
+              className: "ig-mobile-thumb",
+              src: toPublicUrl(mobileSrc),
+              alt: "",
+              "data-raw": repoRawUrl(mobileSrc),
+              onError: onPreviewError,
+            })
+          : null,
         !pathsOnly
           ? h(
               "button",
@@ -720,6 +822,9 @@
                 pathsOnly
                   ? items.length +
                     (items.length === 1 ? " foto" : " fotos") +
+                    (this.isWithMobile()
+                      ? " · Foto mobile = vertical del teléfono · Sin vertical, se usa la horizontal"
+                      : "") +
                     " · Arrastrá = orden · × = borrar"
                   : visible.length +
                     " de " +
