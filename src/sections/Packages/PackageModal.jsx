@@ -112,11 +112,11 @@ const PackageModal = ({ pkg, packages = [], onChangePackage, onClose }) => {
       if (event.key === "Escape") onClose();
       if (event.key === "ArrowRight") {
         event.preventDefault();
-        goToPackage(1);
+        goRef.current(1);
       }
       if (event.key === "ArrowLeft") {
         event.preventDefault();
-        goToPackage(-1);
+        goRef.current(-1);
       }
     };
 
