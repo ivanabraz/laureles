@@ -45,7 +45,10 @@
       "id": "chihuahua",
       "cover": "/images/packages/image-04.jpg",
       "gallery": [
-        "/images/packages/image-04.jpg"
+        "/images/packages/image-04.jpg",
+        "/images/packages/chanda-l.a-riley-09.jpg",
+        "/images/packages/chanda-l.a-riley-13.jpg",
+        "/images/packages/chanda-l.a-riley-07.jpg"
       ],
       "titleColor": "text-black",
       "copy": {
