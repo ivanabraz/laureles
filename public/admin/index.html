@@ -19,29 +19,175 @@
       (function () {
         var MAX_BYTES = 1024 * 1024;
 
-        function rejectLarge(file) {
-          if (!file || typeof file.size !== "number" || file.size <= MAX_BYTES) return false;
-          window.alert(
-            "La imagen pesa " +
-              (file.size / (1024 * 1024)).toFixed(2) +
-              " MB. El maximo es 1 MB.\nComprimila en https://squoosh.app e intenta de nuevo."
-          );
-          return true;
+        function mb(bytes) {
+          return (bytes / MAX_BYTES).toFixed(2);
+        }
+
+        function isImage(file) {
+          if (!file) return false;
+          if (file.type && file.type.indexOf("image/") === 0) return true;
+          return /\.(jpe?g|png|webp|gif|heic|heif|avif)$/i.test(file.name || "");
+        }
+
+        function needsCompression(file) {
+          return isImage(file) && file.size >= MAX_BYTES;
+        }
+
+        function showToast(message) {
+          var el = document.getElementById("laureles-compress-toast");
+          if (!el) {
+            el = document.createElement("div");
+            el.id = "laureles-compress-toast";
+            el.setAttribute("role", "status");
+            el.style.cssText =
+              "position:fixed;left:16px;bottom:16px;z-index:100000;max-width:380px;padding:12px 14px;background:#161616;color:#fff;font:14px/1.45 -apple-system,BlinkMacSystemFont,sans-serif;border-radius:12px;white-space:pre-line;box-shadow:0 10px 30px rgba(0,0,0,.25)";
+            document.body.appendChild(el);
+          }
+          el.textContent = message;
+          clearTimeout(el._hide);
+          el._hide = setTimeout(function () {
+            if (el.parentNode) el.parentNode.removeChild(el);
+          }, 4600);
+        }
+
+        function loadImage(file) {
+          return new Promise(function (resolve, reject) {
+            var url = URL.createObjectURL(file);
+            var img = new Image();
+            img.onload = function () {
+              URL.revokeObjectURL(url);
+              resolve(img);
+            };
+            img.onerror = function () {
+              URL.revokeObjectURL(url);
+              reject(new Error("No pude leer " + (file.name || "la imagen") + "."));
+            };
+            img.src = url;
+          });
+        }
+
+        function jpegBlob(canvas, quality) {
+          return new Promise(function (resolve, reject) {
+            canvas.toBlob(
+              function (blob) {
+                if (!blob) reject(new Error("No pude comprimir la imagen."));
+                else resolve(blob);
+              },
+              "image/jpeg",
+              quality
+            );
+          });
+        }
+
+        function compressImage(file) {
+          return loadImage(file).then(function (img) {
+            var width = img.naturalWidth || img.width;
+            var height = img.naturalHeight || img.height;
+            if (!width || !height) {
+              throw new Error("No pude leer " + (file.name || "la imagen") + ".");
+            }
+            var scale = Math.min(1, 2400 / Math.max(width, height));
+            var quality = 0.86;
+
+            function attempt() {
+              var canvas = document.createElement("canvas");
+              canvas.width = Math.max(1, Math.round(width * scale));
+              canvas.height = Math.max(1, Math.round(height * scale));
+              var ctx = canvas.getContext("2d");
+              ctx.fillStyle = "#ffffff";
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              return jpegBlob(canvas, quality).then(function (blob) {
+                if (blob.size < MAX_BYTES) return blob;
+                if (quality > 0.56) {
+                  quality = Math.round((quality - 0.08) * 100) / 100;
+                } else {
+                  scale *= 0.8;
+                  quality = 0.72;
+                }
+                if (canvas.width < 480 || canvas.height < 480) {
+                  throw new Error(
+                    "No pude dejar " + (file.name || "la imagen") + " en menos de 1 MB."
+                  );
+                }
+                return attempt();
+              });
+            }
+
+            return attempt().then(function (blob) {
+              var base = String(file.name || "foto").replace(/\.[^.]+$/, "");
+              return new File([blob], base + ".jpg", {
+                type: "image/jpeg",
+                lastModified: file.lastModified || Date.now(),
+              });
+            });
+          });
+        }
+
+        function compressFiles(fileList) {
+          var files = Array.prototype.slice.call(fileList || []);
+          var notes = [];
+          return files
+            .reduce(function (chain, file) {
+              return chain.then(function (out) {
+                if (!needsCompression(file)) {
+                  out.push(file);
+                  return out;
+                }
+                var before = file.size;
+                return compressImage(file).then(function (next) {
+                  notes.push(
+                    (file.name || "foto") + " (" + mb(before) + " MB → " + mb(next.size) + " MB)"
+                  );
+                  out.push(next);
+                  return out;
+                });
+              });
+            }, Promise.resolve([]))
+            .then(function (out) {
+              return { files: out, notes: notes };
+            });
+        }
+
+        function toFileList(files) {
+          var transfer = new DataTransfer();
+          files.forEach(function (file) {
+            transfer.items.add(file);
+          });
+          return transfer;
         }
 
         document.addEventListener(
           "change",
           function (event) {
             var input = event.target;
-            if (!input || input.type !== "file" || !input.files) return;
-            for (var i = 0; i < input.files.length; i++) {
-              if (rejectLarge(input.files[i])) {
+            if (!input || input.type !== "file" || !input.files || !input.files.length) return;
+            var pending = Array.prototype.some.call(input.files, needsCompression);
+            if (!pending) return;
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            var original = Array.prototype.slice.call(input.files);
+            showToast(
+              original.length > 1 ? "Comprimiendo las imágenes…" : "Comprimiendo la imagen…"
+            );
+            compressFiles(original)
+              .then(function (result) {
+                input.files = toFileList(result.files).files;
+                if (result.notes.length) {
+                  showToast(
+                    (result.notes.length > 1
+                      ? "Las dejé en menos de 1 MB:\n"
+                      : "La dejé en menos de 1 MB:\n") + result.notes.join("\n")
+                  );
+                }
+                input.dispatchEvent(new Event("change", { bubbles: true }));
+              })
+              .catch(function (err) {
                 input.value = "";
-                event.stopImmediatePropagation();
-                event.preventDefault();
-                return;
-              }
-            }
+                window.alert(
+                  (err && err.message) || "No pude comprimir la imagen a menos de 1 MB."
+                );
+              });
           },
           true
         );
@@ -49,16 +195,41 @@
         document.addEventListener(
           "drop",
           function (event) {
+            if (event.__laurelesReady) return;
             var dt = event.dataTransfer;
-            if (!dt || !dt.files) return;
-            for (var i = 0; i < dt.files.length; i++) {
-              var file = dt.files[i];
-              if (file.type && file.type.indexOf("image/") === 0 && rejectLarge(file)) {
-                event.stopImmediatePropagation();
-                event.preventDefault();
-                return;
-              }
-            }
+            if (!dt || !dt.files || !dt.files.length) return;
+            var pending = Array.prototype.some.call(dt.files, needsCompression);
+            if (!pending) return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var target = event.target;
+            var original = Array.prototype.slice.call(dt.files);
+            showToast(
+              original.length > 1 ? "Comprimiendo las imágenes…" : "Comprimiendo la imagen…"
+            );
+            compressFiles(original)
+              .then(function (result) {
+                var transfer = toFileList(result.files);
+                if (result.notes.length) {
+                  showToast(
+                    (result.notes.length > 1
+                      ? "Las dejé en menos de 1 MB:\n"
+                      : "La dejé en menos de 1 MB:\n") + result.notes.join("\n")
+                  );
+                }
+                var dropped = new DragEvent("drop", {
+                  bubbles: true,
+                  cancelable: true,
+                  dataTransfer: transfer,
+                });
+                dropped.__laurelesReady = true;
+                if (target && typeof target.dispatchEvent === "function") target.dispatchEvent(dropped);
+              })
+              .catch(function (err) {
+                window.alert(
+                  (err && err.message) || "No pude comprimir la imagen a menos de 1 MB."
+                );
+              });
           },
           true
         );
