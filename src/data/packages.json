@@ -4,7 +4,11 @@
       "id": "navidad",
       "cover": "/images/packages/image-08.jpg",
       "gallery": [
-        "/images/packages/image-08.jpg"
+        "/images/packages/image-08.jpg",
+        "/images/packages/chanda-l.a-navidad-2026-06.jpg",
+        "/images/packages/chanda-l.a-navidad-2026-09.jpg",
+        "/images/packages/chanda-l.a-navidad-2026-10.jpg",
+        "/images/packages/chanda-l.jpg"
       ],
       "titleColor": "text-white",
       "copy": {
@@ -18,6 +22,7 @@
         }
       },
       "info": {
+        "price": "$ 00.000",
         "duration": {
           "es": "60 min",
           "en": "60 min"
@@ -52,6 +57,7 @@
         }
       },
       "info": {
+        "price": "$ 00.000",
         "duration": {
           "es": "60 min",
           "en": "60 min"
@@ -86,6 +92,7 @@
         }
       },
       "info": {
+        "price": "$ 00.000",
         "duration": {
           "es": "60 min",
           "en": "60 min"
@@ -120,6 +127,7 @@
         }
       },
       "info": {
+        "price": "$ 00.000",
         "duration": {
           "es": "60 a 90 min",
           "en": "60 to 90 min"
@@ -154,6 +162,7 @@
         }
       },
       "info": {
+        "price": "$ 00.000",
         "duration": {
           "es": "60 a 90 min",
           "en": "60 to 90 min"
@@ -188,6 +197,7 @@
         }
       },
       "info": {
+        "price": "$ 00.000",
         "duration": {
           "es": "60 a 90 min",
           "en": "60 to 90 min"
@@ -222,6 +232,7 @@
         }
       },
       "info": {
+        "price": "$ 00.000",
         "duration": {
           "es": "60 a 90 min",
           "en": "60 to 90 min"
@@ -256,6 +267,7 @@
         }
       },
       "info": {
+        "price": "$ 00.000",
         "duration": {
           "es": "",
           "en": ""
