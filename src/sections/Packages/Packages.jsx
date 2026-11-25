@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -38,15 +38,89 @@ const siteLang = (language) =>
 
 const packageCopy = (pkg, lang) => {
   const copy = pkg?.copy || {};
-  return copy[lang] || copy.es || {};
+  const chosen = copy[lang] || {};
+  const fallback = copy.es || {};
+  return {
+    title: String(chosen.title || fallback.title || ""),
+    description: String(chosen.description || fallback.description || ""),
+  };
+};
+
+const shownPrice = (value) => {
+  const price = String(value || "").trim();
+  if (!price || price.replace(/\s/g, "") === "$00.000") return "";
+  return price;
+};
+
+const publishedImage = (src, sha) => {
+  if (!sha) return null;
+  const path = sitePath(src);
+  if (!path || !path.startsWith("/images/")) return null;
+  return `https://raw.githubusercontent.com/ivanabraz/laureles/${sha}/public${path}`;
+};
+
+const sitePath = (src) => {
+  if (!src) return null;
+  let path = String(src).split("?")[0];
+  const imagesAt = path.indexOf("/images/");
+  if (imagesAt >= 0) return path.slice(imagesAt);
+  if (/^https?:/i.test(path)) return path;
+  path = path.replace(/^\/?src\/data\/public\//, "/").replace(/^\/?public\//, "/");
+  if (!path.startsWith("/")) path = `/${path}`;
+  return path;
 };
 
 const withPublicUrl = (src) => {
-  if (!src) return null;
-  if (src.startsWith("http") || src.startsWith(process.env.PUBLIC_URL || "")) {
-    return src;
-  }
-  return `${process.env.PUBLIC_URL || ""}${src.startsWith("/") ? src : `/${src}`}`;
+  const path = sitePath(src);
+  if (!path) return null;
+  if (/^https?:/i.test(path)) return path;
+  const prefix = process.env.PUBLIC_URL || "";
+  if (prefix && path.startsWith(prefix)) return path;
+  return `${prefix}${path}`;
+};
+
+const mergePublished = (local, remote) => {
+  const mergeLang = (lang) => ({
+    ...(local.includes?.[lang] || {}),
+    ...(remote.includes?.[lang] || {}),
+  });
+  return {
+    ...remote,
+    packages: remote.packages,
+    includes: {
+      es: mergeLang("es"),
+      en: mergeLang("en"),
+    },
+  };
+};
+
+const PackageCover = ({ src, sha, className, children }) => {
+  const local = withPublicUrl(src);
+  const remote = publishedImage(src, sha);
+  const [image, setImage] = useState(local);
+
+  useEffect(() => {
+    setImage(local);
+    if (!remote || remote === local) return undefined;
+    let cancelled = false;
+    const probe = new Image();
+    probe.onload = () => {
+      if (!cancelled) setImage(local);
+    };
+    probe.onerror = () => {
+      if (!cancelled) setImage(remote);
+    };
+    probe.src = local;
+    return () => {
+      cancelled = true;
+    };
+  }, [local, remote]);
+
+  return (
+    <div className={className} style={{ backgroundImage: image ? `url(${image})` : undefined }}>
+      {children}
+    </div>
+  );
 };
 
 const normalizeGallery = (gallery, cover) => {
@@ -61,12 +135,49 @@ const normalizeGallery = (gallery, cover) => {
 const Packages = () => {
   const { t, i18n } = useTranslation();
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [content, setContent] = useState(packagesContent);
+  const [mediaSha, setMediaSha] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadPublished = async () => {
+      try {
+        const commitRes = await fetch("https://api.github.com/repos/ivanabraz/laureles/commits/main", {
+          headers: { Accept: "application/vnd.github+json" },
+        });
+        if (!commitRes.ok) return;
+        const commit = await commitRes.json();
+        const sha = commit?.sha;
+        if (!sha) return;
+        const dataRes = await fetch(
+          `https://raw.githubusercontent.com/ivanabraz/laureles/${sha}/src/data/packages.json`
+        );
+        if (!dataRes.ok) return;
+        const remote = await dataRes.json();
+        if (cancelled || !Array.isArray(remote?.packages)) return;
+        setMediaSha(sha);
+        setContent(mergePublished(packagesContent, remote));
+      } catch (error) {
+        void error;
+      }
+    };
+
+    loadPublished();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") loadPublished();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      cancelled = true;
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, []);
 
   const packagesData = useMemo(() => {
     const lang = siteLang(i18n.language);
-    const phrases =
-      packagesContent.includes?.[lang] || packagesContent.includes?.es || {};
-    const list = packagesContent.packages || [];
+    const phrases = content.includes?.[lang] || content.includes?.es || {};
+    const list = content.packages || [];
     return list
       .map((pkg) => {
         if (!pkg?.id || !pkg.cover) return null;
@@ -77,15 +188,26 @@ const Packages = () => {
           title: String(copy.title || ""),
           titleEs: String(packageCopy(pkg, "es").title || ""),
           description: String(copy.description || ""),
+          intro: String(phrases.intro || ""),
+          price: shownPrice(pkg.info?.price),
+          priceLabel: String(phrases.price_label || ""),
           includesLabel: phrases.includes || "",
           details: packageDetails(pkg.info, lang, phrases.treats || ""),
           image: cover,
           gallery: normalizeGallery(pkg.gallery, pkg.cover),
+          mediaSha,
           titleColor: pkg.titleColor || "text-white",
         };
       })
       .filter(Boolean);
-  }, [i18n.language]);
+  }, [content, i18n.language, mediaSha]);
+
+  useEffect(() => {
+    setSelectedPackage((current) => {
+      if (!current) return current;
+      return packagesData.find((item) => item.id === current.id) || current;
+    });
+  }, [packagesData]);
 
   return (
     <div id="packages" className="w-full bg-white pt-10 pb-14 text-black flex flex-col items-center">
@@ -124,9 +246,10 @@ const Packages = () => {
                 onClick={() => setSelectedPackage(pkg)}
                 className="group w-full text-left bg-transparent p-0 border-0 cursor-pointer"
               >
-                <div
+                <PackageCover
+                  src={pkg.image}
+                  sha={pkg.mediaSha}
                   className="aspect-[10/16] tracking-tight rounded-[40px] overflow-hidden relative bg-cover bg-center flex flex-col p-6 transition-transform duration-300 ease-out will-change-transform group-hover:scale-[1.04]"
-                  style={{ backgroundImage: `url(${pkg.image})` }}
                 >
                   <h3 className={`relative z-10 text-xl md:text-2xl lg:text-2xl ${pkg.titleColor}`}>
                     {String(pkg.title || "").split("\n").map((line, i) => (
@@ -142,7 +265,7 @@ const Packages = () => {
                   >
                     {t("global.see_more")}
                   </span>
-                </div>
+                </PackageCover>
               </button>
             </SwiperSlide>
           ))}
@@ -150,7 +273,12 @@ const Packages = () => {
       </motion.div>
 
       {selectedPackage && (
-        <PackageModal pkg={selectedPackage} onClose={() => setSelectedPackage(null)} />
+        <PackageModal
+          pkg={selectedPackage}
+          packages={packagesData}
+          onChangePackage={setSelectedPackage}
+          onClose={() => setSelectedPackage(null)}
+        />
       )}
     </div>
   );

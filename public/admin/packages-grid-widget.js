@@ -63,6 +63,16 @@
     return src.charAt(0) === "/" ? src : "/" + src;
   }
 
+  function normalizeStoredPath(src) {
+    var path = sitePath(src);
+    if (!path) return "";
+    var at = path.indexOf("/images/");
+    if (at >= 0) return path.slice(at).split("?")[0];
+    path = path.split("?")[0];
+    path = path.replace(/^\/?src\/data\/public\//, "/").replace(/^\/?public\//, "/");
+    return path.charAt(0) === "/" ? path : "/" + path;
+  }
+
   function toPublicUrl(src) {
     src = mediaSrc(src);
     if (!src) return "";
@@ -181,8 +191,11 @@
     };
   }
 
+  var DEFAULT_PRICE = "$ 00.000";
+
   function emptyInfo() {
     return {
+      price: DEFAULT_PRICE,
       duration: { es: "", en: "" },
       photos: { es: "", en: "" },
       treats: false,
@@ -192,8 +205,9 @@
   }
 
   function defaultInfo(id) {
-    if (id === "gift_card") return emptyInfo();
+    if (id === "gift_card") return Object.assign(emptyInfo(), { price: "" });
     return {
+      price: DEFAULT_PRICE,
       duration: { es: "60 min", en: "60 min" },
       photos: {
         es: "5 fotos editadas digitales",
@@ -210,6 +224,7 @@
     if (typeof info.toJS === "function") info = info.toJS();
     var place = info.place === "studio" || info.place === "outdoor" ? info.place : "";
     return {
+      price: info.price == null ? DEFAULT_PRICE : String(info.price),
       duration: bilingual(info.duration),
       photos: bilingual(info.photos),
       treats: info.treats === true || info.treats === "true",
@@ -221,13 +236,14 @@
   function normalizePkg(pkg) {
     var gallery = asArray(pkg.gallery)
       .map(function (g) {
-        return typeof g === "string" ? g : (g && (g.src || g.image)) || "";
+        return normalizeStoredPath(typeof g === "string" ? g : (g && (g.src || g.image)) || "");
       })
       .filter(Boolean);
+    var cover = normalizeStoredPath(pkg.cover || gallery[0] || "");
     return {
       id: pkg.id || "nuevo",
-      cover: pkg.cover || gallery[0] || "",
-      gallery: gallery.length ? gallery : pkg.cover ? [pkg.cover] : [],
+      cover: cover,
+      gallery: gallery.length ? gallery : cover ? [cover] : [],
       titleColor: pkg.titleColor || "text-white",
       copy: normalizeCopy(pkg.copy),
       info: pkg.info ? normalizeInfo(pkg.info) : defaultInfo(pkg.id),
@@ -307,29 +323,61 @@
     componentDidMount: function () {
       ensureStyles();
       this._controlID = "pg-" + Math.random().toString(36).slice(2);
+      this.consumeInsertedMedia();
     },
 
-    componentDidUpdate: function (prevProps) {
-      var paths = this.props.mediaPaths;
-      if (!paths || typeof paths.get !== "function") return;
-      var mediaPath = paths.get(this._controlID);
-      if (!mediaPath) return;
-      var prevPath = prevProps.mediaPaths && prevProps.mediaPaths.get(this._controlID);
-      if (mediaPath === prevPath) return;
+    // Decap skips custom widgets unless shouldComponentUpdate watches mediaPaths.
+    // Without this, uploaded photos never reach the gallery.
+    shouldComponentUpdate: function (nextProps, nextState) {
+      if (nextState && nextState !== this.state) return true;
+      if (!nextProps) return true;
+      if (this.props.value !== nextProps.value) return true;
+      if (this.props.classNameWrapper !== nextProps.classNameWrapper) return true;
+      if (this.props.getAsset !== nextProps.getAsset) return true;
+      if (this.props.mediaPaths !== nextProps.mediaPaths) return true;
+      return false;
+    },
 
-      var incoming = asMediaList(mediaPath);
-      var target = this.state.mediaTarget;
+    componentDidUpdate: function () {
+      this.consumeInsertedMedia();
+    },
+
+    mediaKey: function (mediaPath) {
+      if (mediaPath == null || mediaPath === "") return "";
+      if (typeof mediaPath.toJS === "function") {
+        try {
+          return JSON.stringify(mediaPath.toJS());
+        } catch (err) {
+          return String(mediaPath);
+        }
+      }
+      return typeof mediaPath === "string" ? mediaPath : JSON.stringify(mediaPath);
+    },
+
+    consumeInsertedMedia: function () {
+      var paths = this.props.mediaPaths;
+      if (!paths || typeof paths.get !== "function" || !this._controlID) return;
+      var mediaPath = paths.get(this._controlID);
+      var key = this.mediaKey(mediaPath);
+      if (!key || key === this._consumedMediaKey) return;
+
+      var target = this._mediaTarget || this.state.mediaTarget;
       var editIndex = this.state.editIndex;
       if (editIndex == null || !target) return;
 
+      var incoming = asMediaList(mediaPath);
+      if (!incoming.length) return;
+
       var items = this.getItems();
-      var pkg = Object.assign({}, items[editIndex]);
+      var current = items[editIndex];
+      if (!current) return;
+      var pkg = Object.assign({}, current, { gallery: (current.gallery || []).slice() });
 
       if (target === "cover") {
         var cover = incoming[0];
         if (cover) {
           pkg.cover = cover;
-          if (!pkg.gallery.length) pkg.gallery = [cover];
+          if (pkg.gallery.indexOf(cover) === -1) pkg.gallery.unshift(cover);
         }
       } else if (target === "gallery") {
         incoming.forEach(function (p) {
@@ -338,6 +386,8 @@
         if (!pkg.cover && pkg.gallery[0]) pkg.cover = pkg.gallery[0];
       }
 
+      this._consumedMediaKey = key;
+      this._mediaTarget = null;
       items[editIndex] = pkg;
       this.commit(items);
       this.setState({ mediaTarget: null });
@@ -354,8 +404,78 @@
       this.props.onChange(items.map(normalizePkg));
     },
 
+    pathFromUpload: function (result) {
+      var payload = result && result.payload;
+      var path = "";
+      if (payload) {
+        if (typeof payload.path === "string") path = payload.path;
+        else if (payload.file && typeof payload.file.path === "string") path = payload.file.path;
+      }
+      if (!path && result && typeof result.path === "string") path = result.path;
+      if (!path) return "";
+      var folder = "/images/packages";
+      var field = this.props.field;
+      if (field && typeof field.get === "function" && field.get("public_folder")) {
+        folder = String(field.get("public_folder"));
+      }
+      if (folder.charAt(0) !== "/") folder = "/" + folder;
+      folder = folder.replace(/\/$/, "");
+      var name = path.split("?")[0].split("/").filter(Boolean).pop();
+      return name ? normalizeStoredPath(folder + "/" + name) : "";
+    },
+
+    uploadFiles: function (target, fileList) {
+      var files = Array.prototype.slice.call(fileList || []).filter(Boolean);
+      if (!files.length) return;
+      var persist = this.props.onPersistMedia;
+      if (typeof persist !== "function") {
+        window.alert("No se pudo subir la foto. Probá “Elegir de la biblioteca”.");
+        return;
+      }
+      var self = this;
+      var field = this.props.field;
+      var editIndex = this.state.editIndex;
+      var chain = Promise.resolve([]);
+      files.forEach(function (file) {
+        chain = chain.then(function (acc) {
+          return persist(file, { field: field }).then(function (result) {
+            var next = self.pathFromUpload(result);
+            if (next && acc.indexOf(next) === -1) acc.push(next);
+            return acc;
+          });
+        });
+      });
+      chain
+        .then(function (paths) {
+          if (!paths.length) return;
+          var items = self.getItems();
+          var current = items[editIndex];
+          if (!current) return;
+          var pkg = Object.assign({}, current, {
+            gallery: (current.gallery || []).slice(),
+          });
+          if (target === "cover") {
+            pkg.cover = paths[0];
+            if (pkg.gallery.indexOf(paths[0]) === -1) pkg.gallery.unshift(paths[0]);
+          } else {
+            paths.forEach(function (next) {
+              if (pkg.gallery.indexOf(next) === -1) pkg.gallery.push(next);
+            });
+            if (!pkg.cover && pkg.gallery[0]) pkg.cover = pkg.gallery[0];
+          }
+          items[editIndex] = pkg;
+          self.commit(items);
+        })
+        .catch(function (err) {
+          console.error(err);
+          window.alert("No se pudo agregar la foto. Probá de nuevo.");
+        });
+    },
+
     openMedia: function (target, allowMultiple) {
       var self = this;
+      this._mediaTarget = target;
+      this._consumedMediaKey = "";
       this.setState({ mediaTarget: target }, function () {
         if (typeof self.props.onOpenMediaLibrary === "function") {
           self.props.onOpenMediaLibrary({
@@ -613,7 +733,7 @@
         h(
           "p",
           { className: "pg-sub" },
-          "Título, descripción, duración, fotos y lugar siguen la pestaña de idioma. Enter en el título baja de línea."
+          "Título, descripción, duración, fotos y lugar siguen la pestaña de idioma. El precio es el mismo en los dos. Enter en el título baja de línea."
         ),
         h(
           "div",
@@ -659,6 +779,17 @@
           spellCheck: true,
           onChange: function (event) {
             self.setCopy(index, lang, "description", event.target.value);
+          },
+        }),
+        h("label", {}, "Precio"),
+        h("input", {
+          className: "pg-line",
+          type: "text",
+          value: info.price == null ? "" : String(info.price),
+          spellCheck: false,
+          placeholder: "$ 00.000",
+          onChange: function (event) {
+            self.setInfo(index, { price: event.target.value });
           },
         }),
         h("label", {}, "Duración"),
@@ -770,16 +901,44 @@
             "div",
             {},
             h(
-              "button",
-              {
-                type: "button",
-                className: "pg-btn",
-                onClick: function () {
-                  self.openMedia("cover", false);
+              "div",
+              { className: "pg-chips" },
+              h(
+                "button",
+                {
+                  type: "button",
+                  className: "pg-btn",
+                  onClick: function () {
+                    if (self._coverInput) self._coverInput.click();
+                  },
                 },
+                "Subir cover"
+              ),
+              h(
+                "button",
+                {
+                  type: "button",
+                  className: "pg-btn secondary",
+                  onClick: function () {
+                    self.openMedia("cover", false);
+                  },
+                },
+                "Elegir de la biblioteca"
+              )
+            ),
+            h("input", {
+              type: "file",
+              accept: "image/*",
+              style: { display: "none" },
+              ref: function (el) {
+                self._coverInput = el;
               },
-              "Cambiar cover"
-            )
+              onChange: function (event) {
+                var files = event.target.files;
+                self.uploadFiles("cover", files);
+                event.target.value = "";
+              },
+            })
           )
         ),
 
@@ -815,6 +974,11 @@
 
         h("label", {}, "Galería del modal"),
         h(
+          "p",
+          { className: "pg-sub" },
+          "Subir las agrega directo a esta galería. Desde la biblioteca, confirmá con “Elegir seleccionado”."
+        ),
+        h(
           "div",
           { className: "pg-chips", style: { marginBottom: "8px" } },
           h(
@@ -823,12 +987,37 @@
               type: "button",
               className: "pg-btn",
               onClick: function () {
+                if (self._galleryInput) self._galleryInput.click();
+              },
+            },
+            "Subir fotos"
+          ),
+          h(
+            "button",
+            {
+              type: "button",
+              className: "pg-btn secondary",
+              onClick: function () {
                 self.openMedia("gallery", true);
               },
             },
-            "Agregar fotos a la galería"
+            "Elegir de la biblioteca"
           )
         ),
+        h("input", {
+          type: "file",
+          accept: "image/*",
+          multiple: true,
+          style: { display: "none" },
+          ref: function (el) {
+            self._galleryInput = el;
+          },
+          onChange: function (event) {
+            var files = event.target.files;
+            self.uploadFiles("gallery", files);
+            event.target.value = "";
+          },
+        }),
         pkg.gallery.length
           ? h(
               "div",

@@ -258,6 +258,26 @@ html.christmas [aria-label="Anuncio"] button {
         bottom: 200px !important; /* más arriba */
     }
 
+    .package-gallery .swiper-pagination {
+        bottom: 16px !important;
+        z-index: 5;
+    }
+
+    .package-gallery .swiper-pagination-bullet {
+        width: 7px;
+        height: 7px;
+        margin-left: 4px !important;
+        margin-right: 4px !important;
+        transform: none;
+        background: rgba(255, 255, 255, 0.55) !important;
+        opacity: 1 !important;
+    }
+
+    .package-gallery .swiper-pagination-bullet-active {
+        background: #ffffff !important;
+        transform: none;
+    }
+
     .swiper-pagination-bullet {
         width: 14px;
         height: 14px;

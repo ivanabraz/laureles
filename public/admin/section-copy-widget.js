@@ -121,8 +121,16 @@
       ],
     },
     includes: {
-      intro: "Estas dos frases valen para todos los paquetes. Duración, fotos y lugar se editan en cada card.",
+      intro:
+        "El párrafo y la etiqueta del precio se ven en todos los paquetes, antes de Incluye. El monto se edita en cada card.",
       fields: [
+        {
+          path: "intro",
+          label: "Párrafo antes de Incluye",
+          multiline: true,
+          rows: 4,
+        },
+        { path: "price_label", label: "Etiqueta del precio" },
         { path: "includes", label: "Título “Incluye”" },
         { path: "treats", label: "Premios comestibles" },
       ],

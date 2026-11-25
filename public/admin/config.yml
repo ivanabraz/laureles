@@ -86,15 +86,15 @@ collections:
         label: Paquetes
         file: src/data/packages.json
         format: json
-        media_folder: public/images/packages
+        media_folder: /public/images/packages
         public_folder: /images/packages
         fields:
           - name: packages
             label: Cards
             widget: packages-grid
-            media_folder: public/images/packages
+            media_folder: /public/images/packages
             public_folder: /images/packages
-            hint: Cada card tiene sus fotos, el título, la descripción, la duración, la cantidad de fotos y el lugar.
+            hint: Cada card tiene sus fotos, el título, la descripción, el precio, la duración, la cantidad de fotos y el lugar.
           - name: includes
             label: Textos de Incluye
             widget: section-copy
