@@ -24,6 +24,7 @@
         }
       },
       "info": {
+        "price": "$ 162.000",
         "duration": {
           "es": "40 min",
           "en": "40 min"
@@ -37,8 +38,7 @@
         "placeText": {
           "es": "Estudio (Recoleta)",
           "en": "Studio (Recoleta)"
-        },
-        "price": "$ 162.000"
+        }
       }
     },
     {
@@ -59,6 +59,7 @@
         }
       },
       "info": {
+        "price": "$ 155.000",
         "duration": {
           "es": "60 min",
           "en": "60 min"
@@ -70,10 +71,9 @@
         "treats": true,
         "place": "studio",
         "placeText": {
-          "es": "Estudio Laureles, Ayacucho 1477",
-          "en": "Laureles studio, Ayacucho 1477"
-        },
-        "price": "$ 155.000"
+          "es": "Estudio (Recoleta)",
+          "en": "Studio (Recoleta)"
+        }
       }
     },
     {
@@ -94,6 +94,7 @@
         }
       },
       "info": {
+        "price": "$ 195.000",
         "duration": {
           "es": "60 min",
           "en": "60 min"
@@ -105,10 +106,9 @@
         "treats": true,
         "place": "studio",
         "placeText": {
-          "es": "Estudio Laureles, Ayacucho 1477",
-          "en": "Laureles studio, Ayacucho 1477"
-        },
-        "price": "$ 195.000"
+          "es": "Estudio (Recoleta)",
+          "en": "Studio (Recoleta)"
+        }
       }
     },
     {
@@ -129,6 +129,7 @@
         }
       },
       "info": {
+        "price": "$ 235.000",
         "duration": {
           "es": "60 a 90 min",
           "en": "60 to 90 min"
@@ -140,10 +141,9 @@
         "treats": true,
         "place": "studio",
         "placeText": {
-          "es": "Estudio Laureles, Ayacucho 1477",
-          "en": "Laureles studio, Ayacucho 1477"
-        },
-        "price": "$ 235.000"
+          "es": "Estudio (Recoleta)",
+          "en": "Studio (Recoleta)"
+        }
       }
     },
     {
@@ -164,6 +164,7 @@
         }
       },
       "info": {
+        "price": "$ 161.000",
         "duration": {
           "es": "60 a 90 min",
           "en": "60 to 90 min"
@@ -177,8 +178,7 @@
         "placeText": {
           "es": "Exterior, 1 locación",
           "en": "Outdoor, 1 location"
-        },
-        "price": "$ 161.000"
+        }
       }
     },
     {
@@ -199,6 +199,7 @@
         }
       },
       "info": {
+        "price": "$ 232.000",
         "duration": {
           "es": "60 a 90 min",
           "en": "60 to 90 min"
@@ -212,8 +213,7 @@
         "placeText": {
           "es": "Exterior, 2 locaciones",
           "en": "Outdoor, 2 locations"
-        },
-        "price": "$ 232.000"
+        }
       }
     },
     {
@@ -234,6 +234,7 @@
         }
       },
       "info": {
+        "price": "$ 294.000",
         "duration": {
           "es": "60 a 90 min",
           "en": "60 to 90 min"
@@ -247,8 +248,7 @@
         "placeText": {
           "es": "Exterior, 2 locaciones",
           "en": "Outdoor, 2 locations"
-        },
-        "price": "$ 294.000"
+        }
       }
     },
     {
@@ -269,6 +269,7 @@
         }
       },
       "info": {
+        "price": "",
         "duration": {
           "es": "",
           "en": ""
@@ -282,8 +283,7 @@
         "placeText": {
           "es": "",
           "en": ""
-        },
-        "price": ""
+        }
       }
     }
   ],
