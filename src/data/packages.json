@@ -7,31 +7,31 @@
         "/images/packages/image-08.jpg",
         "/images/packages/chanda-l.a-navidad-2026-06.jpg",
         "/images/packages/chanda-l.a-navidad-2026-09.jpg",
-        "/images/packages/chanda-l.a-navidad-2026-10.jpg",
+        "/images/packages/image-23.jpg",
         "/images/packages/chanda-l.jpg",
         "/images/packages/image-18.jpg",
-        "/images/packages/image-23.jpg"
+        "/images/packages/chanda-l.a-navidad-2026-10.jpg"
       ],
       "titleColor": "text-white",
       "copy": {
         "es": {
           "title": "Sesión Navidad",
-          "description": ""
+          "description": "Un perro y máximo dos personas. Se hacen en fondo rojo con accesorios rojos bien navideños"
         },
         "en": {
-          "title": "",
-          "description": ""
+          "title": "Christmas Session",
+          "description": "One dog and up to two people. Made against a red background with very festive red accessories."
         }
       },
       "info": {
-        "price": "$ 00.000",
+        "price": "$ 162.000",
         "duration": {
-          "es": "60 min",
-          "en": "60 min"
+          "es": "40 min",
+          "en": "40 min"
         },
         "photos": {
-          "es": "5 fotos editadas digitales",
-          "en": "5 edited digital photos"
+          "es": "10 fotos editadas digitales",
+          "en": "10 edited digital photos"
         },
         "treats": true,
         "place": "studio",
